@@ -1,9 +1,9 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'Garuda Tours And Travels',
+  description: 'Created with ',
+  generator: '',
 };
 
 export default function RootLayout({ children }) {

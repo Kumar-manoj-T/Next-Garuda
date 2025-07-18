@@ -1,8 +1,10 @@
 "use client"
 
 import Header from "@/components/header"
-import HeroSlider from "@/components/hero-slider"
+import HeroSlider from "@/components/home/hero-slider"
 import BookingForm from "@/components/booking-form"
+import TourPackages from "@/components/home/tour-packages"
+import Footer from "@/components/footer"
 
 export default function HomePage() {
   return (
@@ -10,6 +12,8 @@ export default function HomePage() {
       <Header />
       <HeroSlider />
       <BookingForm />
+      <TourPackages />
+      <Footer/>
     </div>
   )
 }

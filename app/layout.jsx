@@ -1,16 +1,21 @@
-import './globals.css';
+import './globals.css'
+import Header from '@/components/header'
+import Footer from '@/components/footer'
 
 export const metadata = {
   title: 'Garuda Tours And Travels',
-  description: 'Created with ',
-  generator: '',
-};
+  description: 'Created with ❤️',
+}
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
-  );
+  )
 }
 

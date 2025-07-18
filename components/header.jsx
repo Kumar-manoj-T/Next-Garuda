@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { MapPin } from "lucide-react" // Assuming lucide-react is available or you'll use custom SVGs
+import { MapPin, PhoneCall } from "lucide-react" // Assuming lucide-react is available or you'll use custom SVGs
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -24,7 +24,7 @@ export default function Header() {
             <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Home
             </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+            <a href="/about" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               About Us
             </a>
 
@@ -61,6 +61,20 @@ export default function Header() {
               Contact Us
             </a>
           </nav>
+          <div className="hidden md:flex items-center space-x-4">
+            <PhoneCall className="h-8 w-8 text-[#4CAF50]" /> {/* Light green icon */}
+            <div className="h-10 border-l border-gray-300" /> {/* Vertical separator */}
+            <div className="flex flex-col">
+              <span className="text-sm text-gray-700">To More Inquiry</span>
+              <a
+                href="tel:+990737621432"
+                className="text-lg font-bold text-[#4CAF50] hover:text-[#45a049] transition-colors"
+              >
+                +990-737 621 432
+              </a>
+            </div>
+          </div>
+
 
           {/* Mobile Menu Button */}
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -73,7 +87,7 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col space-y-4 mt-8">
-                <a href="#" className="text-gray-700 hover:text-blue-600 font-medium text-lg transition-colors">
+                <a href="/" className="text-gray-700 hover:text-blue-600 font-medium text-lg transition-colors">
                   Home
                 </a>
                 <a href="#" className="text-gray-700 hover:text-blue-600 font-medium text-lg transition-colors">

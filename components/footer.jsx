@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Phone, Mail, MapPin, ChevronRight, Facebook, Instagram } from "lucide-react"
+import { Phone, Mail, MapPin, ChevronRight, Facebook, Instagram, MessageCircleMore } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -123,7 +123,7 @@ export default function Footer() {
             </li>
           </ul>
         </div>
-        
+
       </div>
 
       {/* Bottom Bar */}
@@ -136,33 +136,22 @@ export default function Footer() {
 
       {/* Floating Buttons (GIFs) */}
       <a
-        href="tel:9840789844" // Example phone number
+        href="tel:9840789844"
         aria-label="Call Us"
-        className="fixed bottom-4 left-4 bg-blue-500 p-3 rounded-full shadow-lg z-50 hover:bg-blue-600 transition-colors flex items-center justify-center"
+        className="fixed bottom-4 left-4 bg-blue-500 p-3 rounded-full shadow-lg z-50 hover:bg-blue-600 transition-colors flex items-center justify-center animate-bounce hover:scale-110 transition-transform"
       >
-        <Image
-          src="/placeholder.svg?height=24&width=24" // Placeholder for Call GIF
-          alt="Call Us"
-          width={24}
-          height={24}
-          unoptimized // Important for GIFs
-        />
+        <Phone className="h-6 w-6 text-white" />
       </a>
       <a
-        href="https://wa.me/919840789844" // Example WhatsApp number
+        href="https://wa.me/919840789844"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp Chat"
-        className="fixed bottom-4 right-4 bg-green-500 p-3 rounded-full shadow-lg z-50 hover:bg-green-600 transition-colors flex items-center justify-center"
+        className="fixed bottom-4 right-4 bg-green-500 p-3 rounded-full shadow-lg z-50 hover:bg-green-600 transition-colors flex items-center justify-center animate-bounce hover:scale-110 transition-transform"
       >
-        <Image
-          src="/placeholder.svg?height=24&width=24" // Placeholder for WhatsApp GIF
-          alt="WhatsApp Chat"
-          width={24}
-          height={24}
-          unoptimized // Important for GIFs
-        />
+        <MessageCircleMore className="h-6 w-6 text-white" />
       </a>
     </footer>
   )
 }
+

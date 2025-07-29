@@ -13,75 +13,73 @@ export default function BookingForm() {
   return (
     <>
      <section className="py-12 px-4 bg-gray-100 flex flex-col items-center justify-center min-h-screen">
-      {/* Package Selection Radio Buttons - Separated Box */}
-     
-
-
-
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-8"> Book Your Chennai to Tirupati Package with Garuda</h2>
+        <p className="text-lg text-center text-gray-600 mb-12">
+          Experience peace & devotion with our Chennai to Tirupati travel package, VIP darshan and flexible one‑day & two‑day packages.
+        </p>
+      </div>
 
 
       {/* Main Booking Form */}
         <div className="form">
           <div className="w-full max-w-2xl mb-0 ms-0">
-  <div className="flex gap-4">
-    {/* Tirupati Package */}
-    <label
-      className={`flex-1   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
-        selectedPackage === "Tirupati Package"
-          ? "bg-blue-600 text-white"
-          : "bg-white text-gray-700 hover:bg-gray-100"
-      }`}
-    >
-      <input
-        type="radio"
-        name="packageType"
-        value="Tirupati Package"
-        checked={selectedPackage === "Tirupati Package"}
-        onChange={handlePackageChange}
-        className="sr-only"
-      />
-      Tirupati Package
-    </label>
+            <div className="flex gap-4">
+              {/* Tirupati Package */}
+              <label
+                className={`flex-1   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${selectedPackage === "Tirupati Package"
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                <input
+                  type="radio"
+                  name="packageType"
+                  value="Tirupati Package"
+                  checked={selectedPackage === "Tirupati Package"}
+                  onChange={handlePackageChange}
+                  className="sr-only"
+                />
+                Tirupati Package
+              </label>
 
-    {/* Car Rental Package */}
-    <label
-      className={`flex-1     bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
-        selectedPackage === "Car Rental Package"
-          ? "bg-blue-600 text-white"
-          : "bg-white text-gray-700 hover:bg-gray-100"
-      }`}
-    >
-      <input
-        type="radio"
-        name="packageType"
-        value="Car Rental Package"
-        checked={selectedPackage === "Car Rental Package"}
-        onChange={handlePackageChange}
-        className="sr-only"
-      />
-      Car Rental Package
-    </label>
+              {/* Car Rental Package */}
+              <label
+                className={`flex-1     bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${selectedPackage === "Car Rental Package"
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                <input
+                  type="radio"
+                  name="packageType"
+                  value="Car Rental Package"
+                  checked={selectedPackage === "Car Rental Package"}
+                  onChange={handlePackageChange}
+                  className="sr-only"
+                />
+                Car Rental Package
+              </label>
 
-    {/* Temple Tour Package */}
-    <label
-      className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
-        selectedPackage === "Temple Tour Package"
-          ? "bg-blue-600 text-white"
-          : "bg-white text-gray-700 hover:bg-gray-100"
-      }`}
-    >
-      <input
-        type="radio"
-        name="packageType"
-        value="Temple Tour Package"
-        checked={selectedPackage === "Temple Tour Package"}
-        onChange={handlePackageChange}
-        className="sr-only"
-      />
-      Temple Tour Package
-    </label>
-  </div>
-</div>
+              {/* Temple Tour Package */}
+              <label
+                className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${selectedPackage === "Temple Tour Package"
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                <input
+                  type="radio"
+                  name="packageType"
+                  value="Temple Tour Package"
+                  checked={selectedPackage === "Temple Tour Package"}
+                  onChange={handlePackageChange}
+                  className="sr-only"
+                />
+                Temple Tour Package
+              </label>
+            </div>
+          </div>
           <div className="bg-white p-8 border-t-0 shadow-lg max-w-4xl mt-0 w-full">
             <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">Book Now</h2>
             <form className="grid grid-cols-1 md:grid-cols-3 gap-6">

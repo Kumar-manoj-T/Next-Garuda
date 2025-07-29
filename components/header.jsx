@@ -67,10 +67,10 @@ export default function Header() {
             <div className="flex flex-col">
               <span className="text-sm text-gray-700">To More Inquiry</span>
               <a
-                href="tel:+990737621432"
+                href="tel:+919840789857"
                 className="text-lg font-bold text-[#4CAF50] hover:text-[#45a049] transition-colors"
               >
-                +990-737 621 432
+                +91 98407-89857
               </a>
             </div>
           </div>

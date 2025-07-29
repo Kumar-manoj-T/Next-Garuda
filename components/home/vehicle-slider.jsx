@@ -50,7 +50,7 @@ export default function VehicleFeatures() {
   }, [])
 
   return (
-    <section className="py-12 px-4 bg-white">
+    <section className="py-12  bg-white">
   <div className="container mx-auto">
     <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
       Why Choose Us & Our Fleet
@@ -58,7 +58,7 @@ export default function VehicleFeatures() {
 
     <div className="grid grid-cols-1 lg:grid-cols-6 gap-8 items-center">
       {/* Left Column: Vehicles Slider */}
-      <div className="lg:col-span-4 bg-gray-100 p-6 rounded-lg shadow-lg overflow-hidden h-[300px] md:h-[400px] lg:h-[450px]">
+      <div className="lg:col-span-4 bg-gray-100 p-3 rounded-lg shadow-lg overflow-hidden h-[353px] md:h-[400px] lg:h-[450px] ">
         <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center lg:text-left">
           Our Fleet
         </h3>
@@ -83,7 +83,7 @@ export default function VehicleFeatures() {
 
       {/* Right Column: Why Choose Us Slider */}
       <div className="lg:col-span-2 bg-gray-100 p-6 rounded-lg shadow-lg h-[300px] md:h-[400px] lg:h-[450px] overflow-hidden flex flex-col justify-center">
-        <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Why Choose Us</h3>
+        <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Garuda’s Fleet & Service Chennai to Tirupati Travel</h3>
         <div className="flex flex-col items-center overflow-y-scroll snap-y snap-mandatory scroll-smooth hide-scrollbar h-full">
           {visibleWhyUsItems.map((item, index) => (
             <div

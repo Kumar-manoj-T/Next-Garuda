@@ -8,23 +8,23 @@ const slides = [
   {
     id: 1,
     image: "/placeholder.svg?height=600&width=1200",
-    title: "Discover Amazing Destinations",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.",
+    title: "Best Temple Tour Packages from Chennai – Spiritual Travel with Garuda",
+    description:"Plan your spiritual journey with Garuda’s temple tour packages from Chennai to Tirupati, Rameswaram, Kanchipuram & more. Comfortable rides, expert planning & divine experiences.",
+    buttonText: "Explore Packages",
   },
   {
     id: 2,
     image: "/placeholder.svg?height=600&width=1200",
-    title: "Unforgettable Travel Experiences",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.",
+    title: "Chennai to Tirupati One Day Package – Easy & Spiritual",
+    description:"Book the top-rated Chennai to Tirupati one-day package from Chennai. Enjoy hassle-free VIP darshan, comfortable travel and fast reservations with Garuda’s Chennai to Tirupati travel package.",
+    buttonText:"Book One-Day Package"
   },
   {
     id: 3,
     image: "/placeholder.svg?height=600&width=1200",
-    title: "Your Journey Starts Here",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.",
+    title: "Tirupati Darshan Package from Chennai – VIP & Quick",
+    description:"Opt for a Tirupati darshan package from Chennai with priority access. Garuda’s VIP darshan package from Chennai to Tirupati ensures peaceful darshan and personalized support.",
+    buttonText: "Book VIP Darshan",
   },
 ]
 
@@ -74,7 +74,7 @@ export default function HeroSlider() {
                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">{slide.title}</h1>
                 <p className="text-lg md:text-xl lg:text-2xl mb-8 leading-relaxed opacity-90">{slide.description}</p>
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg">
-                  Explore Now
+                  {slide.buttonText || "Learn More"}
                 </Button>
               </div>
             </div>

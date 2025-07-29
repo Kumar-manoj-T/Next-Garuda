@@ -53,7 +53,7 @@ export default function VehicleFeatures() {
     <section className="py-12  bg-white">
   <div className="container mx-auto">
     <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
-      Why Choose Us & Our Fleet
+     Garuda’s Fleet & Service Chennai to Tirupati Travel
     </h2>
 
     <div className="grid grid-cols-1 lg:grid-cols-6 gap-8 items-center">
@@ -83,7 +83,7 @@ export default function VehicleFeatures() {
 
       {/* Right Column: Why Choose Us Slider */}
       <div className="lg:col-span-2 bg-gray-100 p-6 rounded-lg shadow-lg h-[300px] md:h-[400px] lg:h-[450px] overflow-hidden flex flex-col justify-center">
-        <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Garuda’s Fleet & Service Chennai to Tirupati Travel</h3>
+        <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Why choose Garuda?</h3>
         <div className="flex flex-col items-center overflow-y-scroll snap-y snap-mandatory scroll-smooth hide-scrollbar h-full">
           {visibleWhyUsItems.map((item, index) => (
             <div

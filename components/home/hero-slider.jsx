@@ -7,21 +7,21 @@ import { Button } from "@/components/ui/button"
 const slides = [
   {
     id: 1,
-    image: "/placeholder.svg?height=600&width=1200",
+    image: "/images/slider1.png",
     title: "Best Temple Tour Packages from Chennai – Spiritual Travel with Garuda",
     description:"Plan your spiritual journey with Garuda’s temple tour packages from Chennai to Tirupati, Rameswaram, Kanchipuram & more. Comfortable rides, expert planning & divine experiences.",
     buttonText: "Explore Packages",
   },
   {
     id: 2,
-    image: "/placeholder.svg?height=600&width=1200",
+    image: "/images/slider2.png",
     title: "Chennai to Tirupati One Day Package – Easy & Spiritual",
     description:"Book the top-rated Chennai to Tirupati one-day package from Chennai. Enjoy hassle-free VIP darshan, comfortable travel and fast reservations with Garuda’s Chennai to Tirupati travel package.",
     buttonText:"Book One-Day Package"
   },
   {
     id: 3,
-    image: "/placeholder.svg?height=600&width=1200",
+    image: "/images/slider3.png",
     title: "Tirupati Darshan Package from Chennai – VIP & Quick",
     description:"Opt for a Tirupati darshan package from Chennai with priority access. Garuda’s VIP darshan package from Chennai to Tirupati ensures peaceful darshan and personalized support.",
     buttonText: "Book VIP Darshan",

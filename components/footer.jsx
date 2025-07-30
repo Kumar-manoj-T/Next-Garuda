@@ -15,8 +15,7 @@ export default function Footer() {
             className="mb-4"
           />
           <p className="mb-6 text-sm leading-relaxed">
-            Garuda Travels is the best travel agency in Chennai offering Tirupati tour packages with a wide range of
-            travel services, car rental & outstation packages.
+            Garuda Tours and Travels offers trusted Chennai to Tirupati packages, VIP darshan trips, and temple tour packages with comfort, care, and devotion.
           </p>
           <div className="flex space-x-4">
             <a

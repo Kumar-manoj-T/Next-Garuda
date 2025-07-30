@@ -10,7 +10,7 @@ const customerReviews = [
     name: "Priya Sharma",
     location: "Chennai, India",
     content:
-      "Garuda Tours & Travels provided an exceptional experience! The Tirupati package was well-organized, and the team was incredibly supportive throughout the journey. Highly recommended for a spiritual and hassle-free trip.",
+       "I booked the Chennai to Tirupati one-day package with Garuda Tours. The trip was smooth and well organized. VIP darshan was quick, and the staff were polite. Best experience I’ve had so far with a Tirupati package from Chennai.",
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ const customerReviews = [
     name: "David Lee",
     location: "Singapore",
     content:
-      "The car rental service was top-notch. Clean vehicle, punctual driver, and very flexible with our itinerary. Made our family trip around Chennai very comfortable and enjoyable. Will definitely use again!",
+       "We chose Garuda's Chennai to Tirupati two-day package for our family trip. The stay was neat, travel was comfortable, and the darshan was peaceful. A well-planned Tirupati tour package from Chennai that I’d recommend to others.",
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const customerReviews = [
     name: "Maria Garcia",
     location: "Madrid, Spain",
     content:
-      "Our Temple Tour Package was a dream come true. Every detail was meticulously planned, from the historical insights provided by the guide to the comfortable accommodations. A truly enriching cultural journey!",
+       "Tried Garuda's Tirupati darshan package from Chennai last weekend. Everything was on time, and we got hassle-free temple entry. They made the travel easy and peaceful. Good service and great value for the price.",
   },
   {
     id: 4,
@@ -34,7 +34,7 @@ const customerReviews = [
     name: "Ahmed Khan",
     location: "Dubai, UAE",
     content:
-      "Excellent service from start to finish. The booking process was smooth, and the staff were very responsive to all our queries. They ensured we had a memorable and stress-free vacation. Thank you, Garuda!",
+      "Booked the Tirupati travel package from Chennai with Garuda Tours. It was a simple and spiritual trip. The team stayed in touch from start to end. I felt safe and satisfied. Would book again for temple tour packages.",
   },
 ]
 

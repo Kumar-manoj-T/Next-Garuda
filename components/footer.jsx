@@ -7,14 +7,8 @@ export default function Footer() {
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Company Info */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <Image
-            src="/placeholder.svg?height=80&width=200" // Placeholder for Garuda logo
-            alt="Garuda Tours & Travels Logo"
-            width={200}
-            height={80}
-            className="mb-4"
-          />
-          <p className="mb-6 text-sm leading-relaxed">
+          <img src="/footer-logo.png" alt="Logo" className="h-6 md:h-8 lg:h-10 w-auto" />
+          <p className="mb-6 text-sm leading-relaxed mt-4">
             Garuda Tours and Travels offers trusted Chennai to Tirupati packages, VIP darshan trips, and temple tour packages with comfort, care, and devotion.
           </p>
           <div className="flex space-x-4">

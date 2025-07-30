@@ -6,7 +6,7 @@ import { Quote } from "lucide-react" // Using Quote icon for decorative purposes
 const customerReviews = [
   {
     id: 1,
-    avatar: "/placeholder.svg?height=64&width=64", // Placeholder for customer avatar
+    avatar: "/images/client/1.png?height=64&width=64", // Placeholder for customer avatar
     name: "Priya Sharma",
     location: "Chennai, India",
     content:
@@ -14,7 +14,7 @@ const customerReviews = [
   },
   {
     id: 2,
-    avatar: "/placeholder.svg?height=64&width=64", // Placeholder for customer avatar
+    avatar: "/images/client/3.png?height=64&width=64", // Placeholder for customer avatar
     name: "David Lee",
     location: "Singapore",
     content:
@@ -22,7 +22,7 @@ const customerReviews = [
   },
   {
     id: 3,
-    avatar: "/placeholder.svg?height=64&width=64", // Placeholder for customer avatar
+    avatar: "/images/client/2.png?height=64&width=64", // Placeholder for customer avatar
     name: "Maria Garcia",
     location: "Madrid, Spain",
     content:
@@ -30,7 +30,7 @@ const customerReviews = [
   },
   {
     id: 4,
-    avatar: "/placeholder.svg?height=64&width=64", // Placeholder for customer avatar
+    avatar: "/images/client/4.png?height=64&width=64", // Placeholder for customer avatar
     name: "Ahmed Khan",
     location: "Dubai, UAE",
     content:
@@ -48,7 +48,7 @@ export default function CustomerReviews() {
           {customerReviews.map((review) => (
             <div key={review.id} className="bg-white rounded-lg shadow-lg p-6 relative overflow-hidden">
               {/* Full round image icon in top-left corner */}
-              <div className="absolute -top-8 -left-8 w-24 h-24 rounded-full bg-white border-2 border-red-500 flex items-center justify-center shadow-md">
+              {/* <div className="absolute -top-8 -left-8 w-24 h-24 rounded-full bg-white border-2 border-red-500 flex items-center justify-center shadow-md">
                 <Image
                   src={review.avatar || "/placeholder.svg"}
                   alt={review.name}
@@ -56,7 +56,7 @@ export default function CustomerReviews() {
                   height={64}
                   className="w-16 h-16 rounded-full object-cover" // Image itself is a smaller circle inside the larger one
                 />
-              </div>
+              </div> */}
 
               {/* Quote icon for decoration */}
               <div className="absolute top-6 right-6 text-gray-200">
@@ -72,8 +72,8 @@ export default function CustomerReviews() {
                 <Image
                   src={review.avatar || "/placeholder.svg"}
                   alt={review.name}
-                  width={40}
-                  height={40}
+                  width={50}
+                  height={50}
                   className="w-10 h-10 rounded-full object-cover border border-gray-300"
                 />
                 <div className="text-right">

@@ -4,21 +4,19 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 
 const initialVehicleImages = [
-  { id: 1, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 1" },
-  { id: 2, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 2" },
-  { id: 3, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 3" },
-  { id: 4, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 4" },
-  { id: 5, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 5" },
-  { id: 6, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 6" },
-  { id: 7, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 7" },
-  { id: 8, src: "/placeholder.svg?height=300&width=450", alt: "Vehicle 8 (Special)" },
+  { id: 1, src: "/cars/swift.jpg?height=300&width=450", alt: "Dzire" },
+  { id: 2, src: "/cars/ertiga.webp?height=300&width=450", alt: "Ertiga" },
+  { id: 3, src: "/cars/innova.webp?height=300&width=450", alt: "Innova" },
+  { id: 4, src: "/cars/crysta.webp?height=300&width=450", alt: "Innova Crysta" },
+  { id: 5, src: "/cars/tempo.jpg?height=300&width=450", alt: "Tempo Traveller" },
+
 ]
 
 const initialWhyChooseUsItems = [
-  { id: 1, src: "/placeholder.svg?height=64&width=64", title: "24/7 Support" },
-  { id: 2, src: "/placeholder.svg?height=64&width=64", title: "Clean Vehicles" },
-  { id: 3, src: "/placeholder.svg?height=64&width=64", title: "Experienced Drivers" },
-  { id: 4, src: "/placeholder.svg?height=64&width=64", title: "Affordable Prices" },
+  { id: 1, src: "/images/feed/1.png?height=64&width=64", title: "24/7 Support" },
+  { id: 2, src: "/images/feed/2.png?height=64&width=64", title: "Clean Vehicles" },
+  { id: 3, src: "/images/feed/3.png?height=64&width=64", title: "Experienced Drivers" },
+  { id: 4, src: "/images/feed/4.png?height=64&width=64", title: "Affordable Prices" },
 ]
 
 export default function VehicleFeatures() {
@@ -72,7 +70,7 @@ export default function VehicleFeatures() {
                 src={image.src || "/placeholder.svg"}
                 alt={image.alt}
                 width={450}
-                height={300}
+                height={500}
                 className="rounded-lg object-cover w-full h-auto"
               />
               <p className="text-center text-gray-700 mt-2">{image.alt}</p>

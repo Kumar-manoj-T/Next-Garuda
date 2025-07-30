@@ -15,8 +15,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <MapPin className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-800">TravelCo</span>
+            <img src="/logo.webp" alt="Logo" className="h-6 md:h-8 lg:h-10 w-auto" />
           </div>
 
           {/* Desktop Navigation */}

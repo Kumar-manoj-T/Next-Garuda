@@ -7,7 +7,7 @@ export default function PassengerNoteBox() {
       {/* Left: Image */}
       <div className="w-28 h-28 flex-shrink-0">
         <Image
-          src="/passenger-icon.svg" // 🔁 Replace this with your image
+          src="/images/feed/note.png" // 🔁 Replace this with your image
           alt="Passenger Note Icon"
           width={112}
           height={112}

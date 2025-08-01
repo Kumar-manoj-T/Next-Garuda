@@ -34,7 +34,7 @@ export default function HomePage() {
             </a>
           </div>
           {/* Right - Image */}
-          <div className="w-[400px] h-[400px]">
+          <div className="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
             <img
               src="/images/about.png"
               alt="Car Booking"
@@ -49,7 +49,7 @@ export default function HomePage() {
       <section className="py-12 px-4 bg-white">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center ">
           {/* Left - */}
-          <div className="w-[400px] h-[400px]">
+          <div className="w-full">
             <img
               src="/images/6.png"
               alt="Car Booking"
@@ -93,7 +93,7 @@ export default function HomePage() {
             </a>
           </div>
           {/* Right - Image */}
-          <div className="w-[400px] h-[400px]">
+          <div className="w-full">
             <img
               src="/images/4.png"
               alt="Car Booking"
@@ -106,7 +106,7 @@ export default function HomePage() {
        <section className="py-12 px-4 bg-white">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center ">
           {/* Left - */}
-          <div className="w-[400px] h-[400px]">
+          <div className="w-full">
             <img
               src="/images/5.png"
               alt="Car Booking"
@@ -151,7 +151,7 @@ export default function HomePage() {
             </a>
           </div>
           {/* Right - Image */}
-          <div className="w-[400px] h-[400px]">
+          <div className="w-full">
             <img
               src="/images/1.png"
               alt="Car Booking"

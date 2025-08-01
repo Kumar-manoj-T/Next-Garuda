@@ -81,7 +81,7 @@ export default function BookingForm() {
 
   return (
     <>
-      <section className="py-12 px-4 bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+      <section className="py-12 px-4 bg-gray-100 flex flex-col items-center justify-center min-h-screen" id="booking">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">
             {" "}
@@ -111,7 +111,7 @@ export default function BookingForm() {
           <div className="w-full max-w-2xl mb-0 ms-0">
             <div className="flex gap-4">
               {/* Tirupati Package */}
-              <label
+              {/* <label
                 className={`flex-1   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Tirupati Package"
                     ? "bg-blue-600 text-white"
@@ -127,10 +127,10 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Tirupati Package
-              </label>
+              </label> */}
 
               {/* Car Rental Package */}
-              <label
+              {/* <label
                 className={`flex-1     bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Car Rental Package"
                     ? "bg-blue-600 text-white"
@@ -146,10 +146,10 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Car Rental Package
-              </label>
+              </label> */}
 
               {/* Temple Tour Package */}
-              <label
+              {/* <label
                 className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Temple Tour Package"
                     ? "bg-blue-600 text-white"
@@ -165,7 +165,7 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Temple Tour Package
-              </label>
+              </label> */}
             </div>
           </div>
           <div className="bg-white p-8 border-t-0 shadow-lg max-w-4xl mt-0 w-full">
@@ -228,22 +228,7 @@ export default function BookingForm() {
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
                 />
-                {/* <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div> */}
+               
               </div>
               <div className="relative">
                 <input
@@ -254,22 +239,6 @@ export default function BookingForm() {
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
                 />
-                {/* <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div> */}
               </div>
 
               {/* Conditional Dropdowns */}
@@ -303,9 +272,16 @@ export default function BookingForm() {
                     <option value="">-- Select a Package --</option>
                     {selectedPackage === "Tirupati Package" && (
                       <>
-                        <option value="Tirupati Darshan (Standard)">Tirupati Darshan (Standard)</option>
-                        <option value="Tirupati Darshan (Deluxe)">Tirupati Darshan (Deluxe)</option>
-                        <option value="Tirupati Darshan (Premium)">Tirupati Darshan (Premium)</option>
+                        <option value="Tirumala Tirupati Darshan Package">Tirumala Tirupati Darshan Package </option>
+                        <option value="Chennai to Tirupati One Day Tour">Chennai to Tirupati One Day Tour</option>
+                        <option value="Chennai to Tirupati Two Days Tour">Chennai to Tirupati Two Days Tour</option>
+                        <option value="VIP Break Darshan">VIP Break Darshan </option>
+                        <option value="Bangalore to Tirupati Dharshan Tour">Bangalore to Tirupati Dharshan Tour</option>
+                        <option value="Kanchipuram to Tirupati One Day Tour">Kanchipuram to Tirupati One Day Tour</option>
+                        <option value="Kanchipuram to Tirupati Two Days Tour">Kanchipuram to Tirupati Two Days Tour</option>
+                        <option value="Vellore to Tirupati One Day Tour">Vellore to Tirupati One Day Tour</option>
+                        <option value="Vellore to Tirupati Two Days Tour">Vellore to Tirupati Two Days Tour</option>
+
                       </>
                     )}
                     {selectedPackage === "Temple Tour Package" && (

@@ -27,7 +27,7 @@ export default function HomePage() {
             <p className="text-gray-600">
               Welcome to Garuda Tours and Travels, your trusted partner for hassle-free Chennai to Tirupati tour packages. We are specialists in providing well-organized Chennai to Tirupati one-day packages, two-day Tirupati tour packages, and VIP darshan packages from Chennai with on-time service, expert guidance, and comfortable travel. Our Tirupati darshan packages from Chennai are designed for individuals, families, and senior citizens seeking peace, devotion, and convenience. In addition to Tirupati, we offer divine temple tour packages to Rameswaram, Kanchipuram, Thiruvannamalai, and other holy destinations across South India. Every Chennai to Tirupati travel package is backed by our commitment to punctuality and customer satisfaction. Trusted by thousands of devotees, we aim to make your Tirupati package from Chennai truly spiritual, memorable, and easy to book.
             </p>
-            <a href="/about" className="inline-block">
+            <a href="#" className="inline-block">
               <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
                 Learn More About Us
               </button>
@@ -66,9 +66,11 @@ export default function HomePage() {
             <p className="text-gray-600">
               With our expert coordination, your Chennai to Tirupati travel package becomes more than a trip—it becomes a spiritual journey. Book now and travel in comfort while we take care of your darshan timing, travel schedule, and support throughout.
             </p>
-            <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
+            <a href="#booking">
+              <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
              Book One-Day Trip
             </button>
+            </a>
           </div>
         </div>
       </section>
@@ -84,7 +86,7 @@ export default function HomePage() {
             <p className="text-gray-600">
               This Tirupati tour package from Chennai gives you the time and flexibility to truly connect spiritually without rushing. It’s the perfect blend of devotion, comfort, and planning—trusted by thousands of pilgrims.
             </p>
-            <a href="#" className="inline-block">
+            <a href="#booking" className="inline-block">
               <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
                 Reserve Two-Day Package
               </button>
@@ -121,9 +123,12 @@ export default function HomePage() {
             <p className="text-gray-600">
              This customizable Tirupati travel package from Chennai is perfect if you already have darshan tickets and want full control of your journey. Garuda’s Tirupati Chennai package by car ensures safety, transparency, and peace of mind every mile of the way.
             </p>
-            <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
+            <a href="#booking">
+              <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
              Get VIP Darshan Now
             </button>
+            </a>
+            
           </div>
         </div>
       </section>
@@ -139,7 +144,7 @@ export default function HomePage() {
             <p className="text-gray-600">
               These expertly crafted temple tour packages near Chennai are perfect for spiritual seekers, senior citizens, and families looking for a divine escape. Discover South India’s sacred routes with Garuda’s trusted services.
             </p>
-            <a href="#" className="inline-block">
+            <a href="#booking" className="inline-block">
               <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
                 Explore All Temple Tours
               </button>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 
 const initialVehicleImages = [
-  { id: 1, src: "/cars/swift.png?height=300&width=450", alt: "Dzire" },
+  { id: 1, src: "/cars/swift.png?height=300&width=450", alt: "Dzire or Etios" },
   { id: 2, src: "/cars/ertiga.png?height=300&width=450", alt: "Ertiga" },
   { id: 3, src: "/cars/innova.png?height=300&width=450", alt: "Innova" },
   { id: 4, src: "/cars/crysta.png?height=300&width=450", alt: "Innova Crysta" },

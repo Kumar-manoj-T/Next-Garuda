@@ -8,72 +8,75 @@ const packagesData = {
   "Tirupati Package": [
     {
       id: 1,
-      name: "Tirupati Darshan (Standard)",
+      name: "Chennai to Tirupati ",
       price: "$150",
-      description: "A comfortable tour to Tirupati, including darshan and basic amenities.",
-      image: "/placeholder.svg?height=200&width=300",
+      include: "Home Pickup & Drop, Breakfast & Lunch, Special Entry Darshan Ticket, SriVari Laddu per person.",
+      exclude: "Accommodation not provided, Multiple pickups, Guide fees excluded, Extra Laddus.",
+      image: "/images/city/c-t.png",
     },
     {
       id: 2,
-      name: "Tirupati Darshan (Deluxe)",
+      name: "Vellore to Tirupati",
       price: "$250",
-      description: "Enhanced Tirupati experience with premium accommodation and services.",
-      image: "/placeholder.svg?height=200&width=300",
+      include: "Home Pickup & Drop, Breakfast & Lunch, Special Entry Darshan Ticket, SriVari Laddu per person",
+      exclude: "Accommodation not provided, Multiple pickups, Guide fees excluded, Extra Laddu",
+      image: "/images/city/v-t.png",
     },
     {
       id: 3,
-      name: "Tirupati Darshan (Premium)",
+      name: "Bangalore to Tirupati",
       price: "$400",
-      description: "Luxury Tirupati tour with VIP darshan and exclusive facilities.",
-      image: "/placeholder.svg?height=200&width=300",
+      include: "Home Pickup & Drop, Breakfast & Lunch, Special Entry Darshan Ticket, SriVari Laddu per person.",
+      exclude: "Accommodation not provided, Multiple pickups, Guide fees excluded, Extra Laddu",
+      image: "/images/city/b-t.png",
     },
   ],
-  "Temple Tour Package": [
-    {
-      id: 4,
-      name: "South India Temple Tour",
-      price: "$500",
-      description: "Explore ancient temples across South India with expert guides.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: 5,
-      name: "North India Temple Tour",
-      price: "$650",
-      description: "Discover the spiritual heritage of North India's iconic temples.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: 6,
-      name: "Custom Temple Tour",
-      price: "Custom",
-      description: "Design your own spiritual journey to temples of your choice.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-  ],
-  "Car Rental Package": [
-    {
-      id: 7,
-      name: "Sedan Rental (Daily)",
-      price: "$80/day",
-      description: "Rent a comfortable sedan for your daily travel needs.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: 8,
-      name: "SUV Rental (Weekly)",
-      price: "$500/week",
-      description: "Spacious SUV for family trips or longer journeys.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      id: 9,
-      name: "Van Rental (Group)",
-      price: "$120/day",
-      description: "Ideal for group travel, offering ample space and comfort.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-  ],
+  // "Temple Tour Package": [
+  //   {
+  //     id: 4,
+  //     name: "South India Temple Tour",
+  //     price: "$500",
+  //     description: "Explore ancient temples across South India with expert guides.",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "North India Temple Tour",
+  //     price: "$650",
+  //     description: "Discover the spiritual heritage of North India's iconic temples.",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Custom Temple Tour",
+  //     price: "Custom",
+  //     description: "Design your own spiritual journey to temples of your choice.",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //   },
+  // ],
+  // "Car Rental Package": [
+  //   {
+  //     id: 7,
+  //     name: "Sedan Rental (Daily)",
+  //     price: "$80/day",
+  //     description: "Rent a comfortable sedan for your daily travel needs.",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "SUV Rental (Weekly)",
+  //     price: "$500/week",
+  //     description: "Spacious SUV for family trips or longer journeys.",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //   },
+  //   {
+  //     id: 9,
+  //     name: "Van Rental (Group)",
+  //     price: "$120/day",
+  //     description: "Ideal for group travel, offering ample space and comfort.",
+  //     image: "/placeholder.svg?height=200&width=300",
+  //   },
+  // ],
 }
 
 export default function TourPackages() {
@@ -119,9 +122,10 @@ export default function TourPackages() {
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-semibold text-gray-800 mb-2">{pkg.name}</h3>
-                <p className="text-blue-600 text-xl font-bold mb-4">{pkg.price}</p>
-                {/* <p className="text-gray-600 mb-6">{pkg.description}</p> */}
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg">Book Now</Button>
+                {/* <p className="text-blue-600 text-xl font-bold mb-4">{pkg.price}</p> */}
+                <small className="text-green-600 mb-6">*Include::{pkg.include}</small><br />
+                <small className="text-red-600 mb-6">*Exclude::{pkg.exclude}</small>
+               <a href="#booking"><Button  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg">Book Now</Button></a> 
               </div>
             </div>
           ))}

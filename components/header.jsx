@@ -55,7 +55,7 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Chennai to Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="#"
+                          href="/tirupati-package/chennai-to-tirupati"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />

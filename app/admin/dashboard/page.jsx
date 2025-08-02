@@ -65,7 +65,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="flex-grow">
               <p className="text-gray-600">Manage {pkgType.title} entries.</p>
-              <Link href={`/admin/dashboard/${pkgType.slug}`} passHref>
+              <Link href={`/admin/${pkgType.slug}`} passHref>
                 <Button variant="outline" className="mt-4 w-full bg-transparent">
                   View All {pkgType.title}
                 </Button>

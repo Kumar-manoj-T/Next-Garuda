@@ -1,9 +1,27 @@
 import { NextResponse } from "next/server"
 import nodemailer from "nodemailer"
+import { db } from "@/lib/firebase"
+import { collection, addDoc, Timestamp } from "firebase/firestore"
 
 export async function POST(request) {
   try {
     const formData = await request.json()
+
+     // Save booking data to Firestore
+    let firestoreSaveSuccess = false
+    let firestoreError = null
+    try {
+      const docRef = await addDoc(collection(db, "bookings"), {
+        ...formData,
+        packageType: formData.packageType, // Ensure packageType is explicitly included
+        createdAt: Timestamp.now(), // Add a server timestamp
+      })
+      console.log("Document written with ID: ", docRef.id)
+      firestoreSaveSuccess = true
+    } catch (e) {
+      console.error("Error adding document to Firestore: ", e)
+      firestoreError = e.message
+    }
 
     // Configure Nodemailer transporter
     const transporter = nodemailer.createTransport({

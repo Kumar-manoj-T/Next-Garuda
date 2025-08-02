@@ -33,7 +33,7 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            <a href="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Home
             </a>
             <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
@@ -171,7 +171,7 @@ export default function Header() {
               <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
                 <div className="py-2">
                   <a
-                    href="#"
+                    href="/car-rental"
                     className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                   >
                     <div className="font-medium">Swift/Etios</div>

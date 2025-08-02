@@ -7,6 +7,8 @@ import Vehicl from "@/components/home/vehicle-slider"
 import PassengerNoteBox from "@/components/PassengerNoteBox"
 import Counter from "@/components/stats-counter"
 import CustomerReviews from "@/components/customer-reviews"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 
 
 
@@ -14,6 +16,7 @@ import CustomerReviews from "@/components/customer-reviews"
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
+      <Header />
 
       <HeroSlider />
       <BookingForm />
@@ -162,6 +165,7 @@ export default function HomePage() {
       </section>
       <CustomerReviews />
       <Counter />
+      <Footer />
     </div>
   )
 }

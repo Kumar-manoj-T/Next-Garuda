@@ -10,16 +10,30 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { isAuthenticated } from "@/lib/custom-auth" // Import custom auth check
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog" // Import AlertDialog components
 
 export default function TirupatiPackageListPage() {
   const router = useRouter()
   const [packages, setPackages] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [clientAuthenticated, setClientAuthenticated] = useState(false) // New state for client-side auth
+  const [clientAuthenticated, setClientAuthenticated] = useState(false)
   const { toast } = useToast()
 
-  const packageType = "tirupati-package" // Hardcode for this specific page
+  // State for delete confirmation dialog
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [packageToDelete, setPackageToDelete] = useState(null)
+
+  const packageType = "tirupati-package"
 
   // Client-side authentication check
   useEffect(() => {
@@ -63,16 +77,22 @@ export default function TirupatiPackageListPage() {
   }
 
   useEffect(() => {
-    // Only fetch if authenticated on the client
     if (clientAuthenticated) {
       fetchPackages()
     }
-  }, [packageType, toast, clientAuthenticated]) // Depend on clientAuthenticated
+  }, [packageType, toast, clientAuthenticated])
 
-  const handleDelete = async (packageId, imageUrls, packageTitle) => {
-    if (!confirm(`Are you sure you want to delete "${packageTitle}"? This action cannot be undone.`)) {
-      return
-    }
+  // Function to open the delete confirmation dialog
+  const handleDeleteClick = (packageId, imageUrls, packageTitle) => {
+    setPackageToDelete({ id: packageId, imageUrls, title: packageTitle })
+    setIsDeleteDialogOpen(true)
+  }
+
+  // Function to perform the actual deletion after confirmation
+  const confirmDelete = async () => {
+    if (!packageToDelete) return
+
+    const { id: packageId, imageUrls, title: packageTitle } = packageToDelete
 
     try {
       // 1. Delete images from Firebase Storage
@@ -113,6 +133,9 @@ export default function TirupatiPackageListPage() {
         description: `Failed to delete package: ${err.message}`,
         variant: "destructive",
       })
+    } finally {
+      setIsDeleteDialogOpen(false) // Close dialog regardless of success/failure
+      setPackageToDelete(null) // Clear package to delete state
     }
   }
 
@@ -178,7 +201,7 @@ export default function TirupatiPackageListPage() {
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleDelete(pkg.id, pkg.images || [], pkg.title)}
+                    onClick={() => handleDeleteClick(pkg.id, pkg.images || [], pkg.title)}
                   >
                     Delete
                   </Button>
@@ -188,6 +211,26 @@ export default function TirupatiPackageListPage() {
           ))}
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the{" "}
+              <span className="font-semibold text-red-600">"{packageToDelete?.title}"</span> package and remove its
+              associated data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

@@ -116,7 +116,7 @@ export default async function TirupatiPackageDetailPage({ params }) {
             </div>
           )}
           <h1 className="text-5xl font-bold text-gray-800 mb-4">{packageData.title}</h1>
-          {packageData.subtitle && <p className="text-xl text-gray-600 mb-6">{packageData.subtitle}</p>}
+          {/* {packageData.subtitle && <p className="text-xl text-gray-600 mb-6">{packageData.subtitle}</p>}
           <Breadcrumb className="justify-center">
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -129,11 +129,11 @@ export default async function TirupatiPackageDetailPage({ params }) {
                 <BreadcrumbPage>{packageData.title}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </Breadcrumb>
+          </Breadcrumb> */}
         </section>
 
         {/* Booking Form and Why Choose Us Section - Adjusted Layout */}
-        <section className="py-12 px-4 bg-gray-100">
+        <section className="py-12 px-4 bg-gray-100 mb-10">
           <div className="container mx-auto flex flex-col gap-12 items-center">
             {/* Booking Form */}
             <div >
@@ -210,6 +210,10 @@ export default async function TirupatiPackageDetailPage({ params }) {
                           <span className="font-medium">₹{price.value}/-</span>
                         </div>
                       ))}
+                      <div className="mt-3 flex align-item-center">
+                        <a href="#booking" className="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-full transition">Book Now</a>
+                      </div>
+                      
                     </div>
                   </CardContent>
                 </Card>
@@ -291,48 +295,52 @@ export default async function TirupatiPackageDetailPage({ params }) {
             </div>
           )}
 
-          {/* Dress Code */}
+         {/* Dress Code */}
           {(packageData.maleDressCodeImages?.length > 0 || packageData.femaleDressCodeImages?.length > 0) && (
             <div className="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
               <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Dress Code</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {packageData.maleDressCodeImages?.length > 0 && (
-                  <div className="flex flex-col items-center text-center">
-                    <Shirt className="h-16 w-16 text-blue-600 mb-2" />
-                    <p className="text-lg font-semibold text-gray-800 mb-4">Male</p>
-                    <div className="grid grid-cols-2 gap-4 w-full">
-                      {packageData.maleDressCodeImages.map((imgSrc, index) => (
-                        <div key={index} className="relative w-full h-48 rounded-lg overflow-hidden shadow-md">
-                          <Image
-                            src={imgSrc || "/placeholder.svg?height=200&width=150&query=male traditional dress"}
-                            alt={`Male dress code example ${index + 1}`}
-                            fill
-                            style={{ objectFit: "cover" }}
-                            className="transition-transform duration-300 hover:scale-105"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 gap-8">
+                {packageData.femaleDressCodeImages?.[0] && (
+                  <Card className="overflow-hidden">
+                    <CardHeader className="p-4 text-center">
+                      <CardTitle className="text-xl font-semibold text-gray-800">Female</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <div className="relative w-full h-64">
+                        <Image
+                          src={
+                            packageData.femaleDressCodeImages[0] ||
+                            "/placeholder.svg?height=300&width=200&query=female traditional dress"
+                          }
+                          alt="Female dress code example"
+                          fill
+                          style={{ objectFit: "cover" }}
+                          className="transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
                 )}
-                {packageData.femaleDressCodeImages?.length > 0 && (
-                  <div className="flex flex-col items-center text-center">
-                    <Shirt className="h-16 w-16 text-pink-600 mb-2" />
-                    <p className="text-lg font-semibold text-gray-800 mb-4">Female</p>
-                    <div className="grid grid-cols-2 gap-4 w-full">
-                      {packageData.femaleDressCodeImages.map((imgSrc, index) => (
-                        <div key={index} className="relative w-full h-48 rounded-lg overflow-hidden shadow-md">
-                          <Image
-                            src={imgSrc || "/placeholder.svg?height=200&width=150&query=female traditional dress"}
-                            alt={`Female dress code example ${index + 1}`}
-                            fill
-                            style={{ objectFit: "cover" }}
-                            className="transition-transform duration-300 hover:scale-105"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                {packageData.maleDressCodeImages?.[0] && (
+                  <Card className="overflow-hidden">
+                    <CardHeader className="p-4 text-center">
+                      <CardTitle className="text-xl font-semibold text-gray-800">Male</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <div className="relative w-full h-64">
+                        <Image
+                          src={
+                            packageData.maleDressCodeImages[0] ||
+                            "/placeholder.svg?height=300&width=200&query=male traditional dress"
+                          }
+                          alt="Male dress code example"
+                          fill
+                          style={{ objectFit: "cover" }}
+                          className="transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
                 )}
               </div>
             </div>
@@ -346,7 +354,7 @@ export default async function TirupatiPackageDetailPage({ params }) {
             {packageData.sections.map((section) => (
               <div key={section.id} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 {section.imageUrl && (
-                  <div className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
+                  <div className="relative w-full h-72 rounded-lg overflow-hidden shadow-md">
                     <Image
                       src={section.imageUrl || "/placeholder.svg?height=300&width=500&query=section image"}
                       alt={section.contentTitle || "Section image"}

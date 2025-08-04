@@ -36,7 +36,7 @@ export default function Header() {
             <a href="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Home
             </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               About
             </a>
 
@@ -62,21 +62,21 @@ export default function Header() {
                           One Day Package
                         </a>
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Calendar className="h-4 w-4 mr-2" />
                           Two Days Package
                         </a>
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Car className="h-4 w-4 mr-2" />
                           Car Rental Package
                         </a>
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Crown className="h-4 w-4 mr-2" />
@@ -90,14 +90,14 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Vellore to Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />
                           One Day Package
                         </a>
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Calendar className="h-4 w-4 mr-2" />
@@ -111,7 +111,7 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Bangalore to Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />
@@ -128,14 +128,14 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Kanchipuram To Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />
                           One Day Package
                         </a>
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Calendar className="h-4 w-4 mr-2" />
@@ -149,7 +149,7 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Tirumala to Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="#"
+                          href="/under-construction"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />
@@ -171,21 +171,21 @@ export default function Header() {
               <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
                 <div className="py-2">
                   <a
-                    href="/car-rental"
+                    href="/under-construction"
                     className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                   >
                     <div className="font-medium">Swift/Etios</div>
                     <div className="text-sm text-gray-500">Compact car rental</div>
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                   >
                     <div className="font-medium">SUV Rental</div>
                     <div className="text-sm text-gray-500">Spacious family vehicles</div>
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                   >
                     <div className="font-medium">Van Rental</div>
@@ -204,21 +204,21 @@ export default function Header() {
               <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
                 <div className="py-2">
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                   >
                     <div className="font-medium">South India Temple Tour</div>
                     <div className="text-sm text-gray-500">Sacred temple visits</div>
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                   >
                     <div className="font-medium">North India Temple Tour</div>
                     <div className="text-sm text-gray-500">Spiritual journeys</div>
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                   >
                     <div className="font-medium">Custom Temple Tour</div>
@@ -228,10 +228,10 @@ export default function Header() {
               </div>
             </div>
 
-            <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Gallery
             </a>
-            <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Contact
             </a>
           </nav>

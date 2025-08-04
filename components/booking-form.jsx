@@ -111,7 +111,7 @@ export default function BookingForm() {
           <div className="w-full max-w-2xl mb-0 ms-0">
             <div className="flex gap-4">
               {/* Tirupati Package */}
-              {/* <label
+              <label
                 className={`flex-1   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Tirupati Package"
                     ? "bg-blue-600 text-white"
@@ -127,10 +127,10 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Tirupati Package
-              </label> */}
+              </label>
 
               {/* Car Rental Package */}
-              {/* <label
+              <label
                 className={`flex-1     bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Car Rental Package"
                     ? "bg-blue-600 text-white"
@@ -146,10 +146,10 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Car Rental Package
-              </label> */}
+              </label>
 
               {/* Temple Tour Package */}
-              {/* <label
+              <label
                 className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Temple Tour Package"
                     ? "bg-blue-600 text-white"
@@ -165,7 +165,7 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Temple Tour Package
-              </label> */}
+              </label>
             </div>
           </div>
           <div className="bg-white p-8 border-t-0 shadow-lg max-w-4xl mt-0 w-full">
@@ -251,11 +251,11 @@ export default function BookingForm() {
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-500"
                   >
-                    <option value="">Select Vehicle Type</option>
-                    <option value="Swift/Etios">Swift/Etios</option>
+                    <option value="">Km Based Rental</option>
+                    {/* <option value="Swift/Etios">Swift/Etios</option>
                     <option value="Sedan">Sedan</option>
                     <option value="SUV">SUV</option>
-                    <option value="Van">Van</option>
+                    <option value="Van">Van</option> */}
                   </select>
                 </div>
               )}

@@ -149,7 +149,7 @@ export default function BookingForm() {
               </label>
 
               {/* Temple Tour Package */}
-              <label
+              {/* <label
                 className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Temple Tour Package"
                     ? "bg-blue-600 text-white"
@@ -165,7 +165,7 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Temple Tour Package
-              </label>
+              </label> */}
             </div>
           </div>
           <div className="bg-white p-8 border-t-0 shadow-lg max-w-4xl mt-0 w-full">

@@ -132,37 +132,38 @@ export default async function TirupatiPackageDetailPage({ params }) {
           </Breadcrumb>
         </section>
 
-        {/* Booking Form and Why Choose Us Section - New Layout */}
+        {/* Booking Form and Why Choose Us Section - Adjusted Layout */}
         <section className="py-12 px-4 bg-gray-100">
-          <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* Left Column: Booking Form */}
-            <div className="flex flex-col items-start w-full">
+          <div className="container mx-auto flex flex-col gap-12 items-center">
+            {/* Booking Form */}
+            <div className="w-full max-w-lg">
               <BookingForm />
             </div>
 
-            {/* Right Column: Custom "Why Choose Us" Section */}
-            <div className="flex flex-col items-start w-full">
-              <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center lg:text-left">Why Choose Us</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-                {packageData.whyChooseUsItems?.map((item) => {
-                  // Use packageData.whyChooseUsItems
-                  const IconComponent = IconMap[item.iconName] // Get the icon component from the map
-                  if (!IconComponent) return null // Don't render if icon not found
-                  return (
-                    <div
-                      key={item.id}
-                      className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md border border-gray-200 transition-transform duration-200 hover:scale-[1.02]"
-                    >
-                      <div className="mb-4">
-                        <IconComponent className="h-12 w-12 text-blue-600" />
+            {/* Custom "Why Choose Us" Section */}
+            {packageData.whyChooseUsItems && packageData.whyChooseUsItems.length > 0 && (
+              <div className="flex flex-col items-center w-full">
+                <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Why Choose Us</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                  {packageData.whyChooseUsItems?.map((item) => {
+                    const IconComponent = IconMap[item.iconName]
+                    if (!IconComponent) return null
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md border border-gray-200 transition-transform duration-200 hover:scale-[1.02]"
+                      >
+                        <div className="mb-4">
+                          <IconComponent className="h-12 w-12 text-blue-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
+                        {/* Description is intentionally removed as per user request */}
                       </div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-                      {/* Removed the description paragraph */}
-                    </div>
-                  )
-                })}
+                    )
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
@@ -337,6 +338,46 @@ export default async function TirupatiPackageDetailPage({ params }) {
             </div>
           )}
         </section>
+
+        {/* Dynamic Sections */}
+        {packageData.sections && packageData.sections.length > 0 && (
+          <section className="mb-12 space-y-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">More Details</h2>
+            {packageData.sections.map((section) => (
+              <div key={section.id} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                {section.imageUrl && (
+                  <div className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
+                    <Image
+                      src={section.imageUrl || "/placeholder.svg?height=300&width=500&query=section image"}
+                      alt={section.contentTitle || "Section image"}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className="transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                )}
+                <div>
+                  {section.contentTitle && (
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{section.contentTitle}</h3>
+                  )}
+                  {section.contentDescription && (
+                    <div
+                      className="prose max-w-none text-gray-700 mb-4"
+                      dangerouslySetInnerHTML={{ __html: section.contentDescription }}
+                    />
+                  )}
+                  {section.listInfo && section.listInfo.length > 0 && (
+                    <ul className="list-disc list-inside space-y-2 text-gray-700">
+                      {section.listInfo.map((item) => (
+                        <li key={item.id}>{item.text}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            ))}
+          </section>
+        )}
 
         {/* Additional Packages Section */}
         {otherPackages.length > 0 && (

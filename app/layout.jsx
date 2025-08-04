@@ -3,8 +3,8 @@ import { Suspense } from 'react'
 
 
 export const metadata = {
-  title: 'Garuda Tours And Travels',
-  description: 'Your trusted partner for hassle-free Chennai to Tirupati tour packages.',
+  title: 'Chennai to Tirupati Tour Packages | Tirupati Tours| Temple Tour Packages - Garuda Tours & Travels',
+  description: 'Explore affordable Chennai to Tirupati tour packages with Garuda Tours & Travels. Hassle-free temple visits, VIP darshan, and customized itineraries. Book your Tirupati temple tour today!',
 }
 
 export default function RootLayout({ children }) {

@@ -25,7 +25,7 @@ export default function Header() {
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-[1470px] mx-auto ">
-      <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img src="/logo.webp" alt="Logo" className="h-6 md:h-8 lg:h-10 w-auto" />
@@ -238,19 +238,19 @@ export default function Header() {
 
           {/* Phone Inquiry Section (Desktop Only) */}
           <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
-    <div className="flex items-center space-x-3 bg-green-50 px-4 py-2 rounded-lg border border-green-100">
-      <PhoneCall className="h-5 w-5 text-green-600" />
-      <div className="flex flex-col">
-        <span className="text-xs text-gray-600 font-medium">For Inquiry</span>
-        <a
-          href="tel:+919840789844"
-          className="text-sm font-bold text-green-600 hover:text-green-700 transition-colors duration-200"
-        >
-          +91 98407 89844
-        </a>
-      </div>
-    </div>
-  </div>
+            <div className="flex items-center space-x-3 bg-green-50 px-4 py-2 rounded-lg border border-green-100">
+              <PhoneCall className="h-5 w-5 text-green-600" />
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-600 font-medium">For Inquiry</span>
+                <a
+                  href="tel:+919840789844"
+                  className="text-sm font-bold text-green-600 hover:text-green-700 transition-colors duration-200"
+                >
+                  +91 98407 89844
+                </a>
+              </div>
+            </div>
+          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -259,13 +259,12 @@ export default function Header() {
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
-        </div> 
+        </div>
 
         {/* Mobile Navigation Menu */}
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-          }`}
+          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+            }`}
         >
           <nav className="py-4 space-y-2 border-t border-gray-100">
             <a

@@ -269,13 +269,13 @@ export default function Header() {
         >
           <nav className="py-4 space-y-2 border-t border-gray-100">
             <a
-              href="#"
+              href="/"
               className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
             >
               Home
             </a>
             <a
-              href="#"
+              href="/under-construction"
               className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
             >
               About Us
@@ -298,28 +298,28 @@ export default function Header() {
                 <div className="pl-6 space-y-2 pb-2">
                   <div className="text-sm font-medium text-blue-600 px-4 py-1">Chennai to Tirupati</div>
                   <a
-                    href="#"
+                    href=""
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <User className="h-3 w-3 mr-2" />
                     One Day Package
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <Calendar className="h-3 w-3 mr-2" />
                     Two Days Package
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <Car className="h-3 w-3 mr-2" />
                     Car Rental Package
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <Crown className="h-3 w-3 mr-2" />
@@ -328,14 +328,14 @@ export default function Header() {
 
                   <div className="text-sm font-medium text-blue-600 px-4 py-1 mt-2">Vellore to Tirupati</div>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <User className="h-3 w-3 mr-2" />
                     One Day Package
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <Calendar className="h-3 w-3 mr-2" />
@@ -344,7 +344,7 @@ export default function Header() {
 
                   <div className="text-sm font-medium text-blue-600 px-4 py-1 mt-2">Bangalore to Tirupati</div>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <User className="h-3 w-3 mr-2" />
@@ -353,14 +353,14 @@ export default function Header() {
 
                   <div className="text-sm font-medium text-blue-600 px-4 py-1 mt-2">Kanchipuram To Tirupati</div>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <User className="h-3 w-3 mr-2" />
                     One Day Package
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <Calendar className="h-3 w-3 mr-2" />
@@ -369,7 +369,7 @@ export default function Header() {
 
                   <div className="text-sm font-medium text-blue-600 px-4 py-1 mt-2">Tirumala to Tirupati</div>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                   >
                     <User className="h-3 w-3 mr-2" />
@@ -395,19 +395,19 @@ export default function Header() {
               >
                 <div className="pl-6 space-y-1 pb-2">
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
                   >
                     Swift/Etios
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
                   >
                     SUV Rental
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
                   >
                     Van Rental
@@ -432,19 +432,19 @@ export default function Header() {
               >
                 <div className="pl-6 space-y-1 pb-2">
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
                   >
                     South India Temple Tour
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
                   >
                     North India Temple Tour
                   </a>
                   <a
-                    href="#"
+                    href="/under-construction"
                     className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
                   >
                     Custom Temple Tour
@@ -454,20 +454,20 @@ export default function Header() {
             </div>
 
             <a
-              href="#"
+              href="/under-construction"
               className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
             >
               Gallery
             </a>
             <a
-              href="#"
+              href="/under-construction"
               className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
             >
               Contact Us
             </a>
 
             {/* Mobile Phone Section */}
-            <div className="mt-4 mx-4 p-4 bg-green-50 rounded-lg border border-green-100">
+            {/* <div className="mt-4 mx-4 p-4 bg-green-50 rounded-lg border border-green-100">
               <div className="flex items-center space-x-3">
                 <PhoneCall className="h-6 w-6 text-green-600" />
                 <div className="flex flex-col">
@@ -480,7 +480,7 @@ export default function Header() {
                   </a>
                 </div>
               </div>
-            </div>
+            </div> */}
           </nav>
         </div>
       </div>

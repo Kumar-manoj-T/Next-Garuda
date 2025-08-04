@@ -181,46 +181,56 @@ export default async function TirupatiPackageDetailPage({ params }) {
           </section>
         )}
 
-        {/* Chennai to Tirupati Package Price Details (Dynamic) */}
-        {packageData.carPrices && packageData.carPrices.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-              {packageData.title} Package Price Details
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {packageData.carPrices.map((car) => (
-                <Card key={car.id} className="overflow-hidden">
-                  <CardHeader className="p-0">
-                    <div className="relative w-full h-48">
-                      <Image
-                        src={car.imageUrl || "/placeholder.svg?height=200&width=300&query=car image"}
-                        alt={car.carName}
-                        fill
-                        style={{ objectFit: "cover" }}
-                        className="transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-4">
-                    <CardTitle className="text-xl font-semibold text-gray-800 mb-3">{car.carName}</CardTitle>
-                    <div className="space-y-2">
-                      {car.prices.map((price) => (
-                        <div key={price.id} className="flex justify-between text-gray-700">
-                          <span>{price.label}:</span>
-                          <span className="font-medium">₹{price.value}/-</span>
-                        </div>
-                      ))}
-                      <div className="mt-3 flex align-item-center">
-                        <a href="#booking" className="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-full transition">Book Now</a>
-                      </div>
-                      
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
+       {packageData.carPrices && packageData.carPrices.length > 0 && (
+  <section className="mb-12">
+    <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+      {packageData.title} Package Price Details
+    </h2>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {packageData.carPrices.map((car) => (
+        <div
+          key={car.id}
+          className="bg-white rounded-xl shadow-md overflow-hidden border"
+        >
+          {/* Car Image */}
+          <div className="w-full h-48 relative">
+            <Image
+              src={car.imageUrl || "/placeholder.svg?height=200&width=300"}
+              alt={car.carName}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Car Name */}
+          <div className="p-4">
+            <h3 className="text-xl font-semibold text-center text-gray-800 mb-4">
+              {car.carName}
+            </h3>
+
+            {/* Price Table */}
+            <table className="w-full text-sm text-left border border-gray-200 rounded">
+              <tbody>
+                {car.prices.map((price) => (
+                  <tr key={price.id} className="border-b last:border-0">
+                    <td className="px-4 py-2 font-medium bg-gray-100">{price.label}</td>
+                    <td className="px-4 py-2 text-blue-500 font-semibold">₹ {price.value.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Inclusions Note */}
+            <p className="text-center text-gray-600 text-sm mt-4">
+              Driver beta, permit, toll gate fees, parking fees are included.
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
 
         {/* Package Includes Section */}
         {packageData.includes && packageData.includes.length > 0 && (

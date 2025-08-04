@@ -103,6 +103,8 @@ export default function PackageForm({ packageType, packageId }) {
                 ...car,
                 imageFile: null, // No file on initial load
                 prices: car.prices || [],
+                includes: car.includes || "", // Load new includes field
+                excludes: car.excludes || "", // Load new excludes field
               })) || [],
             )
             // Map existing sections to include new image/listInfo fields
@@ -239,6 +241,8 @@ export default function PackageForm({ packageType, packageId }) {
         imageUrl: "",
         imageFile: null,
         prices: [{ id: generateUniqueId(), label: "1 person", value: "" }],
+        includes: "", // Initialize new includes field
+        excludes: "", // Initialize new excludes field
       },
     ])
   }
@@ -489,6 +493,8 @@ export default function PackageForm({ packageType, packageId }) {
             carName: car.carName,
             imageUrl: carImageUrl, // Store the final image URL
             prices: car.prices,
+            includes: car.includes, // Include new includes field
+            excludes: car.excludes, // Include new excludes field
           }
         }),
       )
@@ -1211,6 +1217,32 @@ export default function PackageForm({ packageType, packageId }) {
                           </div>
                         )}
                       </div>
+                    </div>
+
+                    {/* Includes Field */}
+                    <div className="mb-4">
+                      <Label htmlFor={`car-includes-${car.id}`}>Includes</Label>
+                      <textarea
+                        id={`car-includes-${car.id}`}
+                        value={car.includes}
+                        onChange={(e) => updateCarPriceField(car.id, "includes", e.target.value)}
+                        rows={3}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
+                        placeholder="Enter what's included (e.g., Toll, Parking, Driver Allowance)"
+                      />
+                    </div>
+
+                    {/* Excludes Field */}
+                    <div className="mb-4">
+                      <Label htmlFor={`car-excludes-${car.id}`}>Excludes</Label>
+                      <textarea
+                        id={`car-excludes-${car.id}`}
+                        value={car.excludes}
+                        onChange={(e) => updateCarPriceField(car.id, "excludes", e.target.value)}
+                        rows={3}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
+                        placeholder="Enter what's excluded (e.g., Food, Accommodation)"
+                      />
                     </div>
 
                     {/* Prices for this Car */}

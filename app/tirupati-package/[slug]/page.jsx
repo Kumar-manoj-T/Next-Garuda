@@ -181,56 +181,97 @@ export default async function TirupatiPackageDetailPage({ params }) {
           </section>
         )}
 
-       {packageData.carPrices && packageData.carPrices.length > 0 && (
-  <section className="mb-12">
-    <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-      {packageData.title} Package Price Details
-    </h2>
+      
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {packageData.carPrices.map((car) => (
-        <div
-          key={car.id}
-          className="bg-white rounded-xl shadow-md overflow-hidden border"
-        >
-          {/* Car Image */}
-          <div className="w-full h-48 relative">
-            <Image
-              src={car.imageUrl || "/placeholder.svg?height=200&width=300"}
-              alt={car.carName}
-              fill
-              className="object-cover"
-            />
-          </div>
+        {packageData.carPrices && packageData.carPrices.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+              {packageData.title} Package Price Details
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {packageData.carPrices.map((car) => (
+                <div key={car.id} className="bg-white rounded-xl shadow-md overflow-hidden border">
+                  {/* Car Image */}
+                  <div className="w-full h-48 relative">
+                    <Image
+                      src={car.imageUrl || "/placeholder.svg?height=200&width=300&query=Car for " + car.carName}
+                      alt={car.carName}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  {/* Car Name */}
+                  <div className="p-4">
+                    <h3 className="text-xl font-semibold text-center text-gray-800 mb-4">{car.carName}</h3>
+                    {/* Price Table */}
+                    <div className="border border-gray-200 rounded overflow-hidden">
+                      {car.prices.map((price, priceIndex) => (
+                        <div
+                          key={price.id}
+                          className={`grid grid-cols-2 py-3 px-4 border-b border-gray-200 last:border-0 ${priceIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                            }`}
+                        >
+                          <div className="font-medium text-gray-800">{price.label}</div>
+                          <div className="text-lg font-bold text-blue-600 text-right">
+                            ₹ {Number(price.value).toLocaleString()}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Inclusions/Exclusions for this specific car */}
+                    {(car.includes || car.excludes) && (
+                      <div className="mt-4 space-y-2">
+                        {car.includes && (
+                          <div>
+                            <p className="font-semibold text-gray-700">Includes:</p>
+                            <ul className="list-none p-0 m-0 text-sm text-gray-600">
+                              {car.includes
+                                .split("\n")
+                                .filter((item) => item.trim() !== "")
+                                .map((item, index) => (
+                                  <li key={index} className="flex items-center">
 
-          {/* Car Name */}
-          <div className="p-4">
-            <h3 className="text-xl font-semibold text-center text-gray-800 mb-4">
-              {car.carName}
-            </h3>
+                                    <span className="whitespace-pre-wrap">{item.trim()}</span>
+                                  </li>
+                                ))}
+                            </ul>
+                          </div>
+                        )}
+                        {car.excludes && (
+                          <div>
+                            <h4 className="font-semibold text-gray-700">Excludes:</h4>
+                            <ul className="list-none p-0 m-0 text-sm text-gray-600">
+                              {car.excludes
+                                .split("\n")
+                                .filter((item) => item.trim() !== "")
+                                .map((item, index) => (
+                                  <li key={index} className="flex items-center">
+                                    <XCircle className="h-4 w-4 text-red-500 mr-2 flex-shrink-0" />
+                                    <span className="whitespace-pre-wrap">{item.trim()}</span>
+                                  </li>
+                                ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4 flex justify-center mb-3">
+                    <a
+                      href="#booking"
+                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-full transition"
+                    >
+                      Book Now
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
-            {/* Price Table */}
-            <table className="w-full text-sm text-left border border-gray-200 rounded">
-              <tbody>
-                {car.prices.map((price) => (
-                  <tr key={price.id} className="border-b last:border-0">
-                    <td className="px-4 py-2 font-medium bg-gray-100">{price.label}</td>
-                    <td className="px-4 py-2 text-blue-500 font-semibold">₹ {price.value.toLocaleString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
 
-            {/* Inclusions Note */}
-            <p className="text-center text-gray-600 text-sm mt-4">
-              Driver beta, permit, toll gate fees, parking fees are included.
-            </p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </section>
-)}
+
 
         {/* Package Includes Section */}
         {packageData.includes && packageData.includes.length > 0 && (
@@ -305,7 +346,7 @@ export default async function TirupatiPackageDetailPage({ params }) {
             </div>
           )}
 
-         {/* Dress Code */}
+          {/* Dress Code */}
           {(packageData.maleDressCodeImages?.length > 0 || packageData.femaleDressCodeImages?.length > 0) && (
             <div className="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
               <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Dress Code</h2>

@@ -1,29 +1,80 @@
-import { doc, getDoc } from "firebase/firestore"
+import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import Image from "next/image"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Check, MapPin } from "lucide-react" // Import MapPin for sightseeing places
+import {
+  Check,
+  Shirt,
+  Star,
+  ShieldCheck,
+  Users,
+  Clock,
+  MapPin,
+  Wallet,
+  BriefcaseMedical,
+  UserCheck,
+  Award,
+  Phone,
+  Mail,
+  MessageCircle,
+} from "lucide-react" // Added new icons for Why Choose Us
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import BookingForm from "@/components/booking-form"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+// Map icon names from CMS to Lucide React components
+const IconMap = {
+  Star: Star,
+  ShieldCheck: ShieldCheck,
+  Users: Users,
+  Clock: Clock,
+  MapPin: MapPin,
+  Wallet: Wallet,
+  BriefcaseMedical: BriefcaseMedical,
+  UserCheck: UserCheck,
+  Award: Award,
+  Phone: Phone,
+  Mail: Mail,
+  MessageCircle: MessageCircle,
+  // Add other icons here if needed in the future
+}
 
 // This is a Server Component, so it can directly fetch data
 export default async function TirupatiPackageDetailPage({ params }) {
-  const { slug } = params // The slug from the URL will be the Firestore document ID
+  const { slug } = params
 
   let packageData = null
   let error = null
+  let otherPackages = []
 
   try {
+    // Fetch current package data
     const docRef = doc(db, "tirupati-package", slug)
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists()) {
       packageData = { id: docSnap.id, ...docSnap.data() }
+
+      // Fetch other packages (excluding the current one)
+      const q = query(collection(db, "tirupati-package"), where("url", "!=", slug))
+      const querySnapshot = await getDocs(q)
+      otherPackages = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     } else {
       error = "Package not found."
     }
   } catch (err) {
-    console.error("Error fetching package:", err)
+    console.error("Error fetching package or other packages:", err)
     error = "Failed to load package details. Please try again later."
   }
 
@@ -39,8 +90,6 @@ export default async function TirupatiPackageDetailPage({ params }) {
   }
 
   if (!packageData) {
-    // This case should ideally be caught by the error block if docSnap.exists() is false
-    // but as a fallback for initial render or unexpected states.
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 p-8">
         <p className="text-lg text-gray-700">Loading package details...</p>
@@ -50,51 +99,119 @@ export default async function TirupatiPackageDetailPage({ params }) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* You might want to include your Header and Footer components here or in a layout.tsx */}
       <Header />
 
       <main className="container mx-auto px-4 py-12">
-        <h1 className="text-5xl font-bold text-gray-800 text-center mb-6">{packageData.title}</h1>
-        {packageData.subtitle && <p className="text-xl text-gray-600 text-center mb-8">{packageData.subtitle}</p>}
+        {/* Hero Section */}
+        <section className="mb-12 text-center">
+          {packageData.images && packageData.images.length > 0 && (
+            <div className="relative w-full h-96 rounded-lg overflow-hidden shadow-lg mb-6">
+              <Image
+                src={packageData.images[0] || "/placeholder.svg?height=400&width=800&query=featured travel image"}
+                alt={`${packageData.title} featured image`}
+                fill
+                style={{ objectFit: "cover" }}
+                className="transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+          )}
+          <h1 className="text-5xl font-bold text-gray-800 mb-4">{packageData.title}</h1>
+          {packageData.subtitle && <p className="text-xl text-gray-600 mb-6">{packageData.subtitle}</p>}
+          <Breadcrumb className="justify-center">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/">Home</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{packageData.title}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </section>
 
-        {/* Image Gallery */}
-        {packageData.images && packageData.images.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-            {packageData.images.map((imgSrc, index) => (
-              <div key={index} className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
-                <Image
-                  src={imgSrc || "/placeholder.svg"}
-                  alt={`${packageData.title} image ${index + 1}`}
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="transition-transform duration-300 hover:scale-105"
-                />
+        {/* Booking Form and Why Choose Us Section - New Layout */}
+        <section className="py-12 px-4 bg-gray-100">
+          <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            {/* Left Column: Booking Form */}
+            <div className="flex flex-col items-start w-full">
+              <BookingForm />
+            </div>
+
+            {/* Right Column: Custom "Why Choose Us" Section */}
+            <div className="flex flex-col items-start w-full">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center lg:text-left">Why Choose Us</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+                {packageData.whyChooseUsItems?.map((item) => {
+                  // Use packageData.whyChooseUsItems
+                  const IconComponent = IconMap[item.iconName] // Get the icon component from the map
+                  if (!IconComponent) return null // Don't render if icon not found
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md border border-gray-200 transition-transform duration-200 hover:scale-[1.02]"
+                    >
+                      <div className="mb-4">
+                        <IconComponent className="h-12 w-12 text-blue-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
+                      {/* Removed the description paragraph */}
+                    </div>
+                  )
+                })}
               </div>
-            ))}
+            </div>
           </div>
-        )}
+        </section>
 
-        {/* Main Content/Description */}
+        {/* Overview Section */}
         {packageData.content && (
-          <div
-            className="prose max-w-none text-gray-700 mb-12"
-            dangerouslySetInnerHTML={{ __html: packageData.content }}
-          />
+          <section className="mb-12 p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200 text-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Overview</h2>
+            <div
+              className="prose max-w-none text-gray-700 mx-auto mb-6"
+              dangerouslySetInnerHTML={{ __html: packageData.content }}
+            />
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+              Call to Book Now
+            </Button>
+          </section>
         )}
 
-        {/* Packages and Cars Section */}
-        {packageData.packagesAndCars && packageData.packagesAndCars.length > 0 && (
+        {/* Chennai to Tirupati Package Price Details (Dynamic) */}
+        {packageData.carPrices && packageData.carPrices.length > 0 && (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Packages & Car Options</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+              Chennai to Tirupati Package Price Details
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {packageData.packagesAndCars.map((item) => (
-                <div key={item.id} className="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
-                  <h3 className="text-xl font-semibold text-blue-600 mb-2">{item.packageName}</h3>
-                  <p className="text-gray-700 mb-2">
-                    Car Type: <span className="font-medium">{item.carType}</span>
-                  </p>
-                  <p className="text-2xl font-bold text-green-600">{item.price}</p>
-                </div>
+              {packageData.carPrices.map((car) => (
+                <Card key={car.id} className="overflow-hidden">
+                  <CardHeader className="p-0">
+                    <div className="relative w-full h-48">
+                      <Image
+                        src={car.imageUrl || "/placeholder.svg?height=200&width=300&query=car image"}
+                        alt={car.carName}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        className="transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <CardTitle className="text-xl font-semibold text-gray-800 mb-3">{car.carName}</CardTitle>
+                    <div className="space-y-2">
+                      {car.prices.map((price) => (
+                        <div key={price.id} className="flex justify-between text-gray-700">
+                          <span>{price.label}:</span>
+                          <span className="font-medium">{price.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </section>
@@ -115,25 +232,6 @@ export default async function TirupatiPackageDetailPage({ params }) {
           </section>
         )}
 
-        {/* Package Itinerary Section */}
-        {packageData.itineraries && packageData.itineraries.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Itinerary ({packageData.days} Day{packageData.days > 1 ? "s" : ""})
-            </h2>
-            <ol className="space-y-4">
-              {packageData.itineraries.map((item, index) => (
-                <li key={item.id} className="flex items-start">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm flex-shrink-0 mr-3">
-                    {index + 1}
-                  </div>
-                  <p className="text-lg text-gray-700">{item.text}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-        )}
-
         {/* Passenger Notes Section */}
         {packageData.passengerNotes && packageData.passengerNotes.length > 0 && (
           <section className="mb-12">
@@ -146,61 +244,133 @@ export default async function TirupatiPackageDetailPage({ params }) {
           </section>
         )}
 
-        {/* Sightseeing Places Section */}
+        {/* Places We Cover Section */}
         {packageData.sightseeingPlaces && packageData.sightseeingPlaces.length > 0 && (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Sightseeing Places</h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-700">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Places We Cover in the Package</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {packageData.sightseeingPlaces.map((item) => (
-                <li key={item.id} className="flex items-center">
-                  <MapPin className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0" />
-                  <span>{item.text}</span>
-                </li>
+                <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <div className="relative w-full h-48">
+                    <Image
+                      src={item.imageUrl || "/placeholder.svg?height=200&width=300&query=sightseeing place"}
+                      alt={item.text}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className="transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-4 text-center">
+                    <h3 className="text-xl font-semibold text-gray-800">{item.text}</h3>
+                  </div>
+                </div>
               ))}
-            </ul>
-          </section>
-        )}
-
-        {/* Car Prices Section */}
-        {packageData.carPrices && packageData.carPrices.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Car Rental Prices</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                <thead>
-                  <tr className="bg-gray-100 border-b">
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Car Name</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">R.Pe Price</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">TELAN Price</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">BANG Price</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">PONDI Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {packageData.carPrices.map((item, index) => (
-                    <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="py-3 px-4 border-b text-gray-800 font-medium">{item.carName}</td>
-                      <td className="py-3 px-4 border-b text-gray-700">{item.rpPrice}</td>
-                      <td className="py-3 px-4 border-b text-gray-700">{item.telanPrice}</td>
-                      <td className="py-3 px-4 border-b text-gray-700">{item.bangPrice}</td>
-                      <td className="py-3 px-4 border-b text-gray-700">{item.pondiPrice}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </section>
         )}
 
-        {/* Dynamic Sections */}
-        {packageData.sections && packageData.sections.length > 0 && (
-          <section className="mb-12">
-            {packageData.sections.map((section) => (
-              <div key={section.id} className="mb-8 p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
-                <h2 className="text-3xl font-bold text-gray-800 mb-4">{section.title}</h2>
-                <div className="prose max-w-none text-gray-700" dangerouslySetInnerHTML={{ __html: section.content }} />
+        {/* Itinerary & Dress Code Section */}
+        <section className="mb-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Itinerary */}
+          {packageData.itineraries && packageData.itineraries.length > 0 && (
+            <div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                Itinerary ({packageData.days} Day{packageData.days > 1 ? "s" : ""})
+              </h2>
+              <ol className="space-y-4">
+                {packageData.itineraries.map((item, index) => (
+                  <li key={item.id} className="flex items-start">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm flex-shrink-0 mr-3">
+                      {index + 1}
+                    </div>
+                    <p className="text-lg text-gray-700">{item.text}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {/* Dress Code */}
+          {(packageData.maleDressCodeImages?.length > 0 || packageData.femaleDressCodeImages?.length > 0) && (
+            <div className="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Dress Code</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {packageData.maleDressCodeImages?.length > 0 && (
+                  <div className="flex flex-col items-center text-center">
+                    <Shirt className="h-16 w-16 text-blue-600 mb-2" />
+                    <p className="text-lg font-semibold text-gray-800 mb-4">Male</p>
+                    <div className="grid grid-cols-2 gap-4 w-full">
+                      {packageData.maleDressCodeImages.map((imgSrc, index) => (
+                        <div key={index} className="relative w-full h-48 rounded-lg overflow-hidden shadow-md">
+                          <Image
+                            src={imgSrc || "/placeholder.svg?height=200&width=150&query=male traditional dress"}
+                            alt={`Male dress code example ${index + 1}`}
+                            fill
+                            style={{ objectFit: "cover" }}
+                            className="transition-transform duration-300 hover:scale-105"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {packageData.femaleDressCodeImages?.length > 0 && (
+                  <div className="flex flex-col items-center text-center">
+                    <Shirt className="h-16 w-16 text-pink-600 mb-2" />
+                    <p className="text-lg font-semibold text-gray-800 mb-4">Female</p>
+                    <div className="grid grid-cols-2 gap-4 w-full">
+                      {packageData.femaleDressCodeImages.map((imgSrc, index) => (
+                        <div key={index} className="relative w-full h-48 rounded-lg overflow-hidden shadow-md">
+                          <Image
+                            src={imgSrc || "/placeholder.svg?height=200&width=150&query=female traditional dress"}
+                            alt={`Female dress code example ${index + 1}`}
+                            fill
+                            style={{ objectFit: "cover" }}
+                            className="transition-transform duration-300 hover:scale-105"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
+          )}
+        </section>
+
+        {/* Additional Packages Section */}
+        {otherPackages.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Other Packages You Might Like</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {otherPackages.map((pkg) => (
+                <Card key={pkg.id} className="overflow-hidden">
+                  <CardHeader className="p-0">
+                    <div className="relative w-full h-48">
+                      <Image
+                        src={pkg.images?.[0] || "/placeholder.svg?height=200&width=300&query=other package image"}
+                        alt={pkg.title}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        className="transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <CardTitle className="text-xl font-semibold text-gray-800 mb-2">{pkg.title}</CardTitle>
+                    {pkg.subtitle && <p className="text-sm text-gray-600 mb-3 line-clamp-2">{pkg.subtitle}</p>}
+                    {pkg.carPrices?.[0]?.prices?.[0]?.value && (
+                      <p className="text-lg font-bold text-blue-600 mb-4">
+                        Starting from {pkg.carPrices[0].prices[0].value}
+                      </p>
+                    )}
+                    <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                      <Link href={`/tirupati-package/${pkg.url}`}>View Details</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </section>
         )}
 

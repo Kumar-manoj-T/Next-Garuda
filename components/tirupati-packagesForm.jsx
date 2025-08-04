@@ -33,14 +33,21 @@ export default function PackageForm({ packageType, packageId }) {
   const [newImageFiles, setNewImageFiles] = useState([]) // Stores File objects for new uploads
 
   // Dynamic sections
-  const [packagesAndCars, setPackagesAndCars] = useState([]) // Corresponds to 'packages' in HTML
+  const [packagesAndCars, setPackagesAndCars] = useState([]) // Array of { id, packageName, cars: [{ id, carName, seatCapacity, price }] }
   const [includes, setIncludes] = useState([])
   const [itineraries, setItineraries] = useState([])
   const [passengerNotes, setPassengerNotes] = useState([]) // Corresponds to 'notes' in HTML
-  const [sightseeingPlaces, setSightseeingPlaces] = useState([]) // Corresponds to 'places' in HTML
-  const [carPrices, setCarPrices] = useState([]) // Corresponds to 'cars' in HTML
-  const [sections, setSections] = useState([]) // Corresponds to 'section' in HTML
+  const [sightseeingPlaces, setSightseeingPlaces] = useState([]) // Array of { id, text, imageUrl, imageFile }
+  // Updated structure for carPrices
+  const [carPrices, setCarPrices] = useState([]) // Array of { id, carName, imageUrl, imageFile, prices: [{ id, label, value }] }
+  const [sections, setSections] = useState([]) // Array of { id, hasImage, imageUrl, imageFile, contentTitle, contentDescription, listInfo: [{ id, text }] }
   const [faqs, setFaqs] = useState([]) // Corresponds to 'faq' in HTML
+  const [whyChooseUsItems, setWhyChooseUsItems] = useState([])
+
+  const [maleDressCodeImages, setMaleDressCodeImages] = useState([]) // Stores URLs of existing male dress code images
+  const [newMaleDressCodeFiles, setNewMaleDressCodeFiles] = useState([]) // Stores File objects for new male dress code uploads
+  const [femaleDressCodeImages, setFemaleDressCodeImages] = useState([]) // Stores URLs of existing female dress code images
+  const [newFemaleDressCodeFiles, setNewFemaleDressCodeFiles] = useState([]) // Stores File objects for new female dress code uploads
 
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
@@ -84,10 +91,42 @@ export default function PackageForm({ packageType, packageId }) {
             setIncludes(data.includes || [])
             setItineraries(data.itineraries || [])
             setPassengerNotes(data.passengerNotes || [])
-            setSightseeingPlaces(data.sightseeingPlaces || [])
-            setCarPrices(data.carPrices || [])
-            setSections(data.sections || [])
+            setSightseeingPlaces(
+              data.sightseeingPlaces?.map((place) => ({
+                ...place,
+                imageFile: null, // No file on initial load
+              })) || [],
+            )
+            // Map existing carPrices to include new image/prices fields
+            setCarPrices(
+              data.carPrices?.map((car) => ({
+                ...car,
+                imageFile: null, // No file on initial load
+                prices: car.prices || [],
+              })) || [],
+            )
+            // Map existing sections to include new image/listInfo fields
+            setSections(
+              data.sections?.map((s) => ({
+                ...s,
+                hasImage: !!s.imageUrl, // Assume if imageUrl exists, it has an image
+                imageFile: null, // No file on initial load
+                listInfo: s.listInfo || [],
+              })) || [],
+            )
             setFaqs(data.faqs || [])
+            // Filter out description when loading existing items
+            setWhyChooseUsItems(
+              data.whyChooseUsItems?.map((item) => ({
+                id: item.id,
+                iconName: item.iconName,
+                title: item.title,
+              })) || [],
+            )
+            setMaleDressCodeImages(data.maleDressCodeImages || [])
+            setNewMaleDressCodeFiles([]) // Clear any pending new files on load
+            setFemaleDressCodeImages(data.femaleDressCodeImages || [])
+            setNewFemaleDressCodeFiles([]) // Clear any pending new files on load
             // Keep existing subtitle and content if they were part of the old structure
             setSubtitle(data.subtitle || "")
             setContent(data.content || "")
@@ -144,40 +183,243 @@ export default function PackageForm({ packageType, packageId }) {
     setter((prev) => prev.filter((item) => item.id !== id))
   }
 
-  // Packages and Cars (e.g., { packageName: "Standard", carType: "Swift", price: "1500" })
-  const addPackageAndCar = () => {
-    setPackagesAndCars((prev) => [...prev, { id: generateUniqueId(), packageName: "", carType: "", price: "" }])
-  }
-  const updatePackageAndCar = (id, field, value) => {
-    setPackagesAndCars((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
-  }
-  const removePackageAndCar = (id) => {
-    setPackagesAndCars((prev) => prev.filter((item) => item.id !== id))
+  // Packages and Cars (nested structure)
+  const addPackageEntry = () => {
+    setPackagesAndCars((prev) => [...prev, { id: generateUniqueId(), packageName: "", cars: [] }])
   }
 
-  // Car Prices (e.g., { carName: "Swift", rpPrice: "2500", telanPrice: "3000", ... })
-  const addCarPrice = () => {
+  const updatePackageName = (packageIdToUpdate, newName) => {
+    setPackagesAndCars((prev) =>
+      prev.map((pkg) => (pkg.id === packageIdToUpdate ? { ...pkg, packageName: newName } : pkg)),
+    )
+  }
+
+  const removePackageEntry = (packageIdToRemove) => {
+    setPackagesAndCars((prev) => prev.filter((pkg) => pkg.id !== packageIdToRemove))
+  }
+
+  const addCarToPackage = (packageIdToUpdate) => {
+    setPackagesAndCars((prev) =>
+      prev.map((pkg) =>
+        pkg.id === packageIdToUpdate
+          ? { ...pkg, cars: [...pkg.cars, { id: generateUniqueId(), carName: "", seatCapacity: "", price: "" }] }
+          : pkg,
+      ),
+    )
+  }
+
+  const updateCarInPackage = (packageIdToUpdate, carIdToUpdate, field, value) => {
+    setPackagesAndCars((prev) =>
+      prev.map((pkg) =>
+        pkg.id === packageIdToUpdate
+          ? {
+              ...pkg,
+              cars: pkg.cars.map((car) => (car.id === carIdToUpdate ? { ...car, [field]: value } : car)),
+            }
+          : pkg,
+      ),
+    )
+  }
+
+  const removeCarFromPackage = (packageIdToUpdate, carIdToRemove) => {
+    setPackagesAndCars((prev) =>
+      prev.map((pkg) =>
+        pkg.id === packageIdToUpdate ? { ...pkg, cars: pkg.cars.filter((car) => car.id !== carIdToRemove) } : pkg,
+      ),
+    )
+  }
+
+  // Car Prices (updated handlers for nested structure)
+  const addCarPriceEntry = () => {
     setCarPrices((prev) => [
       ...prev,
-      { id: generateUniqueId(), carName: "", rpPrice: "", telanPrice: "", bangPrice: "", pondiPrice: "" },
+      {
+        id: generateUniqueId(),
+        carName: "",
+        imageUrl: "",
+        imageFile: null,
+        prices: [{ id: generateUniqueId(), label: "1 person", value: "" }],
+      },
     ])
   }
-  const updateCarPrice = (id, field, value) => {
-    setCarPrices((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+
+  const updateCarPriceField = (carId, field, value) => {
+    setCarPrices((prev) => prev.map((car) => (car.id === carId ? { ...car, [field]: value } : car)))
   }
-  const removeCarPrice = (id) => {
+
+  const handleCarImageFileChange = (carId, file) => {
+    setCarPrices((prev) => prev.map((car) => (car.id === carId ? { ...car, imageFile: file } : car)))
+  }
+
+  const removeCarImage = (carId) => {
+    setCarPrices((prev) => prev.map((car) => (car.id === carId ? { ...car, imageUrl: "", imageFile: null } : car)))
+  }
+
+  const addPriceToCar = (carId) => {
+    setCarPrices((prev) =>
+      prev.map((car) =>
+        car.id === carId ? { ...car, prices: [...car.prices, { id: generateUniqueId(), label: "", value: "" }] } : car,
+      ),
+    )
+  }
+
+  const updatePriceInCar = (carId, priceId, field, value) => {
+    setCarPrices((prev) =>
+      prev.map((car) =>
+        car.id === carId
+          ? {
+              ...car,
+              prices: car.prices.map((price) => (price.id === priceId ? { ...price, [field]: value } : price)),
+            }
+          : car,
+      ),
+    )
+  }
+
+  const removePriceFromCar = (carId, priceId) => {
+    setCarPrices((prev) =>
+      prev.map((car) =>
+        car.id === carId ? { ...car, prices: car.prices.filter((price) => price.id !== priceId) } : car,
+      ),
+    )
+  }
+
+  const removeCarPriceEntry = (id) => {
     setCarPrices((prev) => prev.filter((item) => item.id !== id))
   }
 
-  // Sections (e.g., { title: "Section Title", content: "Section Content" })
+  // Sightseeing Places (new handlers for image and text)
+  const addSightseeingPlace = () => {
+    setSightseeingPlaces((prev) => [...prev, { id: generateUniqueId(), text: "", imageUrl: "", imageFile: null }])
+  }
+
+  const updateSightseeingPlaceField = (placeId, field, value) => {
+    setSightseeingPlaces((prev) => prev.map((place) => (place.id === placeId ? { ...place, [field]: value } : place)))
+  }
+
+  const handleSightseeingPlaceImageFileChange = (placeId, file) => {
+    setSightseeingPlaces((prev) => prev.map((place) => (place.id === placeId ? { ...place, imageFile: file } : place)))
+  }
+
+  const removeSightseeingPlaceImage = (placeId) => {
+    setSightseeingPlaces((prev) =>
+      prev.map((place) => (place.id === placeId ? { ...place, imageUrl: "", imageFile: null } : place)),
+    )
+  }
+
+  const removeSightseeingPlace = (id) => {
+    setSightseeingPlaces((prev) => prev.filter((item) => item.id !== id))
+  }
+
+  // Dress Code Image Handlers
+  const handleMaleDressCodeFileChange = (e) => {
+    if (e.target.files) {
+      setNewMaleDressCodeFiles((prev) => [...prev, ...Array.from(e.target.files)])
+    }
+  }
+
+  const removeNewMaleDressCodeImage = (index) => {
+    setNewMaleDressCodeFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const removeExistingMaleDressCodeImage = (urlToRemove) => {
+    setMaleDressCodeImages((prev) => prev.filter((url) => url !== urlToRemove))
+  }
+
+  const handleFemaleDressCodeFileChange = (e) => {
+    if (e.target.files) {
+      setNewFemaleDressCodeFiles((prev) => [...prev, ...Array.from(e.target.files)])
+    }
+  }
+
+  const removeNewFemaleDressCodeImage = (index) => {
+    setNewFemaleDressCodeFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const removeExistingFemaleDressCodeImage = (urlToRemove) => {
+    setFemaleDressCodeImages((prev) => prev.filter((url) => url !== urlToRemove))
+  }
+
+  // Sections (updated handlers for nested structure)
   const addSection = () => {
-    setSections((prev) => [...prev, { id: generateUniqueId(), title: "", content: "" }])
+    setSections((prev) => [
+      ...prev,
+      {
+        id: generateUniqueId(),
+        hasImage: false,
+        imageUrl: "",
+        imageFile: null,
+        contentTitle: "",
+        contentDescription: "",
+        listInfo: [],
+      },
+    ])
   }
-  const updateSection = (id, field, value) => {
-    setSections((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+
+  const updateSectionField = (sectionId, field, value) => {
+    setSections((prev) => prev.map((section) => (section.id === sectionId ? { ...section, [field]: value } : section)))
   }
+
+  const handleSectionImageFileChange = (sectionId, file) => {
+    setSections((prev) => prev.map((section) => (section.id === sectionId ? { ...section, imageFile: file } : section)))
+  }
+
+  const removeSectionImage = (sectionId) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId ? { ...section, imageUrl: "", imageFile: null, hasImage: false } : section,
+      ),
+    )
+  }
+
+  const addListInfoToSection = (sectionId) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId
+          ? { ...section, listInfo: [...section.listInfo, { id: generateUniqueId(), text: "" }] }
+          : section,
+      ),
+    )
+  }
+
+  const updateListInfoInSection = (sectionId, listInfoId, newText) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId
+          ? {
+              ...section,
+              listInfo: section.listInfo.map((item) => (item.id === listInfoId ? { ...item, text: newText } : item)),
+            }
+          : section,
+      ),
+    )
+  }
+
+  const removeListInfoFromSection = (sectionId, listInfoId) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId
+          ? { ...section, listInfo: section.listInfo.filter((item) => item.id !== listInfoId) }
+          : section,
+      ),
+    )
+  }
+
   const removeSection = (id) => {
     setSections((prev) => prev.filter((item) => item.id !== id))
+  }
+
+  // Why Choose Us Handlers
+  const addWhyChooseUsItem = () => {
+    setWhyChooseUsItems((prev) => [...prev, { id: generateUniqueId(), iconName: "", title: "" }])
+  }
+
+  const updateWhyChooseUsItem = (id, field, value) => {
+    setWhyChooseUsItems((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+  }
+
+  const removeWhyChooseUsItem = (id) => {
+    setWhyChooseUsItems((prev) => prev.filter((item) => item.id !== id))
   }
 
   // FAQs (e.g., { question: "Q?", answer: "A." })
@@ -208,7 +450,7 @@ export default function PackageForm({ packageType, packageId }) {
     }
 
     try {
-      // 1. Upload new images to Firebase Storage
+      // 1. Upload main package images to Firebase Storage
       const uploadedImageUrls = []
       const folderName =
         packageUrl
@@ -216,11 +458,10 @@ export default function PackageForm({ packageType, packageId }) {
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/^-|-$/g, "") || "untitled-package"
       const storagePathPrefix = `${packageType}/${folderName}`
-      console.log(`Storage path prefix: ${storagePathPrefix}`)
-      console.log(`Number of new image files to upload: ${newImageFiles.length}`)
+      console.log(`Storage path prefix for main images: ${storagePathPrefix}`)
 
       for (const file of newImageFiles) {
-        console.log(`Attempting to upload file: ${file.name}`)
+        console.log(`Attempting to upload main file: ${file.name}`)
         const imageRef = ref(storage, `${storagePathPrefix}/${file.name}`)
         await uploadBytes(imageRef, file)
         const url = await getDownloadURL(imageRef)
@@ -228,11 +469,103 @@ export default function PackageForm({ packageType, packageId }) {
         console.log(`Uploaded ${file.name}, URL: ${url}`)
       }
 
-      // Combine existing images with newly uploaded ones
+      // Combine existing main images with newly uploaded ones
       const allImageUrls = [...images, ...uploadedImageUrls]
-      console.log("All image URLs (existing + new):", allImageUrls)
+      console.log("All main image URLs (existing + new):", allImageUrls)
 
-      // 2. Prepare package data
+      // 2. Process car prices, including image uploads for each car
+      const processedCarPrices = await Promise.all(
+        carPrices.map(async (car) => {
+          let carImageUrl = car.imageUrl // Start with existing URL
+          if (car.imageFile) {
+            // Only upload if a new file is selected
+            const carImageRef = ref(storage, `${storagePathPrefix}/cars/${car.imageFile.name}`)
+            await uploadBytes(carImageRef, car.imageFile)
+            carImageUrl = await getDownloadURL(carImageRef)
+            console.log(`Uploaded car image ${car.imageFile.name}, URL: ${carImageUrl}`)
+          }
+          return {
+            id: car.id,
+            carName: car.carName,
+            imageUrl: carImageUrl, // Store the final image URL
+            prices: car.prices,
+          }
+        }),
+      )
+      console.log("Processed car prices:", processedCarPrices)
+
+      // New: Process sightseeing places, including image uploads for each place
+      const processedSightseeingPlaces = await Promise.all(
+        sightseeingPlaces.map(async (place) => {
+          let placeImageUrl = place.imageUrl // Start with existing URL
+          if (place.imageFile) {
+            // Only upload if a new file is selected
+            const placeImageRef = ref(storage, `${storagePathPrefix}/places/${place.imageFile.name}`)
+            await uploadBytes(placeImageRef, place.imageFile)
+            placeImageUrl = await getDownloadURL(placeImageRef)
+            console.log(`Uploaded sightseeing place image ${place.imageFile.name}, URL: ${placeImageUrl}`)
+          }
+          return {
+            id: place.id,
+            text: place.text,
+            imageUrl: placeImageUrl, // Store the final image URL
+          }
+        }),
+      )
+      console.log("Processed sightseeing places:", processedSightseeingPlaces)
+
+      // New: Process male dress code images
+      const uploadedMaleDressCodeUrls = []
+      for (const file of newMaleDressCodeFiles) {
+        console.log(`Attempting to upload male dress code file: ${file.name}`)
+        const imageRef = ref(storage, `${storagePathPrefix}/dress-code/male/${file.name}`)
+        await uploadBytes(imageRef, file)
+        const url = await getDownloadURL(imageRef)
+        uploadedMaleDressCodeUrls.push(url)
+        console.log(`Uploaded male dress code image ${file.name}, URL: ${url}`)
+      }
+      const allMaleDressCodeUrls = [...maleDressCodeImages, ...uploadedMaleDressCodeUrls]
+      console.log("All male dress code image URLs (existing + new):", allMaleDressCodeUrls)
+
+      // New: Process female dress code images
+      const uploadedFemaleDressCodeUrls = []
+      for (const file of newFemaleDressCodeFiles) {
+        console.log(`Attempting to upload female dress code file: ${file.name}`)
+        const imageRef = ref(storage, `${storagePathPrefix}/dress-code/female/${file.name}`)
+        await uploadBytes(imageRef, file)
+        const url = await getDownloadURL(imageRef)
+        uploadedFemaleDressCodeUrls.push(url)
+        console.log(`Uploaded female dress code image ${file.name}, URL: ${url}`)
+      }
+      const allFemaleDressCodeUrls = [...femaleDressCodeImages, ...uploadedFemaleDressCodeUrls]
+      console.log("All female dress code image URLs (existing + new):", allFemaleDressCodeUrls)
+
+      // 3. Process sections, including image uploads for each section
+      const processedSections = await Promise.all(
+        sections.map(async (section) => {
+          let sectionImageUrl = section.imageUrl // Start with existing URL
+          if (section.hasImage && section.imageFile) {
+            // Only upload if hasImage is true and a new file is selected
+            const sectionImageRef = ref(storage, `${storagePathPrefix}/sections/${section.imageFile.name}`)
+            await uploadBytes(sectionImageRef, section.imageFile)
+            sectionImageUrl = await getDownloadURL(sectionImageRef)
+            console.log(`Uploaded section image ${section.imageFile.name}, URL: ${sectionImageUrl}`)
+          } else if (!section.hasImage) {
+            // If hasImage is false, clear the image URL
+            sectionImageUrl = ""
+          }
+          return {
+            id: section.id,
+            contentTitle: section.contentTitle,
+            contentDescription: section.contentDescription,
+            imageUrl: sectionImageUrl, // Store the final image URL
+            listInfo: section.listInfo,
+          }
+        }),
+      )
+      console.log("Processed sections:", processedSections)
+
+      // 4. Prepare package data
       const packageData = {
         url: packageUrl,
         title,
@@ -243,10 +576,13 @@ export default function PackageForm({ packageType, packageId }) {
         includes,
         itineraries,
         passengerNotes,
-        sightseeingPlaces,
-        carPrices,
-        sections,
+        sightseeingPlaces: processedSightseeingPlaces,
+        carPrices: processedCarPrices, // Use the processed car prices
+        sections: processedSections, // Use the processed sections
         faqs,
+        whyChooseUsItems, // Save the updated whyChooseUsItems
+        maleDressCodeImages: allMaleDressCodeUrls,
+        femaleDressCodeImages: allFemaleDressCodeUrls,
         subtitle,
         content,
         createdAt: isEditMode ? (await getDoc(doc(db, packageType, packageId))).data().createdAt : Timestamp.now(),
@@ -254,7 +590,7 @@ export default function PackageForm({ packageType, packageId }) {
       }
       console.log("Prepared package data:", packageData)
 
-      // 3. Save/Update document in Firestore using packageUrl as document ID
+      // 5. Save/Update document in Firestore using packageUrl as document ID
       const docRef = doc(db, packageType, packageUrl)
       console.log(`Attempting to save document to Firestore at path: ${packageType}/${packageUrl}`)
       await setDoc(docRef, packageData) // setDoc handles both create and update
@@ -309,7 +645,9 @@ export default function PackageForm({ packageType, packageId }) {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Package URL */}
             <div>
-              <Label htmlFor="packageUrl">Package URL<span className="text-red-500">*</span></Label>
+              <Label htmlFor="packageUrl">
+                Package URL<span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="packageUrl"
                 type="text"
@@ -317,14 +655,16 @@ export default function PackageForm({ packageType, packageId }) {
                 onChange={(e) => setPackageUrl(e.target.value)}
                 required
                 placeholder="Eg: chennai-to-tirupati"
-                disabled={isEditMode} 
+                disabled={isEditMode} // URL should not be editable in edit mode
               />
               {isEditMode && <p className="text-sm text-gray-500 mt-1">URL cannot be changed after creation.</p>}
             </div>
 
             {/* Package Title */}
             <div>
-              <Label htmlFor="title">Package Title<span className="text-red-500">*</span></Label>
+              <Label htmlFor="title">
+                Package Title<span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="title"
                 type="text"
@@ -337,7 +677,9 @@ export default function PackageForm({ packageType, packageId }) {
 
             {/* Package Order */}
             <div>
-              <Label htmlFor="packageOrder">Package Order<span className="text-red-500">*</span></Label>
+              <Label htmlFor="packageOrder">
+                Package Order<span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="packageOrder"
                 type="number"
@@ -351,7 +693,9 @@ export default function PackageForm({ packageType, packageId }) {
 
             {/* Trip Days */}
             <div>
-              <Label htmlFor="tripDays">Trip Days<span className="text-red-500">*</span></Label>
+              <Label htmlFor="tripDays">
+                Trip Days<span className="text-red-500">*</span>
+              </Label>
               <select
                 id="tripDays"
                 value={tripDays}
@@ -366,7 +710,9 @@ export default function PackageForm({ packageType, packageId }) {
 
             {/* Package Image */}
             <div>
-              <Label htmlFor="images">Package Image<span className="text-red-500">*</span></Label>
+              <Label htmlFor="images">
+                Package Image<span className="text-red-500">*</span>
+              </Label>
               <Input id="images" type="file" multiple onChange={handleFileChange} className="cursor-pointer" />
               <p className="text-sm text-gray-500 mt-1">Upload multiple images for this package.</p>
 
@@ -431,53 +777,85 @@ export default function PackageForm({ packageType, packageId }) {
               )}
             </div>
 
-            {/* Package and Cars */}
+            {/* Packages and Cars (Updated Nested Structure) */}
             <div>
-              <h4 className="heading text-lg font-semibold mb-2">Package and Cars</h4>
-              <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
-                {packagesAndCars.map((item, index) => (
-                  <div key={item.id} className="flex flex-col sm:flex-row gap-2 items-end">
-                    <div className="flex-1">
-                      <Label htmlFor={`package-name-${item.id}`}>Package Name</Label>
-                      <Input
-                        id={`package-name-${item.id}`}
-                        type="text"
-                        value={item.packageName}
-                        onChange={(e) => updatePackageAndCar(item.id, "packageName", e.target.value)}
-                        placeholder="Eg: Standard Package"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Label htmlFor={`car-type-${item.id}`}>Car Type</Label>
-                      <Input
-                        id={`car-type-${item.id}`}
-                        type="text"
-                        value={item.carType}
-                        onChange={(e) => updatePackageAndCar(item.id, "carType", e.target.value)}
-                        placeholder="Eg: Swift/Etios"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Label htmlFor={`package-price-${item.id}`}>Price</Label>
-                      <Input
-                        id={`package-price-${item.id}`}
-                        type="text"
-                        value={item.price}
-                        onChange={(e) => updatePackageAndCar(item.id, "price", e.target.value)}
-                        placeholder="Eg: ₹ 1500"
-                      />
-                    </div>
+              <h4 className="heading text-lg font-semibold mb-2">Packages and Cars</h4>
+              <div className="space-y-6 p-4 bg-gray-50 rounded-md border border-gray-200">
+                {packagesAndCars.map((pkg) => (
+                  <div key={pkg.id} className="border border-gray-300 p-4 rounded-md bg-white relative">
                     <Button
                       type="button"
                       variant="destructive"
-                      size="sm"
-                      onClick={() => removePackageAndCar(item.id)}
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                      onClick={() => removePackageEntry(pkg.id)}
                     >
-                      Remove
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove package</span>
+                    </Button>
+                    <div className="mb-4">
+                      <Label htmlFor={`package-name-${pkg.id}`}>Package Name</Label>
+                      <Input
+                        id={`package-name-${pkg.id}`}
+                        type="text"
+                        value={pkg.packageName}
+                        onChange={(e) => updatePackageName(pkg.id, e.target.value)}
+                        placeholder="Eg: Standard Package"
+                        className="w-full"
+                      />
+                    </div>
+
+                    <h5 className="text-md font-semibold mb-2">Cars for this Package:</h5>
+                    <div className="space-y-3 mb-4">
+                      {pkg.cars.map((car) => (
+                        <div key={car.id} className="flex flex-col sm:flex-row gap-2 items-end">
+                          <div className="flex-1">
+                            <Label htmlFor={`car-name-${car.id}`}>Car Name</Label>
+                            <Input
+                              id={`car-name-${car.id}`}
+                              type="text"
+                              value={car.carName}
+                              onChange={(e) => updateCarInPackage(pkg.id, car.id, "carName", e.target.value)}
+                              placeholder="Eg: Swift"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <Label htmlFor={`seat-capacity-${car.id}`}>Seat Capacity</Label>
+                            <Input
+                              id={`seat-capacity-${car.id}`}
+                              type="text"
+                              value={car.seatCapacity}
+                              onChange={(e) => updateCarInPackage(pkg.id, car.id, "seatCapacity", e.target.value)}
+                              placeholder="Eg: 6+1"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <Label htmlFor={`car-price-${car.id}`}>Price</Label>
+                            <Input
+                              id={`car-price-${car.id}`}
+                              type="text"
+                              value={car.price}
+                              onChange={(e) => updateCarInPackage(pkg.id, car.id, "price", e.target.value)}
+                              placeholder="Eg: ₹ 1200"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => removeCarFromPackage(pkg.id, car.id)}
+                          >
+                            Remove Car
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                    <Button type="button" onClick={() => addCarToPackage(pkg.id)} className="mt-2">
+                      Add Car
                     </Button>
                   </div>
                 ))}
-                <Button type="button" onClick={addPackageAndCar} className="mt-3">
+                <Button type="button" onClick={addPackageEntry} className="mt-3">
                   Add Package
                 </Button>
               </div>
@@ -496,7 +874,12 @@ export default function PackageForm({ packageType, packageId }) {
                       placeholder="Eg: Driver Allowance"
                       className="flex-grow"
                     />
-                    <Button type="button" variant="destructive" size="sm" onClick={() => removePoint(setIncludes, item.id)}>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removePoint(setIncludes, item.id)}
+                    >
                       Remove
                     </Button>
                   </div>
@@ -520,7 +903,12 @@ export default function PackageForm({ packageType, packageId }) {
                       placeholder="Eg: Day 1: Chennai to Tirupati"
                       className="flex-grow"
                     />
-                    <Button type="button" variant="destructive" size="sm" onClick={() => removePoint(setItineraries, item.id)}>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removePoint(setItineraries, item.id)}
+                    >
                       Remove
                     </Button>
                   </div>
@@ -544,7 +932,12 @@ export default function PackageForm({ packageType, packageId }) {
                       placeholder="Eg: Carry valid ID proof"
                       className="flex-grow"
                     />
-                    <Button type="button" variant="destructive" size="sm" onClick={() => removePoint(setPassengerNotes, item.id)}>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removePoint(setPassengerNotes, item.id)}
+                    >
                       Remove
                     </Button>
                   </div>
@@ -558,136 +951,432 @@ export default function PackageForm({ packageType, packageId }) {
             {/* Sightseeing Places */}
             <div>
               <h4 className="heading text-lg font-semibold mb-2">Sightseeing Places</h4>
-              <div className="space-y-2 p-4 bg-gray-50 rounded-md border border-gray-200">
-                {sightseeingPlaces.map((item) => (
-                  <div key={item.id} className="flex gap-2 items-end">
-                    <Input
-                      type="text"
-                      value={item.text}
-                      onChange={(e) => updatePoint(setSightseeingPlaces, item.id, e.target.value)}
-                      placeholder="Eg: Sri Venkateswara Temple"
-                      className="flex-grow"
-                    />
-                    <Button type="button" variant="destructive" size="sm" onClick={() => removePoint(setSightseeingPlaces, item.id)}>
-                      Remove
+              <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                {sightseeingPlaces.map((place) => (
+                  <div key={place.id} className="border border-gray-300 p-4 rounded-md bg-white relative">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                      onClick={() => removeSightseeingPlace(place.id)}
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove place</span>
                     </Button>
+
+                    {/* Place Name and Image */}
+                    <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                      <div className="flex-1">
+                        <Label htmlFor={`place-name-${place.id}`}>Place Name</Label>
+                        <Input
+                          id={`place-name-${place.id}`}
+                          type="text"
+                          value={place.text}
+                          onChange={(e) => updateSightseeingPlaceField(place.id, "text", e.target.value)}
+                          placeholder="Enter Name"
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <Label htmlFor={`place-image-${place.id}`}>Choose Image</Label>
+                        <Input
+                          id={`place-image-${place.id}`}
+                          type="file"
+                          onChange={(e) => handleSightseeingPlaceImageFileChange(place.id, e.target.files[0])}
+                          className="cursor-pointer"
+                        />
+                        {(place.imageUrl || place.imageFile) && (
+                          <div className="mt-2 relative group w-24 h-16">
+                            <img
+                              src={place.imageFile ? URL.createObjectURL(place.imageFile) : place.imageUrl}
+                              alt="Place image preview"
+                              width={96}
+                              height={64}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-0 right-0 h-5 w-5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeSightseeingPlaceImage(place.id)}
+                            >
+                              <X className="h-3 w-3" />
+                              <span className="sr-only">Remove place image</span>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 ))}
-                <Button type="button" onClick={() => addPoint(setSightseeingPlaces)} className="mt-3">
-                  Add Point
+                <Button type="button" onClick={addSightseeingPlace} className="mt-3">
+                  Add Place
                 </Button>
               </div>
             </div>
 
-            {/* Car Prices */}
+            {/* Dress Code */}
+            <div>
+              <h4 className="heading text-lg font-semibold mb-2">Dress Code</h4>
+              <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Male Dress Code */}
+                  <div className="border border-gray-300 p-4 rounded-md bg-white">
+                    <h5 className="text-md font-semibold mb-2 text-center">Male</h5>
+                    <Label htmlFor="male-dress-code-image">Choose Image</Label>
+                    <Input
+                      id="male-dress-code-image"
+                      type="file"
+                      multiple
+                      onChange={handleMaleDressCodeFileChange}
+                      className="cursor-pointer"
+                    />
+                    {newMaleDressCodeFiles.length > 0 && (
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {newMaleDressCodeFiles.map((file, index) => (
+                          <div key={index} className="relative group w-24 h-16">
+                            <img
+                              src={URL.createObjectURL(file) || "/placeholder.svg"}
+                              alt={`New male dress code image ${index + 1}`}
+                              width={96}
+                              height={64}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-0 right-0 h-5 w-5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeNewMaleDressCodeImage(index)}
+                            >
+                              <X className="h-3 w-3" />
+                              <span className="sr-only">Remove image</span>
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {maleDressCodeImages.length > 0 && (
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {maleDressCodeImages.map((url, index) => (
+                          <div key={index} className="relative group w-24 h-16">
+                            <img
+                              src={url || "/placeholder.svg"}
+                              alt={`Existing male dress code image ${index + 1}`}
+                              width={96}
+                              height={64}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-0 right-0 h-5 w-5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeExistingMaleDressCodeImage(url)}
+                            >
+                              <X className="h-3 w-3" />
+                              <span className="sr-only">Remove image</span>
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Female Dress Code */}
+                  <div className="border border-gray-300 p-4 rounded-md bg-white">
+                    <h5 className="text-md font-semibold mb-2 text-center">Female</h5>
+                    <Label htmlFor="female-dress-code-image">Choose Image</Label>
+                    <Input
+                      id="female-dress-code-image"
+                      type="file"
+                      multiple
+                      onChange={handleFemaleDressCodeFileChange}
+                      className="cursor-pointer"
+                    />
+                    {newFemaleDressCodeFiles.length > 0 && (
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {newFemaleDressCodeFiles.map((file, index) => (
+                          <div key={index} className="relative group w-24 h-16">
+                            <img
+                              src={URL.createObjectURL(file) || "/placeholder.svg"}
+                              alt={`New female dress code image ${index + 1}`}
+                              width={96}
+                              height={64}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-0 right-0 h-5 w-5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeNewFemaleDressCodeImage(index)}
+                            >
+                              <X className="h-3 w-3" />
+                              <span className="sr-only">Remove image</span>
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {femaleDressCodeImages.length > 0 && (
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {femaleDressCodeImages.map((url, index) => (
+                          <div key={index} className="relative group w-24 h-16">
+                            <img
+                              src={url || "/placeholder.svg"}
+                              alt={`Existing female dress code image ${index + 1}`}
+                              width={96}
+                              height={64}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-0 right-0 h-5 w-5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeExistingFemaleDressCodeImage(url)}
+                            >
+                              <X className="h-3 w-3" />
+                              <span className="sr-only">Remove image</span>
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Car Prices (Updated Nested Structure) */}
             <div>
               <h4 className="heading text-lg font-semibold mb-2">Car Prices</h4>
-              <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
-                {carPrices.map((item) => (
-                  <div key={item.id} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 items-end">
-                    <div className="col-span-full sm:col-span-1">
-                      <Label htmlFor={`car-name-${item.id}`}>Car Name</Label>
-                      <Input
-                        id={`car-name-${item.id}`}
-                        type="text"
-                        value={item.carName}
-                        onChange={(e) => updateCarPrice(item.id, "carName", e.target.value)}
-                        placeholder="Eg: Swift/Etios"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`rp-price-${item.id}`}>R.Pe Price</Label>
-                      <Input
-                        id={`rp-price-${item.id}`}
-                        type="text"
-                        value={item.rpPrice}
-                        onChange={(e) => updateCarPrice(item.id, "rpPrice", e.target.value)}
-                        placeholder="₹ 2500"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`telan-price-${item.id}`}>TELAN Price</Label>
-                      <Input
-                        id={`telan-price-${item.id}`}
-                        type="text"
-                        value={item.telanPrice}
-                        onChange={(e) => updateCarPrice(item.id, "telanPrice", e.target.value)}
-                        placeholder="₹ 3000"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`bang-price-${item.id}`}>BANG Price</Label>
-                      <Input
-                        id={`bang-price-${item.id}`}
-                        type="text"
-                        value={item.bangPrice}
-                        onChange={(e) => updateCarPrice(item.id, "bangPrice", e.target.value)}
-                        placeholder="₹ 3500"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`pondi-price-${item.id}`}>PONDI Price</Label>
-                      <Input
-                        id={`pondi-price-${item.id}`}
-                        type="text"
-                        value={item.pondiPrice}
-                        onChange={(e) => updateCarPrice(item.id, "pondiPrice", e.target.value)}
-                        placeholder="₹ 2800"
-                      />
-                    </div>
+              <div className="space-y-6 p-4 bg-gray-50 rounded-md border border-gray-200">
+                {carPrices.map((car) => (
+                  <div key={car.id} className="border border-gray-300 p-4 rounded-md bg-white relative">
                     <Button
                       type="button"
                       variant="destructive"
-                      size="sm"
-                      onClick={() => removeCarPrice(item.id)}
-                      className="col-span-full sm:col-span-1"
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                      onClick={() => removeCarPriceEntry(car.id)}
                     >
-                      Remove
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove car</span>
                     </Button>
+
+                    {/* Car Name and Image */}
+                    <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                      <div className="flex-1">
+                        <Label htmlFor={`car-name-${car.id}`}>Enter Car Name</Label>
+                        <Input
+                          id={`car-name-${car.id}`}
+                          type="text"
+                          value={car.carName}
+                          onChange={(e) => updateCarPriceField(car.id, "carName", e.target.value)}
+                          placeholder="Eg: Swift/Etios"
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <Label htmlFor={`car-image-${car.id}`}>Choose Image</Label>
+                        <Input
+                          id={`car-image-${car.id}`}
+                          type="file"
+                          onChange={(e) => handleCarImageFileChange(car.id, e.target.files[0])}
+                          className="cursor-pointer"
+                        />
+                        {(car.imageUrl || car.imageFile) && (
+                          <div className="mt-2 relative group w-24 h-16">
+                            <img
+                              src={car.imageFile ? URL.createObjectURL(car.imageFile) : car.imageUrl}
+                              alt="Car image preview"
+                              width={96}
+                              height={64}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-0 right-0 h-5 w-5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeCarImage(car.id)}
+                            >
+                              <X className="h-3 w-3" />
+                              <span className="sr-only">Remove car image</span>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Prices for this Car */}
+                    <h5 className="text-md font-semibold mb-2">Prices:</h5>
+                    <div className="space-y-3 mb-4 p-3 bg-gray-100 rounded-md border border-gray-200">
+                      {car.prices.map((price) => (
+                        <div key={price.id} className="flex flex-col sm:flex-row gap-2 items-end">
+                          <div className="flex-1">
+                            <Label htmlFor={`price-label-${price.id}`}>Label</Label>
+                            <Input
+                              id={`price-label-${price.id}`}
+                              type="text"
+                              value={price.label}
+                              onChange={(e) => updatePriceInCar(car.id, price.id, "label", e.target.value)}
+                              placeholder="Eg: 1 person"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <Label htmlFor={`price-value-${price.id}`}>Price</Label>
+                            <Input
+                              id={`price-value-${price.id}`}
+                              type="text"
+                              value={price.value}
+                              onChange={(e) => updatePriceInCar(car.id, price.id, "value", e.target.value)}
+                              placeholder="Eg: ₹ 1000"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => removePriceFromCar(car.id, price.id)}
+                          >
+                            Remove Price
+                          </Button>
+                        </div>
+                      ))}
+                      <Button type="button" onClick={() => addPriceToCar(car.id)} className="mt-2">
+                        Add Price
+                      </Button>
+                    </div>
                   </div>
                 ))}
-                <Button type="button" onClick={addCarPrice} className="mt-3">
+                <Button type="button" onClick={addCarPriceEntry} className="mt-3">
                   Add Car
                 </Button>
               </div>
             </div>
 
-            {/* Sections */}
+            {/* Sections (Updated Structure) */}
             <div>
               <h4 className="heading text-lg font-semibold mb-2">Sections</h4>
               <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
-                {sections.map((item) => (
-                  <div key={item.id} className="flex flex-col gap-2">
-                    <div>
-                      <Label htmlFor={`section-title-${item.id}`}>Section Title</Label>
+                {sections.map((section) => (
+                  <div key={section.id} className="border border-gray-300 p-4 rounded-md bg-white relative">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                      onClick={() => removeSection(section.id)}
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove section</span>
+                    </Button>
+
+                    {/* Content Title */}
+                    <div className="mb-4">
+                      <Label htmlFor={`section-title-${section.id}`}>Content Title</Label>
                       <Input
-                        id={`section-title-${item.id}`}
+                        id={`section-title-${section.id}`}
                         type="text"
-                        value={item.title}
-                        onChange={(e) => updateSection(item.id, "title", e.target.value)}
-                        placeholder="Eg: About This Package"
+                        value={section.contentTitle}
+                        onChange={(e) => updateSectionField(section.id, "contentTitle", e.target.value)}
+                        placeholder="Enter content title"
+                        className="w-full"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor={`section-content-${item.id}`}>Section Content (HTML)</Label>
+
+                    {/* Content Description */}
+                    <div className="mb-4">
+                      <Label htmlFor={`section-description-${section.id}`}>Content Description (HTML)</Label>
                       <textarea
-                        id={`section-content-${item.id}`}
-                        value={item.content}
-                        onChange={(e) => updateSection(item.id, "content", e.target.value)}
+                        id={`section-description-${section.id}`}
+                        value={section.contentDescription}
+                        onChange={(e) => updateSectionField(section.id, "contentDescription", e.target.value)}
                         rows={4}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
                         placeholder="Enter section content (HTML allowed)"
                       />
                     </div>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => removeSection(item.id)}
-                      className="self-end"
-                    >
-                      Remove
-                    </Button>
+
+                    {/* Want Update Image Checkbox */}
+                    <div className="flex items-center mb-4">
+                      <input
+                        type="checkbox"
+                        id={`want-image-${section.id}`}
+                        checked={section.hasImage}
+                        onChange={(e) => updateSectionField(section.id, "hasImage", e.target.checked)}
+                        className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <Label htmlFor={`want-image-${section.id}`}>Want to add/update Image?</Label>
+                    </div>
+
+                    {/* Image Upload and Preview (Conditional) */}
+                    {section.hasImage && (
+                      <div className="mb-4 p-3 bg-gray-100 rounded-md border border-gray-200">
+                        <Label htmlFor={`section-image-${section.id}`}>Choose File</Label>
+                        <Input
+                          id={`section-image-${section.id}`}
+                          type="file"
+                          onChange={(e) => handleSectionImageFileChange(section.id, e.target.files[0])}
+                          className="cursor-pointer"
+                        />
+                        <p className="text-sm text-gray-500 mt-1">Upload an image for this section.</p>
+
+                        {(section.imageUrl || section.imageFile) && (
+                          <div className="mt-4 relative group w-32 h-24">
+                            <img
+                              src={section.imageFile ? URL.createObjectURL(section.imageFile) : section.imageUrl}
+                              alt="Section image preview"
+                              width={128}
+                              height={96}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-1 right-1 h-6 w-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeSectionImage(section.id)}
+                            >
+                              <X className="h-4 w-4" />
+                              <span className="sr-only">Remove section image</span>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* List Information */}
+                    <h5 className="text-md font-semibold mb-2">List Information</h5>
+                    <div className="space-y-2 mb-4 p-3 bg-gray-100 rounded-md border border-gray-200">
+                      {section.listInfo.map((item) => (
+                        <div key={item.id} className="flex gap-2 items-end">
+                          <Input
+                            type="text"
+                            value={item.text}
+                            onChange={(e) => updateListInfoInSection(section.id, item.id, e.target.value)}
+                            placeholder="Add info point"
+                            className="flex-grow"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => removeListInfoFromSection(section.id, item.id)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                      <Button type="button" onClick={() => addListInfoToSection(section.id)} className="mt-2">
+                        Add Info
+                      </Button>
+                    </div>
                   </div>
                 ))}
                 <Button type="button" onClick={addSection} className="mt-3">
@@ -736,6 +1425,65 @@ export default function PackageForm({ packageType, packageId }) {
                 ))}
                 <Button type="button" onClick={addFaq} className="mt-3">
                   Add FAQ
+                </Button>
+              </div>
+            </div>
+
+            {/* Why Choose Us */}
+            <div>
+              <h4 className="heading text-lg font-semibold mb-2">Why Choose Us Items:</h4>
+              <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                {whyChooseUsItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col gap-2 border border-gray-300 p-4 rounded-md bg-white relative"
+                  >
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                      onClick={() => removeWhyChooseUsItem(item.id)}
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove item</span>
+                    </Button>
+                    <div>
+                      <Label htmlFor={`why-us-icon-${item.id}`}>Icon Name (Lucide React)</Label>
+                      <Input
+                        id={`why-us-icon-${item.id}`}
+                        type="text"
+                        value={item.iconName}
+                        onChange={(e) => updateWhyChooseUsItem(item.id, "iconName", e.target.value)}
+                        placeholder="Eg: Star, ShieldCheck, Users"
+                      />
+                      <p className="text-sm text-gray-500 mt-1">
+                        Use names from{" "}
+                        <a
+                          href="https://lucide.dev/icons/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          Lucide React
+                        </a>{" "}
+                        (e.g., Star, ShieldCheck, Users, Clock, MapPin, Wallet).
+                      </p>
+                    </div>
+                    <div>
+                      <Label htmlFor={`why-us-title-${item.id}`}>Title</Label>
+                      <Input
+                        id={`why-us-title-${item.id}`}
+                        type="text"
+                        value={item.title}
+                        onChange={(e) => updateWhyChooseUsItem(item.id, "title", e.target.value)}
+                        placeholder="Eg: 5-Star Rated Service"
+                      />
+                    </div>
+                  </div>
+                ))}
+                <Button type="button" onClick={addWhyChooseUsItem} className="mt-3">
+                  Add Why Choose Us Item
                 </Button>
               </div>
             </div>

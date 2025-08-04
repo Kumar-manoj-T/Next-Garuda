@@ -207,13 +207,13 @@ export default async function TirupatiPackageDetailPage({ params }) {
                     <div className="border border-gray-200 rounded overflow-hidden">
                       {car.prices.map((price, priceIndex) => (
                         <div
-                          key={price.id}
+                          key={price.value}
                           className={`grid grid-cols-2 py-3 px-4 border-b border-gray-200 last:border-0 ${priceIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
                             }`}
                         >
                           <div className="font-medium text-gray-800">{price.label}</div>
                           <div className="text-lg font-bold text-blue-600 text-right">
-                            ₹ {Number(price.value).toLocaleString()}
+                            ₹ {price.value.toLocaleString()}
                           </div>
                         </div>
                       ))}

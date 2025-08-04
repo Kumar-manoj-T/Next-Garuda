@@ -136,7 +136,7 @@ export default async function TirupatiPackageDetailPage({ params }) {
         <section className="py-12 px-4 bg-gray-100">
           <div className="container mx-auto flex flex-col gap-12 items-center">
             {/* Booking Form */}
-            <div className="w-full max-w-lg">
+            <div >
               <BookingForm />
             </div>
 

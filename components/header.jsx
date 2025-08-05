@@ -76,7 +76,7 @@ export default function Header() {
                           Car Rental Package
                         </a>
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/srivani-vip-break-darshan"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Crown className="h-4 w-4 mr-2" />
@@ -90,14 +90,14 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Vellore to Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/vellore-tirupati-one-day-tour-package"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />
                           One Day Package
                         </a>
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/vellore-to-tirupati"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Calendar className="h-4 w-4 mr-2" />
@@ -135,7 +135,7 @@ export default function Header() {
                           One Day Package
                         </a>
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/kanchipuram-tirupati-two-days-tour-package"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Calendar className="h-4 w-4 mr-2" />
@@ -149,7 +149,7 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Tirumala to Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/tirumala-tirupati-darshan-one-day-package"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />

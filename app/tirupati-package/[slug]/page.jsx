@@ -17,6 +17,7 @@ import {
   Phone,
   Mail,
   MessageCircle,
+  XCircle,
 } from "lucide-react" // Added new icons for Why Choose Us
 import Header from "@/components/header"
 import Footer from "@/components/footer"

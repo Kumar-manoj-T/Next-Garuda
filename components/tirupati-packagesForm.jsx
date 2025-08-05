@@ -19,6 +19,7 @@ const generateUniqueId = () => Math.random().toString(36).substring(2, 15)
 export default function PackageForm({ packageType, packageId }) {
   const router = useRouter()
   const { toast } = useToast()
+  const [isDirty, setIsDirty] = useState(false)
 
   // Core package fields
   const [packageUrl, setPackageUrl] = useState("") // New: Used as document ID
@@ -161,15 +162,18 @@ export default function PackageForm({ packageType, packageId }) {
   const handleFileChange = (e) => {
     if (e.target.files) {
       setNewImageFiles((prev) => [...prev, ...Array.from(e.target.files)])
+      setIsDirty(true)
     }
   }
 
   const removeNewImage = (index) => {
     setNewImageFiles((prev) => prev.filter((_, i) => i !== index))
+    setIsDirty(true)
   }
 
   const removeExistingImage = (urlToRemove) => {
     setImages((prev) => prev.filter((url) => url !== urlToRemove))
+    setIsDirty(true)
   }
 
   // --- Dynamic Field Handlers ---
@@ -177,27 +181,33 @@ export default function PackageForm({ packageType, packageId }) {
   // Generic add/remove for simple text points (includes, itineraries, notes, places)
   const addPoint = (setter) => {
     setter((prev) => [...prev, { id: generateUniqueId(), text: "" }])
+    setIsDirty(true)
   }
   const updatePoint = (setter, id, newText) => {
     setter((prev) => prev.map((item) => (item.id === id ? { ...item, text: newText } : item)))
+    setIsDirty(true)
   }
   const removePoint = (setter, id) => {
     setter((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
   }
 
   // Packages and Cars (nested structure)
   const addPackageEntry = () => {
     setPackagesAndCars((prev) => [...prev, { id: generateUniqueId(), packageName: "", cars: [] }])
+    setIsDirty(true)
   }
 
   const updatePackageName = (packageIdToUpdate, newName) => {
     setPackagesAndCars((prev) =>
       prev.map((pkg) => (pkg.id === packageIdToUpdate ? { ...pkg, packageName: newName } : pkg)),
     )
+    setIsDirty(true)
   }
 
   const removePackageEntry = (packageIdToRemove) => {
     setPackagesAndCars((prev) => prev.filter((pkg) => pkg.id !== packageIdToRemove))
+    setIsDirty(true)
   }
 
   const addCarToPackage = (packageIdToUpdate) => {
@@ -208,6 +218,7 @@ export default function PackageForm({ packageType, packageId }) {
           : pkg,
       ),
     )
+    setIsDirty(true)
   }
 
   const updateCarInPackage = (packageIdToUpdate, carIdToUpdate, field, value) => {
@@ -221,6 +232,7 @@ export default function PackageForm({ packageType, packageId }) {
           : pkg,
       ),
     )
+    setIsDirty(true)
   }
 
   const removeCarFromPackage = (packageIdToUpdate, carIdToRemove) => {
@@ -229,6 +241,7 @@ export default function PackageForm({ packageType, packageId }) {
         pkg.id === packageIdToUpdate ? { ...pkg, cars: pkg.cars.filter((car) => car.id !== carIdToRemove) } : pkg,
       ),
     )
+    setIsDirty(true)
   }
 
   // Car Prices (updated handlers for nested structure)
@@ -245,18 +258,22 @@ export default function PackageForm({ packageType, packageId }) {
         excludes: "", // Initialize new excludes field
       },
     ])
+    setIsDirty(true)
   }
 
   const updateCarPriceField = (carId, field, value) => {
     setCarPrices((prev) => prev.map((car) => (car.id === carId ? { ...car, [field]: value } : car)))
+    setIsDirty(true)
   }
 
   const handleCarImageFileChange = (carId, file) => {
     setCarPrices((prev) => prev.map((car) => (car.id === carId ? { ...car, imageFile: file } : car)))
+    setIsDirty(true)
   }
 
   const removeCarImage = (carId) => {
     setCarPrices((prev) => prev.map((car) => (car.id === carId ? { ...car, imageUrl: "", imageFile: null } : car)))
+    setIsDirty(true)
   }
 
   const addPriceToCar = (carId) => {
@@ -265,6 +282,7 @@ export default function PackageForm({ packageType, packageId }) {
         car.id === carId ? { ...car, prices: [...car.prices, { id: generateUniqueId(), label: "", value: "" }] } : car,
       ),
     )
+    setIsDirty(true)
   }
 
   const updatePriceInCar = (carId, priceId, field, value) => {
@@ -278,6 +296,7 @@ export default function PackageForm({ packageType, packageId }) {
           : car,
       ),
     )
+    setIsDirty(true)
   }
 
   const removePriceFromCar = (carId, priceId) => {
@@ -286,62 +305,75 @@ export default function PackageForm({ packageType, packageId }) {
         car.id === carId ? { ...car, prices: car.prices.filter((price) => price.id !== priceId) } : car,
       ),
     )
+    setIsDirty(true)
   }
 
   const removeCarPriceEntry = (id) => {
     setCarPrices((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
   }
 
   // Sightseeing Places (new handlers for image and text)
   const addSightseeingPlace = () => {
     setSightseeingPlaces((prev) => [...prev, { id: generateUniqueId(), text: "", imageUrl: "", imageFile: null }])
+    setIsDirty(true)
   }
 
   const updateSightseeingPlaceField = (placeId, field, value) => {
     setSightseeingPlaces((prev) => prev.map((place) => (place.id === placeId ? { ...place, [field]: value } : place)))
+    setIsDirty(true)
   }
 
   const handleSightseeingPlaceImageFileChange = (placeId, file) => {
     setSightseeingPlaces((prev) => prev.map((place) => (place.id === placeId ? { ...place, imageFile: file } : place)))
+    setIsDirty(true)
   }
 
   const removeSightseeingPlaceImage = (placeId) => {
     setSightseeingPlaces((prev) =>
       prev.map((place) => (place.id === placeId ? { ...place, imageUrl: "", imageFile: null } : place)),
     )
+    setIsDirty(true)
   }
 
   const removeSightseeingPlace = (id) => {
     setSightseeingPlaces((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
   }
 
   // Dress Code Image Handlers
   const handleMaleDressCodeFileChange = (e) => {
     if (e.target.files) {
       setNewMaleDressCodeFiles((prev) => [...prev, ...Array.from(e.target.files)])
+      setIsDirty(true)
     }
   }
 
   const removeNewMaleDressCodeImage = (index) => {
     setNewMaleDressCodeFiles((prev) => prev.filter((_, i) => i !== index))
+    setIsDirty(true)
   }
 
   const removeExistingMaleDressCodeImage = (urlToRemove) => {
     setMaleDressCodeImages((prev) => prev.filter((url) => url !== urlToRemove))
+    setIsDirty(true)
   }
 
   const handleFemaleDressCodeFileChange = (e) => {
     if (e.target.files) {
       setNewFemaleDressCodeFiles((prev) => [...prev, ...Array.from(e.target.files)])
+      setIsDirty(true)
     }
   }
 
   const removeNewFemaleDressCodeImage = (index) => {
     setNewFemaleDressCodeFiles((prev) => prev.filter((_, i) => i !== index))
+    setIsDirty(true)
   }
 
   const removeExistingFemaleDressCodeImage = (urlToRemove) => {
     setFemaleDressCodeImages((prev) => prev.filter((url) => url !== urlToRemove))
+    setIsDirty(true)
   }
 
   // Sections (updated handlers for nested structure)
@@ -358,14 +390,17 @@ export default function PackageForm({ packageType, packageId }) {
         listInfo: [],
       },
     ])
+    setIsDirty(true)
   }
 
   const updateSectionField = (sectionId, field, value) => {
     setSections((prev) => prev.map((section) => (section.id === sectionId ? { ...section, [field]: value } : section)))
+    setIsDirty(true)
   }
 
   const handleSectionImageFileChange = (sectionId, file) => {
     setSections((prev) => prev.map((section) => (section.id === sectionId ? { ...section, imageFile: file } : section)))
+    setIsDirty(true)
   }
 
   const removeSectionImage = (sectionId) => {
@@ -374,6 +409,7 @@ export default function PackageForm({ packageType, packageId }) {
         section.id === sectionId ? { ...section, imageUrl: "", imageFile: null, hasImage: false } : section,
       ),
     )
+    setIsDirty(true)
   }
 
   const addListInfoToSection = (sectionId) => {
@@ -384,6 +420,7 @@ export default function PackageForm({ packageType, packageId }) {
           : section,
       ),
     )
+    setIsDirty(true)
   }
 
   const updateListInfoInSection = (sectionId, listInfoId, newText) => {
@@ -397,6 +434,7 @@ export default function PackageForm({ packageType, packageId }) {
           : section,
       ),
     )
+    setIsDirty(true)
   }
 
   const removeListInfoFromSection = (sectionId, listInfoId) => {
@@ -407,35 +445,66 @@ export default function PackageForm({ packageType, packageId }) {
           : section,
       ),
     )
+    setIsDirty(true)
   }
 
   const removeSection = (id) => {
     setSections((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
   }
 
   // Why Choose Us Handlers
   const addWhyChooseUsItem = () => {
     setWhyChooseUsItems((prev) => [...prev, { id: generateUniqueId(), iconName: "", title: "" }])
+    setIsDirty(true)
   }
 
   const updateWhyChooseUsItem = (id, field, value) => {
     setWhyChooseUsItems((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+    setIsDirty(true)
   }
 
   const removeWhyChooseUsItem = (id) => {
     setWhyChooseUsItems((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
   }
 
   // FAQs (e.g., { question: "Q?", answer: "A." })
   const addFaq = () => {
     setFaqs((prev) => [...prev, { id: generateUniqueId(), question: "", answer: "" }])
+    setIsDirty(true)
   }
   const updateFaq = (id, field, value) => {
     setFaqs((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+    setIsDirty(true)
   }
   const removeFaq = (id) => {
     setFaqs((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
   }
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ""
+      }
+    }
+
+    const handleRouteChange = (url) => {
+      if (isDirty && !confirm("Are you sure you want to move back without saving?")) {
+        throw "Abort route change" // cancel navigation
+      }
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    router.events?.on("routeChangeStart", handleRouteChange)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+      router.events?.off("routeChangeStart", handleRouteChange)
+    }
+  }, [isDirty, router])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -620,6 +689,8 @@ export default function PackageForm({ packageType, packageId }) {
       setLoading(false)
       console.log("Form submission finished.")
     }
+
+    setIsDirty(false)
   }
 
   if (!clientAuthenticated) {
@@ -658,8 +729,10 @@ export default function PackageForm({ packageType, packageId }) {
                 id="packageUrl"
                 type="text"
                 value={packageUrl}
-                onChange={(e) => setPackageUrl(e.target.value)}
-                
+                onChange={(e) => {
+                  setPackageUrl(e.target.value)
+                  setIsDirty(true)
+                }}
                 placeholder="Eg: chennai-to-tirupati"
                 disabled={isEditMode} // URL should not be editable in edit mode
               />
@@ -675,8 +748,10 @@ export default function PackageForm({ packageType, packageId }) {
                 id="title"
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                
+                onChange={(e) => {
+                  setTitle(e.target.value)
+                  setIsDirty(true)
+                }}
                 placeholder="Eg: Chennai to Tirupati"
               />
             </div>
@@ -691,8 +766,10 @@ export default function PackageForm({ packageType, packageId }) {
                 type="number"
                 min="1"
                 value={packageOrder}
-                onChange={(e) => setPackageOrder(Number(e.target.value))}
-                
+                onChange={(e) => {
+                  setPackageOrder(Number(e.target.value))
+                  setIsDirty(true)
+                }}
                 placeholder="Enter Package Order"
               />
             </div>
@@ -705,9 +782,11 @@ export default function PackageForm({ packageType, packageId }) {
               <select
                 id="tripDays"
                 value={tripDays}
-                onChange={(e) => setTripDays(e.target.value)}
+                onChange={(e) => {
+                  setTripDays(e.target.value)
+                  setIsDirty(true)
+                }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
-                
               >
                 <option value="1">One Day</option>
                 <option value="2">Two Days</option>
@@ -805,7 +884,10 @@ export default function PackageForm({ packageType, packageId }) {
                         id={`package-name-${pkg.id}`}
                         type="text"
                         value={pkg.packageName}
-                        onChange={(e) => updatePackageName(pkg.id, e.target.value)}
+                        onChange={(e) => {
+                          updatePackageName(pkg.id, e.target.value)
+                          setIsDirty(true)
+                        }}
                         placeholder="Eg: Standard Package"
                         className="w-full"
                       />
@@ -821,7 +903,10 @@ export default function PackageForm({ packageType, packageId }) {
                               id={`car-name-${car.id}`}
                               type="text"
                               value={car.carName}
-                              onChange={(e) => updateCarInPackage(pkg.id, car.id, "carName", e.target.value)}
+                              onChange={(e) => {
+                                updateCarInPackage(pkg.id, car.id, "carName", e.target.value)
+                                setIsDirty(true)
+                              }}
                               placeholder="Eg: Swift"
                             />
                           </div>
@@ -831,7 +916,10 @@ export default function PackageForm({ packageType, packageId }) {
                               id={`seat-capacity-${car.id}`}
                               type="text"
                               value={car.seatCapacity}
-                              onChange={(e) => updateCarInPackage(pkg.id, car.id, "seatCapacity", e.target.value)}
+                              onChange={(e) => {
+                                updateCarInPackage(pkg.id, car.id, "seatCapacity", e.target.value)
+                                setIsDirty(true)
+                              }}
                               placeholder="Eg: 6+1"
                             />
                           </div>
@@ -841,7 +929,10 @@ export default function PackageForm({ packageType, packageId }) {
                               id={`car-price-${car.id}`}
                               type="text"
                               value={car.price}
-                              onChange={(e) => updateCarInPackage(pkg.id, car.id, "price", e.target.value)}
+                              onChange={(e) => {
+                                updateCarInPackage(pkg.id, car.id, "price", e.target.value)
+                                setIsDirty(true)
+                              }}
                               placeholder="Eg: ₹ 1200"
                             />
                           </div>
@@ -876,7 +967,10 @@ export default function PackageForm({ packageType, packageId }) {
                     <Input
                       type="text"
                       value={item.text}
-                      onChange={(e) => updatePoint(setIncludes, item.id, e.target.value)}
+                      onChange={(e) => {
+                        updatePoint(setIncludes, item.id, e.target.value)
+                        setIsDirty(true)
+                      }}
                       placeholder="Eg: Driver Allowance"
                       className="flex-grow"
                     />
@@ -905,7 +999,10 @@ export default function PackageForm({ packageType, packageId }) {
                     <Input
                       type="text"
                       value={item.text}
-                      onChange={(e) => updatePoint(setItineraries, item.id, e.target.value)}
+                      onChange={(e) => {
+                        updatePoint(setItineraries, item.id, e.target.value)
+                        setIsDirty(true)
+                      }}
                       placeholder="Eg: Day 1: Chennai to Tirupati"
                       className="flex-grow"
                     />
@@ -934,7 +1031,10 @@ export default function PackageForm({ packageType, packageId }) {
                     <Input
                       type="text"
                       value={item.text}
-                      onChange={(e) => updatePoint(setPassengerNotes, item.id, e.target.value)}
+                      onChange={(e) => {
+                        updatePoint(setPassengerNotes, item.id, e.target.value)
+                        setIsDirty(true)
+                      }}
                       placeholder="Eg: Carry valid ID proof"
                       className="flex-grow"
                     />
@@ -979,7 +1079,10 @@ export default function PackageForm({ packageType, packageId }) {
                           id={`place-name-${place.id}`}
                           type="text"
                           value={place.text}
-                          onChange={(e) => updateSightseeingPlaceField(place.id, "text", e.target.value)}
+                          onChange={(e) => {
+                            updateSightseeingPlaceField(place.id, "text", e.target.value)
+                            setIsDirty(true)
+                          }}
                           placeholder="Enter Name"
                           className="w-full"
                         />
@@ -989,7 +1092,10 @@ export default function PackageForm({ packageType, packageId }) {
                         <Input
                           id={`place-image-${place.id}`}
                           type="file"
-                          onChange={(e) => handleSightseeingPlaceImageFileChange(place.id, e.target.files[0])}
+                          onChange={(e) => {
+                            handleSightseeingPlaceImageFileChange(place.id, e.target.files[0])
+                            setIsDirty(true)
+                          }}
                           className="cursor-pointer"
                         />
                         {(place.imageUrl || place.imageFile) && (
@@ -1182,7 +1288,10 @@ export default function PackageForm({ packageType, packageId }) {
                           id={`car-name-${car.id}`}
                           type="text"
                           value={car.carName}
-                          onChange={(e) => updateCarPriceField(car.id, "carName", e.target.value)}
+                          onChange={(e) => {
+                            updateCarPriceField(car.id, "carName", e.target.value)
+                            setIsDirty(true)
+                          }}
                           placeholder="Eg: Swift/Etios"
                           className="w-full"
                         />
@@ -1192,7 +1301,10 @@ export default function PackageForm({ packageType, packageId }) {
                         <Input
                           id={`car-image-${car.id}`}
                           type="file"
-                          onChange={(e) => handleCarImageFileChange(car.id, e.target.files[0])}
+                          onChange={(e) => {
+                            handleCarImageFileChange(car.id, e.target.files[0])
+                            setIsDirty(true)
+                          }}
                           className="cursor-pointer"
                         />
                         {(car.imageUrl || car.imageFile) && (
@@ -1225,7 +1337,10 @@ export default function PackageForm({ packageType, packageId }) {
                       <textarea
                         id={`car-includes-${car.id}`}
                         value={car.includes}
-                        onChange={(e) => updateCarPriceField(car.id, "includes", e.target.value)}
+                        onChange={(e) => {
+                          updateCarPriceField(car.id, "includes", e.target.value)
+                          setIsDirty(true)
+                        }}
                         rows={3}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
                         placeholder="Enter what's included (e.g., Toll, Parking, Driver Allowance)"
@@ -1238,7 +1353,10 @@ export default function PackageForm({ packageType, packageId }) {
                       <textarea
                         id={`car-excludes-${car.id}`}
                         value={car.excludes}
-                        onChange={(e) => updateCarPriceField(car.id, "excludes", e.target.value)}
+                        onChange={(e) => {
+                          updateCarPriceField(car.id, "excludes", e.target.value)
+                          setIsDirty(true)
+                        }}
                         rows={3}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
                         placeholder="Enter what's excluded (e.g., Food, Accommodation)"
@@ -1256,7 +1374,10 @@ export default function PackageForm({ packageType, packageId }) {
                               id={`price-label-${price.id}`}
                               type="text"
                               value={price.label}
-                              onChange={(e) => updatePriceInCar(car.id, price.id, "label", e.target.value)}
+                              onChange={(e) => {
+                                updatePriceInCar(car.id, price.id, "label", e.target.value)
+                                setIsDirty(true)
+                              }}
                               placeholder="Eg: 1 person"
                             />
                           </div>
@@ -1266,7 +1387,10 @@ export default function PackageForm({ packageType, packageId }) {
                               id={`price-value-${price.id}`}
                               type="text"
                               value={price.value}
-                              onChange={(e) => updatePriceInCar(car.id, price.id, "value", e.target.value)}
+                              onChange={(e) => {
+                                updatePriceInCar(car.id, price.id, "value", e.target.value)
+                                setIsDirty(true)
+                              }}
                               placeholder="Eg: ₹ 1000"
                             />
                           </div>
@@ -1316,7 +1440,10 @@ export default function PackageForm({ packageType, packageId }) {
                         id={`section-title-${section.id}`}
                         type="text"
                         value={section.contentTitle}
-                        onChange={(e) => updateSectionField(section.id, "contentTitle", e.target.value)}
+                        onChange={(e) => {
+                          updateSectionField(section.id, "contentTitle", e.target.value)
+                          setIsDirty(true)
+                        }}
                         placeholder="Enter content title"
                         className="w-full"
                       />
@@ -1328,7 +1455,10 @@ export default function PackageForm({ packageType, packageId }) {
                       <textarea
                         id={`section-description-${section.id}`}
                         value={section.contentDescription}
-                        onChange={(e) => updateSectionField(section.id, "contentDescription", e.target.value)}
+                        onChange={(e) => {
+                          updateSectionField(section.id, "contentDescription", e.target.value)
+                          setIsDirty(true)
+                        }}
                         rows={4}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
                         placeholder="Enter section content (HTML allowed)"
@@ -1341,7 +1471,10 @@ export default function PackageForm({ packageType, packageId }) {
                         type="checkbox"
                         id={`want-image-${section.id}`}
                         checked={section.hasImage}
-                        onChange={(e) => updateSectionField(section.id, "hasImage", e.target.checked)}
+                        onChange={(e) => {
+                          updateSectionField(section.id, "hasImage", e.target.checked)
+                          setIsDirty(true)
+                        }}
                         className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                       />
                       <Label htmlFor={`want-image-${section.id}`}>Want to add/update Image?</Label>
@@ -1354,7 +1487,10 @@ export default function PackageForm({ packageType, packageId }) {
                         <Input
                           id={`section-image-${section.id}`}
                           type="file"
-                          onChange={(e) => handleSectionImageFileChange(section.id, e.target.files[0])}
+                          onChange={(e) => {
+                            handleSectionImageFileChange(section.id, e.target.files[0])
+                            setIsDirty(true)
+                          }}
                           className="cursor-pointer"
                         />
                         <p className="text-sm text-gray-500 mt-1">Upload an image for this section.</p>
@@ -1391,7 +1527,10 @@ export default function PackageForm({ packageType, packageId }) {
                           <Input
                             type="text"
                             value={item.text}
-                            onChange={(e) => updateListInfoInSection(section.id, item.id, e.target.value)}
+                            onChange={(e) => {
+                              updateListInfoInSection(section.id, item.id, e.target.value)
+                              setIsDirty(true)
+                            }}
                             placeholder="Add info point"
                             className="flex-grow"
                           />
@@ -1429,7 +1568,10 @@ export default function PackageForm({ packageType, packageId }) {
                         id={`faq-question-${item.id}`}
                         type="text"
                         value={item.question}
-                        onChange={(e) => updateFaq(item.id, "question", e.target.value)}
+                        onChange={(e) => {
+                          updateFaq(item.id, "question", e.target.value)
+                          setIsDirty(true)
+                        }}
                         placeholder="Eg: What is included in the package?"
                       />
                     </div>
@@ -1438,7 +1580,10 @@ export default function PackageForm({ packageType, packageId }) {
                       <textarea
                         id={`faq-answer-${item.id}`}
                         value={item.answer}
-                        onChange={(e) => updateFaq(item.id, "answer", e.target.value)}
+                        onChange={(e) => {
+                          updateFaq(item.id, "answer", e.target.value)
+                          setIsDirty(true)
+                        }}
                         rows={3}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
                         placeholder="Enter the answer to the FAQ"
@@ -1486,7 +1631,10 @@ export default function PackageForm({ packageType, packageId }) {
                         id={`why-us-icon-${item.id}`}
                         type="text"
                         value={item.iconName}
-                        onChange={(e) => updateWhyChooseUsItem(item.id, "iconName", e.target.value)}
+                        onChange={(e) => {
+                          updateWhyChooseUsItem(item.id, "iconName", e.target.value)
+                          setIsDirty(true)
+                        }}
                         placeholder="Eg: Star, ShieldCheck, Users"
                       />
                       <p className="text-sm text-gray-500 mt-1">
@@ -1508,7 +1656,10 @@ export default function PackageForm({ packageType, packageId }) {
                         id={`why-us-title-${item.id}`}
                         type="text"
                         value={item.title}
-                        onChange={(e) => updateWhyChooseUsItem(item.id, "title", e.target.value)}
+                        onChange={(e) => {
+                          updateWhyChooseUsItem(item.id, "title", e.target.value)
+                          setIsDirty(true)
+                        }}
                         placeholder="Eg: 5-Star Rated Service"
                       />
                     </div>
@@ -1528,7 +1679,15 @@ export default function PackageForm({ packageType, packageId }) {
               type="button"
               variant="outline"
               className="w-full mt-2 bg-transparent"
-              onClick={() => router.back()}
+              onClick={() => {
+                if (
+                  isDirty &&
+                  !confirm("You have unsaved changes. Are you sure you want to leave? All changes will be lost.")
+                ) {
+                  return
+                }
+                router.back()
+              }}
             >
               Cancel
             </Button>

@@ -2,7 +2,7 @@ import { BriefcaseMedical, UserCheck, Award, PlayCircle, ShieldUser, TruckElectr
 
 export default function CircleCard({ Logo, title, description }) {
 
-    // console.log("Logo ==> ",Logo,title,description)
+ 
     if (!Logo) return null
 
     return (

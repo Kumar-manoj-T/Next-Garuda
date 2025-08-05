@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { BriefcaseMedical, UserCheck,Truck, Award, PlayCircle, TruckIcon, ShieldCheck } from "lucide-react"
+import { BriefcaseMedical, UserCheck, Car, Award, PlayCircle, TruckIcon, ShieldCheck, ClockArrowUp, UserPlus  } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
@@ -9,6 +9,8 @@ import StatsCounter from "@/components/stats-counter"
 import BookingForm from "@/components/booking-form"
 import CustomerReviews from "@/components/customer-reviews"
 import CircleCard from "@/components/about/CircleCard"
+import Link from "next/link"
+import { ChevronRight } from "lucide-react" 
 
 export default function AboutUs() {
   const data = [
@@ -18,17 +20,17 @@ export default function AboutUs() {
       description: "All vehicles are GPS-tracked, sanitized, and operated by verified, professional drivers to ensure every journey is safe and reliable."
     },
     {
-      Logo: Truck,
+      Logo: Car,
       title: "Trusted Travel Guides",
       description: " Our coordinators and trip managers assist you throughout your journey—from pickup in Chennai to darshan at Tirumala."
     },
     {
-      Logo: TruckIcon,
+      Logo: UserPlus,
       title: " Expertise & Experience",
       description: "With 5+ years of specialized experience in Tirupati and temple tour travel, we handle every trip with devotion and perfection."
     },
     {
-      Logo: Truck,
+      Logo: ClockArrowUp,
       title: "Customized Pilgrimage Plans",
       description: "We understand every pilgrim is different. That’s why we offer flexible tour options: one-day, two-day, and car rental packages—all designed around your schedule."
     }
@@ -36,6 +38,23 @@ export default function AboutUs() {
   return (
     <>
       <Header />
+      <section className="bg-red-100 py-12">
+                <div className="container mx-auto text-center">
+                    {/* Title */}
+                    <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">
+                        About Us
+                    </h1>
+
+                    {/* Breadcrumb */}
+                    <nav className="text-sm text-gray-600 flex justify-center items-center gap-2" aria-label="Breadcrumb">
+                        <Link href="/" className="hover:underline text-gray-700 font-medium">
+                            Home
+                        </Link>
+                        <ChevronRight className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-700 font-medium">About</span>
+                    </nav>
+                </div>
+            </section>
       <section className="py-16 px-4 bg-gray-100">
 
         <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -139,7 +158,7 @@ export default function AboutUs() {
       </section>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-8">
         {data.map((item, index) => {
-          console.log("item --> ", item)
+          // console.log("item --> ", item)
           return (
             <CircleCard
               key={index}

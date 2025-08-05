@@ -62,7 +62,7 @@ export default function PackageForm({ packageType, packageId }) {
       setClientAuthenticated(authStatus)
       if (!authStatus) {
         toast({
-          title: "Authentication Required",
+          title: "Authentication ",
           description: "Please log in to access the admin panel.",
           variant: "destructive",
         })
@@ -445,7 +445,7 @@ export default function PackageForm({ packageType, packageId }) {
     if (!packageUrl) {
       toast({
         title: "Validation Error",
-        description: "Package URL is required.",
+        description: "Package URL is .",
         variant: "destructive",
       })
       setLoading(false)
@@ -659,7 +659,7 @@ export default function PackageForm({ packageType, packageId }) {
                 type="text"
                 value={packageUrl}
                 onChange={(e) => setPackageUrl(e.target.value)}
-                required
+                
                 placeholder="Eg: chennai-to-tirupati"
                 disabled={isEditMode} // URL should not be editable in edit mode
               />
@@ -676,7 +676,7 @@ export default function PackageForm({ packageType, packageId }) {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                required
+                
                 placeholder="Eg: Chennai to Tirupati"
               />
             </div>
@@ -692,7 +692,7 @@ export default function PackageForm({ packageType, packageId }) {
                 min="1"
                 value={packageOrder}
                 onChange={(e) => setPackageOrder(Number(e.target.value))}
-                required
+                
                 placeholder="Enter Package Order"
               />
             </div>
@@ -707,7 +707,7 @@ export default function PackageForm({ packageType, packageId }) {
                 value={tripDays}
                 onChange={(e) => setTripDays(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
-                required
+                
               >
                 <option value="1">One Day</option>
                 <option value="2">Two Days</option>

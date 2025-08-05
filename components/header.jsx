@@ -36,7 +36,7 @@ export default function Header() {
             <a href="/" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Home
             </a>
-            <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            <a href="/about" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               About
             </a>
 
@@ -69,7 +69,7 @@ export default function Header() {
                           Two Days Package
                         </a>
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/chennai-tirupati-car-rental-package"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Car className="h-4 w-4 mr-2" />
@@ -128,7 +128,7 @@ export default function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Kanchipuram To Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/kanchipuram-tirupati-one-day-tour-package"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />

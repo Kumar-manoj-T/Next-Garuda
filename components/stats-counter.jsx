@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Globe, Users, CheckCircle, Handshake } from "lucide-react" // Using Lucide React for icons
+import { Car , Users, CheckCircle, Handshake } from "lucide-react" // Using Lucide React for icons
 
 const stats = [
   {
     id: 1,
-    icon: Globe,
+    icon: Car ,
     value: "30+",
-    label: "Visa Categories",
+    label: "Vehicles",
     endValue: 30,
     suffix: "+",
   },
@@ -16,7 +16,7 @@ const stats = [
     id: 2,
     icon: Users,
     value: "389+",
-    label: "Team Members",
+    label: "Our Drivers",
     endValue: 389,
     suffix: "+",
   },
@@ -24,7 +24,7 @@ const stats = [
     id: 3,
     icon: CheckCircle,
     value: "5K",
-    label: "Visa Process",
+    label: "Happy Customers",
     endValue: 5, // Changed to 5 for '5K' to work with multiplication
     suffix: "K",
   },

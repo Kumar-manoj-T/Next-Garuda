@@ -104,7 +104,7 @@ export default function StatsCounter() {
 
   return (
     <section
-      className="relative py-20 px-4 bg-gray-100 overflow-hidden"
+      className="relative py-10 px-4 bg-gray-100 overflow-hidden"
       style={{
         backgroundImage: `url(/placeholder.svg?height=800&width=1600)`, // Placeholder for background image
         backgroundSize: "cover",

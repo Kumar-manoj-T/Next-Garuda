@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { X } from "lucide-react"
+import { X } from 'lucide-react'
 import { isAuthenticated } from "@/lib/custom-auth" // Import custom auth check
 
 // Helper to generate unique IDs for dynamic fields
@@ -26,8 +26,6 @@ export default function PackageForm({ packageType, packageId }) {
   const [title, setTitle] = useState("")
   const [packageOrder, setPackageOrder] = useState(1) // New: Package Order
   const [tripDays, setTripDays] = useState("1") // New: Trip Days
-  const [subtitle, setSubtitle] = useState("") // Existing, but not in HTML snippet
-  const [content, setContent] = useState("") // Existing, but not in HTML snippet
 
   // Image management
   const [images, setImages] = useState([]) // Stores URLs of existing images
@@ -130,9 +128,6 @@ export default function PackageForm({ packageType, packageId }) {
             setNewMaleDressCodeFiles([]) // Clear any pending new files on load
             setFemaleDressCodeImages(data.femaleDressCodeImages || [])
             setNewFemaleDressCodeFiles([]) // Clear any pending new files on load
-            // Keep existing subtitle and content if they were part of the old structure
-            setSubtitle(data.subtitle || "")
-            setContent(data.content || "")
           } else {
             toast({
               title: "Error",
@@ -658,8 +653,6 @@ export default function PackageForm({ packageType, packageId }) {
         whyChooseUsItems, // Save the updated whyChooseUsItems
         maleDressCodeImages: allMaleDressCodeUrls,
         femaleDressCodeImages: allFemaleDressCodeUrls,
-        subtitle,
-        content,
         createdAt: isEditMode ? (await getDoc(doc(db, packageType, packageId))).data().createdAt : Timestamp.now(),
         updatedAt: Timestamp.now(),
       }

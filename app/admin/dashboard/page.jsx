@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const packageTypes = [
     { title: "Tirupati Package", slug: "tirupati-package" },
     { title: "Temple Tour Package", slug: "temple-package" },
-    { title: "Car Rental Package", slug: "carrental-package" },
+    { title: "Car Rental Package", slug: "car-rental-package" },
   ]
 
   const handleLogout = () => {

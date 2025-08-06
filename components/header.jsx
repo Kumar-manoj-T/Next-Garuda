@@ -62,7 +62,7 @@ export default function Header() {
                           One Day Package
                         </a>
                         <a
-                          href="/under-construction"
+                          href="/tirupati-package/tirupati-two-days-package-from-chennai"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Calendar className="h-4 w-4 mr-2" />

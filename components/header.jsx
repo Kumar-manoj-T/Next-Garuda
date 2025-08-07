@@ -424,7 +424,7 @@ export function Header() {
                     carRentalPackages.map((pkg) => (
                       <a
                         key={pkg.id}
-                        href={`/car-rental/${pkg.slug}`}
+                        href={`/car-rental/${pkg.id}`}
                         className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                       >
                         {pkg.title}

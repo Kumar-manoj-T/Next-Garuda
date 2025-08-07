@@ -1,405 +1,548 @@
-import { doc, getDoc } from "firebase/firestore"
+"use client"
+
+import { useState, useEffect } from "react"
+import { useParams } from "next/navigation"
+import { collection, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
-import { notFound } from "next/navigation"
-import { BookingForm } from "@/components/booking-form"
+import BookingForm from "@/components/booking-form"
+
+import Link from "next/link"
+import { ChevronRight, MapPin, Clock, Users, Star, Calendar, CheckCircle, XCircle, Phone, Mail, MessageCircle, Camera, Route, Info, Award, Shield, Car, IndianRupee, Eye, Heart, Share2 } from 'lucide-react'
+import Header from "@/components/header"
+import Footer from "@/components/footer"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { MapPin, Clock, Users, Star, Calendar, Phone, Mail, CheckCircle, XCircle, Camera, Mountain, Car, Utensils } from 'lucide-react'
 
-async function getTemplePackage(slug) {
-  try {
-    const docRef = doc(db, "templePackages", slug)
-    const docSnap = await getDoc(docRef)
-    
-    if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() }
+function TemplePackagePage() {
+  const params = useParams()
+  const [packageData, setPackageData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
+
+  useEffect(() => {
+    async function fetchPackageData() {
+      try {
+        setLoading(true)
+        const querySnapshot = await getDocs(collection(db, "templePackages"))
+        const packages = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        const foundPackage = packages.find((pkg) => pkg.url === params.slug)
+        
+        if (foundPackage && foundPackage.isActive) {
+          setPackageData(foundPackage)
+        } else {
+          setError("Temple package not found or inactive")
+        }
+      } catch (err) {
+        console.error("Error fetching temple package:", err)
+        setError("Failed to load temple package")
+      } finally {
+        setLoading(false)
+      }
     }
-    return null
-  } catch (error) {
-    console.error("Error fetching temple package:", error)
-    return null
+
+    if (params.slug) {
+      fetchPackageData()
+    }
+  }, [params.slug])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading temple package...</p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
   }
-}
 
-export default async function TemplePackagePage({ params }) {
-  const { slug } = params
-  const packageData = await getTemplePackage(slug)
-
-  if (!packageData) {
-    notFound()
+  if (error || !packageData) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Package Not Found</h2>
+            <p className="text-gray-600 mb-6">{error || "The requested temple package could not be found."}</p>
+            <Link href="/" className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
+              Back to Home
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
-      {/* Hero Section */}
-      <div className="relative h-[70vh] overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url(${packageData.mainImage || '/temple-tour-package.png'})`
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      {/* Breadcrumb Section
+      <section className="bg-white py-4 border-b">
+        <div className="container mx-auto px-4">
+          <nav className="text-sm text-gray-600 flex items-center gap-2" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-blue-600 transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <Link href="/temple-tours" className="hover:text-blue-600 transition-colors">
+              Temple Tours
+            </Link>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <span className="text-gray-800 font-medium">{packageData.title}</span>
+          </nav>
         </div>
-        
-        <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-          <div className="max-w-3xl text-white animate-fade-in-up">
-            <div className="flex items-center gap-2 mb-4">
-              <Badge variant="secondary" className="bg-orange-500 text-white hover:bg-orange-600">
-                <Mountain className="w-4 h-4 mr-1" />
-                Temple Tour
-              </Badge>
-              <Badge variant="outline" className="border-white text-white">
-                <Star className="w-4 h-4 mr-1 fill-yellow-400 text-yellow-400" />
-                {packageData.rating || "4.8"}
-              </Badge>
-            </div>
-            
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight animate-fade-in-up delay-200">
+      </section> */}
+
+      {/* Hero Section */}
+      <section className="bg-orange-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
               {packageData.title}
             </h1>
-            
-            <p className="text-xl lg:text-2xl mb-8 opacity-90 animate-fade-in-up delay-400">
-              {packageData.shortDescription}
-            </p>
-            
-            <div className="flex flex-wrap items-center gap-6 text-lg animate-fade-in-up delay-600">
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-orange-400" />
-                <span>{packageData.duration}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-orange-400" />
-                <span>{packageData.groupSize || "Any Group Size"}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-orange-400" />
-                <span>{packageData.location}</span>
-              </div>
-            </div>
-            
-            <div className="mt-8 animate-fade-in-up delay-800">
-              <div className="text-3xl font-bold text-orange-400">
-                ₹{packageData.price}
-                <span className="text-lg text-white/80 ml-2">per person</span>
-              </div>
+            {packageData.subtitle && (
+              <p className="text-lg md:text-xl text-gray-600 mb-6">{packageData.subtitle}</p>
+            )}
+            <div className="flex flex-wrap justify-center items-center gap-4">
+              <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1">
+                <Clock className="w-4 h-4" />
+                {packageData.days} Days
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+                <MapPin className="w-4 h-4" />
+                Temple Tour
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+                <Users className="w-4 h-4" />
+                All Group Sizes
+              </Badge>
             </div>
           </div>
         </div>
+      </section>
+
+       
+
+      {/* Image Gallery Section */}
+      {packageData.images && packageData.images.length > 0 && (
+        <section className="bg-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              {/* Main Image */}
+              <div className="mb-6">
+                <img
+                  src={packageData.images[activeImageIndex] || "/placeholder.svg?height=400&width=800&query=temple tour"}
+                  alt={`${packageData.title} - Image ${activeImageIndex + 1}`}
+                  className="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+                />
+              </div>
+              
+              {/* Thumbnail Images */}
+              {packageData.images.length > 1 && (
+                <div className="flex gap-3 overflow-x-auto pb-2">
+                  {packageData.images.slice(0, 6).map((image, index) => (
+                    <div
+                      key={index}
+                      className={`flex-shrink-0 cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                        activeImageIndex === index ? 'border-blue-500' : 'border-transparent'
+                      }`}
+                      onClick={() => setActiveImageIndex(index)}
+                    >
+                      <img
+                        src={image || "/placeholder.svg"}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-20 h-16 object-cover hover:opacity-80 transition-opacity"
+                      />
+                    </div>
+                  ))}
+                  {packageData.images.length > 6 && (
+                    <div className="flex-shrink-0 w-20 h-16 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors">
+                      <div className="text-center">
+                        <Eye className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                        <span className="text-xs text-gray-600">+{packageData.images.length - 6}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Booking Form */}
+      <div id="booking">
+        <BookingForm />
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Left Content */}
-          <div className="lg:col-span-2 space-y-12">
+      <section className="py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            {/* Package Overview */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm animate-fade-in-up">
-              <CardContent className="p-8">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                  <Mountain className="w-8 h-8 text-orange-500" />
-                  Package Overview
-                </h2>
-                <div 
-                  className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: packageData.description }}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Dynamic Sections */}
-            {packageData.sections && packageData.sections.length > 0 && (
-              <div className="space-y-8">
-                {packageData.sections.map((section, index) => (
-                  <Card 
-                    key={section.id} 
-                    className="shadow-lg border-0 bg-white/80 backdrop-blur-sm animate-fade-in-up"
-                    style={{ animationDelay: `${index * 200}ms` }}
-                  >
-                    <CardContent className="p-8">
-                      <div className="grid md:grid-cols-2 gap-8 items-center">
-                        <div className={index % 2 === 0 ? "order-1" : "order-2"}>
-                          <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                            {section.contentTitle}
-                          </h3>
-                          <div 
-                            className="prose prose-lg text-gray-700 mb-6"
-                            dangerouslySetInnerHTML={{ __html: section.contentDescription }}
-                          />
-                          {section.listInfo && section.listInfo.length > 0 && (
-                            <ul className="space-y-3">
-                              {section.listInfo.map((item) => (
-                                <li key={item.id} className="flex items-start gap-3">
-                                  <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                                  <span className="text-gray-700">{item.text}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                        {section.imageUrl && (
-                          <div className={index % 2 === 0 ? "order-2" : "order-1"}>
-                            <div className="relative rounded-2xl overflow-hidden shadow-xl group">
-                              <img
-                                src={section.imageUrl || "/placeholder.svg"}
-                                alt={section.contentTitle}
-                                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-
-            {/* Gallery */}
-            {packageData.galleryImages && packageData.galleryImages.length > 0 && (
-              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm animate-fade-in-up">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <Camera className="w-8 h-8 text-orange-500" />
-                    Photo Gallery
+            {/* Left Content - 2/3 width */}
+            <div className="lg:col-span-2 space-y-8">
+              
+              {/* Package Overview */}
+              {packageData.content && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <Info className="w-6 h-6 text-blue-600" />
+                    Package Overview
                   </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {packageData.galleryImages.map((image, index) => (
-                      <div 
-                        key={index} 
-                        className="relative rounded-xl overflow-hidden shadow-lg group cursor-pointer transform transition-all duration-300 hover:scale-105"
-                      >
-                        <img
-                          src={image || "/placeholder.svg"}
-                          alt={`Gallery ${index + 1}`}
-                          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div 
+                    className="text-gray-700 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: packageData.content }}
+                  />
+                </div>
+              )}
+
+              {/* Tour Highlights */}
+              {packageData.tourHighlights && packageData.tourHighlights.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <Star className="w-6 h-6 text-yellow-500" />
+                    Tour Highlights
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {packageData.tourHighlights.map((highlight, index) => (
+                      <div key={highlight.id || index} className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
+                        <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{highlight.text}</span>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                </div>
+              )}
 
-            {/* Itinerary */}
-            {packageData.itinerary && packageData.itinerary.length > 0 && (
-              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm animate-fade-in-up">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <Calendar className="w-8 h-8 text-orange-500" />
+              {/* Temple List */}
+              {packageData.templeList && packageData.templeList.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <Award className="w-6 h-6 text-orange-500" />
+                    Temples to Visit
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {packageData.templeList.map((temple, index) => (
+                      <div key={temple.id || index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        {temple.imageUrl && (
+                          <img
+                            src={temple.imageUrl || "/placeholder.svg"}
+                            alt={temple.name}
+                            className="w-full h-32 object-cover rounded-lg mb-3"
+                          />
+                        )}
+                        <h4 className="font-semibold text-gray-800 mb-2">{temple.name}</h4>
+                        {temple.description && (
+                          <p className="text-sm text-gray-600 leading-relaxed">{temple.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Itinerary */}
+              {packageData.itineraries && packageData.itineraries.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <Route className="w-6 h-6 text-blue-600" />
                     Detailed Itinerary
                   </h2>
-                  <div className="space-y-6">
-                    {packageData.itinerary.map((day, index) => (
-                      <div key={day.id} className="relative">
-                        <div className="flex items-start gap-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                  <div className="space-y-4">
+                    {packageData.itineraries.map((item, index) => (
+                      <div key={item.id || index} className="flex gap-4 p-4 bg-blue-50 rounded-lg">
+                        <div className="flex-shrink-0">
+                          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
                             {index + 1}
                           </div>
-                          <div className="flex-1">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                              {day.title}
-                            </h3>
-                            <p className="text-gray-600 leading-relaxed">
-                              {day.description}
-                            </p>
-                          </div>
                         </div>
-                        {index < packageData.itinerary.length - 1 && (
-                          <div className="absolute left-6 top-12 w-0.5 h-8 bg-gradient-to-b from-orange-300 to-red-300"></div>
+                        <div className="flex-1">
+                          <p className="text-gray-700 leading-relaxed">{item.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sightseeing Places */}
+              {packageData.sightseeingPlaces && packageData.sightseeingPlaces.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <Camera className="w-6 h-6 text-purple-600" />
+                    Sightseeing Places
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {packageData.sightseeingPlaces.map((place, index) => (
+                      <div key={place.id || index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <h4 className="font-semibold text-gray-800 mb-2">{place.name}</h4>
+                        {place.description && (
+                          <p className="text-sm text-gray-600 leading-relaxed">{place.description}</p>
                         )}
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                </div>
+              )}
 
-            {/* Inclusions & Exclusions */}
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Inclusions */}
-              {packageData.inclusions && packageData.inclusions.length > 0 && (
-                <Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50 animate-fade-in-up">
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                      <CheckCircle className="w-7 h-7 text-green-500" />
+              {/* Additional Sections */}
+              {packageData.sections && packageData.sections.length > 0 && (
+                <div className="space-y-6">
+                  {packageData.sections.map((section, index) => (
+                    <div key={section.id || index} className="bg-white rounded-lg shadow-sm p-6">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">{section.title}</h2>
+                      <div 
+                        className="text-gray-700 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: section.content }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Inclusions & Exclusions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Inclusions */}
+                {packageData.includes && packageData.includes.length > 0 && (
+                  <div className="bg-white rounded-lg shadow-sm p-6 border-l-4 border-green-500">
+                    <h3 className="text-xl font-bold text-green-800 mb-4 flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5" />
                       What's Included
                     </h3>
                     <ul className="space-y-3">
-                      {packageData.inclusions.map((item) => (
-                        <li key={item.id} className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{item.text}</span>
+                      {packageData.includes.map((item, index) => (
+                        <li key={item.id || index} className="flex items-start gap-3">
+                          <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{item.text}</span>
                         </li>
                       ))}
                     </ul>
-                  </CardContent>
-                </Card>
-              )}
+                  </div>
+                )}
 
-              {/* Exclusions */}
-              {packageData.exclusions && packageData.exclusions.length > 0 && (
-                <Card className="shadow-lg border-0 bg-gradient-to-br from-red-50 to-pink-50 animate-fade-in-up">
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                      <XCircle className="w-7 h-7 text-red-500" />
+                {/* Exclusions */}
+                {packageData.excludes && packageData.excludes.length > 0 && (
+                  <div className="bg-white rounded-lg shadow-sm p-6 border-l-4 border-red-500">
+                    <h3 className="text-xl font-bold text-red-800 mb-4 flex items-center gap-2">
+                      <XCircle className="w-5 h-5" />
                       What's Not Included
                     </h3>
                     <ul className="space-y-3">
-                      {packageData.exclusions.map((item) => (
-                        <li key={item.id} className="flex items-start gap-3">
-                          <XCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{item.text}</span>
+                      {packageData.excludes.map((item, index) => (
+                        <li key={item.id || index} className="flex items-start gap-3">
+                          <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{item.text}</span>
                         </li>
                       ))}
                     </ul>
-                  </CardContent>
-                </Card>
+                  </div>
+                )}
+              </div>
+
+              {/* Important Notes */}
+              {packageData.importantNotes && packageData.importantNotes.length > 0 && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                  <h3 className="text-xl font-bold text-yellow-800 mb-4 flex items-center gap-2">
+                    <Info className="w-5 h-5" />
+                    Important Notes
+                  </h3>
+                  <ul className="space-y-3">
+                    {packageData.importantNotes.map((note, index) => (
+                      <li key={note.id || index} className="flex items-start gap-3">
+                        <span className="text-yellow-600 mt-1 font-bold">•</span>
+                        <span className="text-sm text-gray-700">{note.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
-            </div>
 
-            {/* Terms & Conditions */}
-            {packageData.termsConditions && (
-              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm animate-fade-in-up">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                    Terms & Conditions
-                  </h2>
-                  <div 
-                    className="prose prose-lg max-w-none text-gray-700"
-                    dangerouslySetInnerHTML={{ __html: packageData.termsConditions }}
-                  />
-                </CardContent>
-              </Card>
-            )}
-
-            {/* FAQs */}
-            {packageData.faqs && packageData.faqs.length > 0 && (
-              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm animate-fade-in-up">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold text-gray-800 mb-6">
+              {/* FAQs */}
+              {packageData.faqs && packageData.faqs.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <MessageCircle className="w-6 h-6 text-blue-600" />
                     Frequently Asked Questions
                   </h2>
-                  <Accordion type="single" collapsible className="space-y-4">
+                  <Accordion type="single" collapsible className="w-full">
                     {packageData.faqs.map((faq, index) => (
-                      <AccordionItem 
-                        key={faq.id} 
-                        value={`item-${index}`}
-                        className="border border-gray-200 rounded-lg px-6 shadow-sm"
-                      >
-                        <AccordionTrigger className="text-left font-semibold text-gray-800 hover:text-orange-600 transition-colors">
-                          {faq.question}
+                      <AccordionItem key={faq.id || index} value={`item-${index}`} className="border-b border-gray-200">
+                        <AccordionTrigger className="text-left hover:no-underline py-4">
+                          <span className="font-medium text-gray-800">{faq.question}</span>
                         </AccordionTrigger>
-                        <AccordionContent className="text-gray-600 pt-2">
-                          {faq.answer}
+                        <AccordionContent className="pb-4">
+                          <div 
+                            className="text-gray-600 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: faq.answer }}
+                          />
                         </AccordionContent>
                       </AccordionItem>
                     ))}
                   </Accordion>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+                </div>
+              )}
+            </div>
 
-          {/* Right Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-8 space-y-8">
-              {/* Booking Form */}
-              <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm animate-fade-in-up">
-                <CardContent className="p-0">
-                  <div className="bg-gradient-to-r from-orange-500 to-red-500 p-6 text-white rounded-t-lg">
-                    <h3 className="text-2xl font-bold mb-2">Book This Package</h3>
-                    <p className="opacity-90">Secure your spiritual journey today</p>
+            {/* Right Sidebar - 1/3 width */}
+            <div className="space-y-6">
+              
+              {/* Car Prices */}
+              {packageData.carPrices && packageData.carPrices.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <Car className="w-5 h-5 text-blue-600" />
+                    Car Rental Prices
+                  </h3>
+                  <div className="space-y-3">
+                    {packageData.carPrices.map((carPrice, index) => (
+                      <div key={carPrice.id || index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="font-medium text-gray-800 text-sm">{carPrice.carType}</span>
+                        <span className="flex items-center gap-1 font-bold text-blue-600">
+                          <IndianRupee className="w-4 h-4" />
+                          {parseInt(carPrice.price).toLocaleString()}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <div className="p-6">
-                    <BookingForm />
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <p className="text-xs text-gray-500 mb-3 text-center">
+                      * Prices may vary based on season and availability
+                    </p>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
+                      <Phone className="w-4 h-4 mr-2" />
+                      Book Now
+                    </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              )}
 
-              {/* Package Highlights */}
-              <Card className="shadow-lg border-0 bg-gradient-to-br from-orange-50 to-red-50 animate-fade-in-up">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4">Package Highlights</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                        <Clock className="w-5 h-5 text-orange-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">Duration</p>
-                        <p className="text-sm text-gray-600">{packageData.duration}</p>
-                      </div>
+              {/* Quick Info */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">Quick Information</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-blue-600" />
                     </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                        <MapPin className="w-5 h-5 text-orange-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">Location</p>
-                        <p className="text-sm text-gray-600">{packageData.location}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                        <Users className="w-5 h-5 text-orange-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">Group Size</p>
-                        <p className="text-sm text-gray-600">{packageData.groupSize || "Any Size"}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                        <Star className="w-5 h-5 text-orange-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">Rating</p>
-                        <p className="text-sm text-gray-600">{packageData.rating || "4.8"}/5 ⭐</p>
-                      </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">Duration</p>
+                      <p className="text-sm text-gray-600">{packageData.days} Days</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                      <MapPin className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">Type</p>
+                      <p className="text-sm text-gray-600">Temple Tour Package</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                      <Users className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">Group Size</p>
+                      <p className="text-sm text-gray-600">Flexible</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">Availability</p>
+                      <p className="text-sm text-gray-600">Year Round</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-              {/* Contact Info */}
-              <Card className="shadow-lg border-0 bg-gradient-to-br from-blue-50 to-indigo-50 animate-fade-in-up">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4">Need Help?</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Phone className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">Call Us</p>
-                        <p className="text-sm text-blue-600">+91 9876543210</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Mail className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">Email Us</p>
-                        <p className="text-sm text-blue-600">info@templetours.com</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Contact Card */}
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">Need Help?</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Have questions about this temple tour package? Our travel experts are here to help!
+                </p>
+                <div className="space-y-3">
+                  <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Us
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email Us
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    WhatsApp
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="bg-orange-50 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Why Choose Our Temple Tours</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-orange-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Safe & Secure</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">Experienced guides and safe transportation for your spiritual journey</p>
+              </div>
+              <div className="text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Award className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Expert Guides</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">Knowledgeable local temple guides with deep spiritual insights</p>
+              </div>
+              <div className="text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Clock className="w-8 h-8 text-green-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Flexible Timing</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">Customizable tour schedules to match your preferences</p>
+              </div>
+              <div className="text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Phone className="w-8 h-8 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">24/7 Support</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">Round the clock customer support for your peace of mind</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+     
+
+     
+      
+     
+      
+      <Footer />
     </div>
   )
 }
+
+export default TemplePackagePage

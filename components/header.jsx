@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { MapPin, PhoneCall, Menu, X, ChevronDown, User, Calendar, Car, Crown, Repeat1 } from 'lucide-react'
+import { MapPin, PhoneCall, Menu, X, ChevronDown, User, Calendar, Car, Crown, Repeat1, CarFront } from 'lucide-react'
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 
@@ -202,7 +202,7 @@ export function Header() {
                 Car Rental Packages
                 <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <div className="absolute top-full left-0 mt-2 w-80 bg-[#f5ece1] rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
                 <div className="py-2">
                   {loading ? (
                     <div className="px-4 py-3 text-gray-500">Loading...</div>
@@ -212,7 +212,7 @@ export function Header() {
                         key={pkg.id}
                         href={`/car-rental/${pkg.id}`}
                         className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
-                      >
+                      > 
                         <div className="font-medium">{pkg.title}</div>
                         {pkg.shortDescription && (
                           <div className="text-sm text-gray-500 truncate">{pkg.shortDescription}</div>
@@ -232,7 +232,7 @@ export function Header() {
                 Temple Tour Packages
                 <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <div className="absolute top-full left-0 mt-2 w-80 bg-[#f5ece1] rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
                 <div className="py-2">
                   {loading ? (
                     <div className="px-4 py-3 text-gray-500">Loading...</div>

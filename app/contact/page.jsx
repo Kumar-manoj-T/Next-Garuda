@@ -144,7 +144,7 @@ export default function ContactPage() {
                   </div>
                   <Button variant="outline" asChild>
                     <a 
-                      href="https://maps.google.com/?q=123+Business+Street,+New+York,+NY+10001" 
+                      href="https://maps.google.com/?q=No.9+, Netaji Nagar+, RV Nagar+, Last main road+, Near R V Nagar water tank+,Kodungaiyur Chennai 118" 
                       target="_blank" 
                       rel="noopener noreferrer"
                     >

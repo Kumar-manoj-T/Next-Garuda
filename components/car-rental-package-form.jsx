@@ -39,6 +39,7 @@ export default function CarRentalPackageForm({ packageId }) {
   const [serviceFeatures, setServiceFeatures] = useState([])
   const [pricingPlans, setPricingPlans] = useState([])
   const [termsAndConditions, setTermsAndConditions] = useState([])
+  const [sections, setSections] = useState([]) // Added sections field like Tirupati
   const [faqs, setFaqs] = useState([])
   const [isActive, setIsActive] = useState(true)
 
@@ -125,6 +126,15 @@ export default function CarRentalPackageForm({ packageId }) {
               })) || [],
             )
             setTermsAndConditions(data.termsAndConditions || [])
+            // Map existing sections to include new image/listInfo fields
+            setSections(
+              data.sections?.map((s) => ({
+                ...s,
+                hasImage: !!s.imageUrl, // Assume if imageUrl exists, it has an image
+                imageFile: null, // No file on initial load
+                listInfo: s.listInfo || [],
+              })) || [],
+            )
             setFaqs(data.faqs || [])
             setSubtitle(data.subtitle || "")
             setContent(data.content || "")
@@ -277,6 +287,83 @@ export default function CarRentalPackageForm({ packageId }) {
     setIsDirty(true)
   }
 
+  // Sections handlers (same as Tirupati package)
+  const addSection = () => {
+    setSections((prev) => [
+      ...prev,
+      {
+        id: generateUniqueId(),
+        hasImage: false,
+        imageUrl: "",
+        imageFile: null,
+        contentTitle: "",
+        contentDescription: "",
+        listInfo: [],
+      },
+    ])
+    setIsDirty(true)
+  }
+
+  const updateSectionField = (sectionId, field, value) => {
+    setSections((prev) => prev.map((section) => (section.id === sectionId ? { ...section, [field]: value } : section)))
+    setIsDirty(true)
+  }
+
+  const handleSectionImageFileChange = (sectionId, file) => {
+    setSections((prev) => prev.map((section) => (section.id === sectionId ? { ...section, imageFile: file } : section)))
+    setIsDirty(true)
+  }
+
+  const removeSectionImage = (sectionId) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId ? { ...section, imageUrl: "", imageFile: null, hasImage: false } : section,
+      ),
+    )
+    setIsDirty(true)
+  }
+
+  const addListInfoToSection = (sectionId) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId
+          ? { ...section, listInfo: [...section.listInfo, { id: generateUniqueId(), text: "" }] }
+          : section,
+      ),
+    )
+    setIsDirty(true)
+  }
+
+  const updateListInfoInSection = (sectionId, listInfoId, newText) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId
+          ? {
+              ...section,
+              listInfo: section.listInfo.map((item) => (item.id === listInfoId ? { ...item, text: newText } : item)),
+            }
+          : section,
+      ),
+    )
+    setIsDirty(true)
+  }
+
+  const removeListInfoFromSection = (sectionId, listInfoId) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId
+          ? { ...section, listInfo: section.listInfo.filter((item) => item.id !== listInfoId) }
+          : section,
+      ),
+    )
+    setIsDirty(true)
+  }
+
+  const removeSection = (id) => {
+    setSections((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
+  }
+
   // FAQs handlers
   const addFaq = () => {
     setFaqs((prev) => [...prev, { id: generateUniqueId(), question: "", answer: "" }])
@@ -346,6 +433,29 @@ export default function CarRentalPackageForm({ packageId }) {
         }),
       )
 
+      // Process sections, including image uploads for each section (same as Tirupati)
+      const processedSections = await Promise.all(
+        sections.map(async (section) => {
+          let sectionImageUrl = section.imageUrl // Start with existing URL
+          if (section.hasImage && section.imageFile) {
+            // Only upload if hasImage is true and a new file is selected
+            const sectionImageRef = ref(storage, `${storagePathPrefix}/sections/${section.imageFile.name}`)
+            await uploadBytes(sectionImageRef, section.imageFile)
+            sectionImageUrl = await getDownloadURL(sectionImageRef)
+          } else if (!section.hasImage) {
+            // If hasImage is false, clear the image URL
+            sectionImageUrl = ""
+          }
+          return {
+            id: section.id,
+            contentTitle: section.contentTitle,
+            contentDescription: section.contentDescription,
+            imageUrl: sectionImageUrl, // Store the final image URL
+            listInfo: section.listInfo,
+          }
+        }),
+      )
+
       // Prepare car rental package data
       const packageData = {
         url: packageUrl,
@@ -356,6 +466,7 @@ export default function CarRentalPackageForm({ packageId }) {
         serviceFeatures,
         pricingPlans,
         termsAndConditions,
+        sections: processedSections, // Add processed sections
         faqs,
         subtitle,
         content,
@@ -832,6 +943,146 @@ export default function CarRentalPackageForm({ packageId }) {
                 ))}
                 <Button type="button" onClick={() => addPoint(setTermsAndConditions)} className="mt-3">
                   Add Term
+                </Button>
+              </div>
+            </div>
+
+            {/* Sections (Updated Structure - Same as Tirupati) */}
+            <div>
+              <h4 className="heading text-lg font-semibold mb-2">Sections</h4>
+              <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                {sections.map((section) => (
+                  <div key={section.id} className="border border-gray-300 p-4 rounded-md bg-white relative">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                      onClick={() => removeSection(section.id)}
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove section</span>
+                    </Button>
+
+                    {/* Content Title */}
+                    <div className="mb-4">
+                      <Label htmlFor={`section-title-${section.id}`}>Content Title</Label>
+                      <Input
+                        id={`section-title-${section.id}`}
+                        type="text"
+                        value={section.contentTitle}
+                        onChange={(e) => {
+                          updateSectionField(section.id, "contentTitle", e.target.value)
+                          setIsDirty(true)
+                        }}
+                        placeholder="Enter content title"
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Content Description */}
+                    <div className="mb-4">
+                      <Label htmlFor={`section-description-${section.id}`}>Content Description (HTML)</Label>
+                      <textarea
+                        id={`section-description-${section.id}`}
+                        value={section.contentDescription}
+                        onChange={(e) => {
+                          updateSectionField(section.id, "contentDescription", e.target.value)
+                          setIsDirty(true)
+                        }}
+                        rows={4}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
+                        placeholder="Enter section content (HTML allowed)"
+                      />
+                    </div>
+
+                    {/* Want Update Image Checkbox */}
+                    <div className="flex items-center mb-4">
+                      <input
+                        type="checkbox"
+                        id={`want-image-${section.id}`}
+                        checked={section.hasImage}
+                        onChange={(e) => {
+                          updateSectionField(section.id, "hasImage", e.target.checked)
+                          setIsDirty(true)
+                        }}
+                        className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <Label htmlFor={`want-image-${section.id}`}>Want to add/update Image?</Label>
+                    </div>
+
+                    {/* Image Upload and Preview (Conditional) */}
+                    {section.hasImage && (
+                      <div className="mb-4 p-3 bg-gray-100 rounded-md border border-gray-200">
+                        <Label htmlFor={`section-image-${section.id}`}>Choose File</Label>
+                        <Input
+                          id={`section-image-${section.id}`}
+                          type="file"
+                          onChange={(e) => {
+                            handleSectionImageFileChange(section.id, e.target.files[0])
+                            setIsDirty(true)
+                          }}
+                          className="cursor-pointer"
+                        />
+                        <p className="text-sm text-gray-500 mt-1">Upload an image for this section.</p>
+
+                        {(section.imageUrl || section.imageFile) && (
+                          <div className="mt-4 relative group w-32 h-24">
+                            <img
+                              src={section.imageFile ? URL.createObjectURL(section.imageFile) : section.imageUrl}
+                              alt="Section image preview"
+                              width={128}
+                              height={96}
+                              className="rounded-md object-cover w-full h-full"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-1 right-1 h-6 w-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeSectionImage(section.id)}
+                            >
+                              <X className="h-4 w-4" />
+                              <span className="sr-only">Remove section image</span>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* List Information */}
+                    <h5 className="text-md font-semibold mb-2">List Information</h5>
+                    <div className="space-y-2 mb-4 p-3 bg-gray-100 rounded-md border border-gray-200">
+                      {section.listInfo.map((item) => (
+                        <div key={item.id} className="flex gap-2 items-end">
+                          <Input
+                            type="text"
+                            value={item.text}
+                            onChange={(e) => {
+                              updateListInfoInSection(section.id, item.id, e.target.value)
+                              setIsDirty(true)
+                            }}
+                            placeholder="Add info point"
+                            className="flex-grow"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => removeListInfoFromSection(section.id, item.id)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                      <Button type="button" onClick={() => addListInfoToSection(section.id)} className="mt-2">
+                        Add Info
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                <Button type="button" onClick={addSection} className="mt-3">
+                  Add Section
                 </Button>
               </div>
             </div>

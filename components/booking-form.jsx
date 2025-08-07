@@ -82,7 +82,7 @@ export default function BookingForm() {
   return (
     <>
       <section className="py-12 px-4 bg-gray-100 flex flex-col items-center justify-center min-h-screen" id="booking">
-        <div className="max-w-4xl mx-auto text-center">
+        {/* <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">
             {" "}
             Book Your Chennai to Tirupati Package with Garuda
@@ -91,7 +91,7 @@ export default function BookingForm() {
             Experience peace & devotion with our Chennai to Tirupati travel package, VIP darshan and flexible one‑day &
             two‑day packages.
           </p>
-        </div>
+        </div> */}
 
         {/* Status Messages */}
         {submitStatus && (
@@ -149,7 +149,7 @@ export default function BookingForm() {
               </label>
 
               {/* Temple Tour Package */}
-              {/* <label
+              <label
                 className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
                   selectedPackage === "Temple Tour Package"
                     ? "bg-blue-600 text-white"
@@ -165,7 +165,7 @@ export default function BookingForm() {
                   className="sr-only"
                 />
                 Temple Tour Package
-              </label> */}
+              </label>
             </div>
           </div>
           <div className="bg-white p-8 border-t-0 shadow-lg max-w-4xl mt-0 w-full">

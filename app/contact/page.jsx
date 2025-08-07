@@ -6,6 +6,7 @@ import { MapPin, Phone, Mail, Clock, Send, ChevronRight } from 'lucide-react'
 import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import BookingForm from "@/components/booking-form"
 export default function ContactPage() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -48,8 +49,8 @@ export default function ContactPage() {
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-600">+1 (555) 123-4567</p>
-                      <p className="text-gray-600">+1 (555) 987-6543</p>
+                     <a href="tel:+919840789844"><p className="text-gray-600">+91 9840789844</p></a> 
+                     <a href="tel:+919840789857"><p className="text-gray-600">+91 9840789857</p></a> 
                     </CardContent>
                   </Card>
 
@@ -63,8 +64,8 @@ export default function ContactPage() {
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-600">info@yourbrand.com</p>
-                      <p className="text-gray-600">support@yourbrand.com</p>
+                      <p className="text-gray-600">garudattd1@gmail.com</p>
+                      {/* <p className="text-gray-600">support@yourbrand.com</p> */}
                     </CardContent>
                   </Card>
 
@@ -78,9 +79,10 @@ export default function ContactPage() {
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-600">123 Business Street</p>
-                      <p className="text-gray-600">Suite 100</p>
-                      <p className="text-gray-600">New York, NY 10001</p>
+                      <p className="text-gray-600">No.83, Nehru Nagar, 1st Street,t</p>
+                      <p className="text-gray-600">13th Main Road,</p>
+                      <p className="text-gray-600">Anna Nagar West, Chennai</p>
+                        
                     </CardContent>
                   </Card>
 
@@ -101,68 +103,8 @@ export default function ContactPage() {
                   </Card>
                 </div>
               </div>
-
-              {/* Contact Form */}
-              <div>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Send us a Message</CardTitle>
-                    <CardDescription>
-                      Fill out the form below and we'll get back to you as soon as possible.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form className="space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                            First Name
-                          </label>
-                          <Input id="firstName" placeholder="John" />
-                        </div>
-                        <div>
-                          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                            Last Name
-                          </label>
-                          <Input id="lastName" placeholder="Doe" />
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                          Email
-                        </label>
-                        <Input id="email" type="email" placeholder="john@example.com" />
-                      </div>
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                          Phone Number
-                        </label>
-                        <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" />
-                      </div>
-                      <div>
-                        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                          Subject
-                        </label>
-                        <Input id="subject" placeholder="How can we help you?" />
-                      </div>
-                      <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                          Message
-                        </label>
-                        <Textarea 
-                          id="message" 
-                          placeholder="Tell us more about your inquiry..." 
-                          rows={5}
-                        />
-                      </div>
-                      <Button type="submit" className="w-full">
-                        <Send className="h-4 w-4 mr-2" />
-                        Send Message
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </div>
+             <BookingForm />
+            
             </div>
           </div>
         </section>
@@ -180,7 +122,7 @@ export default function ContactPage() {
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="aspect-w-16 aspect-h-9 lg:aspect-h-6">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343008!2d-74.00425878459418!3d40.74844097932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259bf5c1654f3%3A0xc80f9cfce5383d5d!2sGoogle!5e0!3m2!1sen!2sus!4v1635959592890!5m2!1sen!2sus"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62164.442960287735!2d80.19592147307087!3d13.144876277881592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265910e9bc0df%3A0xa42f2e29ce86361!2sBEST%20ONE%20DAY%20TIRUPATI%20TOUR%20GARUDA%20TRAVELS!5e0!3m2!1sen!2sin!4v1673010410052!5m2!1sen!2sin"
                   width="100%"
                   height="450"
                   style={{ border: 0 }}
@@ -196,8 +138,8 @@ export default function ContactPage() {
                   <div className="flex items-center space-x-3 mb-4 sm:mb-0">
                     <MapPin className="h-5 w-5 text-red-600" />
                     <div>
-                      <p className="font-medium text-gray-900">123 Business Street, Suite 100</p>
-                      <p className="text-gray-600">New York, NY 10001</p>
+                      <p className="font-medium text-gray-900">No.9, Netaji Nagar, RV Nagar, Last main road Near R V Nagar water tank</p>
+                      <p className="text-gray-600"> Kodungaiyur Chennai 118</p>
                     </div>
                   </div>
                   <Button variant="outline" asChild>

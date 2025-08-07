@@ -228,9 +228,9 @@ export default function Header() {
               </div>
             </div>
 
-            <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            {/* <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Gallery
-            </a>
+            </a> */}
             <a href="/contact" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Contact
             </a>

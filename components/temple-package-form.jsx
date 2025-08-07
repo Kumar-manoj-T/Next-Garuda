@@ -17,6 +17,67 @@ import { Switch } from "@/components/ui/switch"
 // Helper to generate unique IDs for dynamic fields
 const generateUniqueId = () => Math.random().toString(36).substring(2, 15)
 
+// Helper function to clean empty fields from objects and arrays
+const cleanEmptyFields = (data) => {
+  if (Array.isArray(data)) {
+    return data
+      .map(item => cleanEmptyFields(item))
+      .filter(item => {
+        if (typeof item === 'string') return item.trim() !== ''
+        if (typeof item === 'object' && item !== null) {
+          const cleanedItem = Object.fromEntries(
+            Object.entries(item).filter(([key, value]) => {
+              if (typeof value === 'string') return value.trim() !== ''
+              if (Array.isArray(value)) return value.length > 0
+              return value !== null && value !== undefined
+            })
+          )
+          return Object.keys(cleanedItem).length > 0
+        }
+        return item !== null && item !== undefined
+      })
+  }
+  
+  if (typeof data === 'object' && data !== null) {
+    const cleaned = {}
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === 'string') {
+        if (value.trim() !== '') cleaned[key] = value.trim()
+      } else if (Array.isArray(value)) {
+        const cleanedArray = cleanEmptyFields(value)
+        if (cleanedArray.length > 0) cleaned[key] = cleanedArray
+      } else if (typeof value === 'object' && value !== null) {
+        const cleanedObject = cleanEmptyFields(value)
+        if (Object.keys(cleanedObject).length > 0) cleaned[key] = cleanedObject
+      } else if (value !== null && value !== undefined && value !== '') {
+        cleaned[key] = value
+      }
+    }
+    return cleaned
+  }
+  
+  return data
+}
+
+// Helper function to ensure arrays have proper structure when fetching
+const ensureArrayStructure = (data, defaultStructure = { id: generateUniqueId(), text: "" }) => {
+  if (!Array.isArray(data)) return []
+  
+  return data.map(item => {
+    if (typeof item === 'string') {
+      return { id: generateUniqueId(), text: item }
+    }
+    if (typeof item === 'object' && item !== null) {
+      return { id: item.id || generateUniqueId(), ...item }
+    }
+    return defaultStructure
+  }).filter(item => {
+    // Filter out items where all values are empty
+    const values = Object.values(item).filter(val => val !== 'id')
+    return values.some(val => val && val.toString().trim() !== '')
+  })
+}
+
 export default function TemplePackageForm({ packageId }) {
   const router = useRouter()
   const { toast } = useToast()
@@ -113,29 +174,76 @@ export default function TemplePackageForm({ packageId }) {
 
           if (docSnap.exists()) {
             const data = docSnap.data()
+            
+            // Set basic fields with empty string fallback
             setPackageUrl(packageId)
             setTitle(data.title || "")
             setPackageOrder(data.order || 1)
             setTripDays(data.days || "1")
-            setImages(data.images || [])
-            setTempleList(
-              data.templeList?.map((temple) => ({
-                ...temple,
-                imageFile: null,
-              })) || [],
-            )
-            setTourHighlights(data.tourHighlights || [])
-            setIncludes(data.includes || [])
-            setExcludes(data.excludes || [])
-            setItineraries(data.itineraries || [])
-            setImportantNotes(data.importantNotes || [])
-            setFaqs(data.faqs || [])
             setSubtitle(data.subtitle || "")
             setContent(data.content || "")
             setIsActive(data.isActive !== undefined ? data.isActive : true)
-            setCarPrices(data.carPrices || [])
-            setSections(data.sections || [])
-            setSightseeingPlaces(data.sightseeingPlaces || [])
+            
+            // Set images array, filter out empty strings
+            setImages((data.images || []).filter(img => img && img.trim() !== ''))
+            
+            // Set temple list with proper structure
+            setTempleList(
+              ensureArrayStructure(data.templeList || [], {
+                id: generateUniqueId(),
+                name: "",
+                description: "",
+                imageUrl: "",
+                imageFile: null
+              }).map(temple => ({
+                ...temple,
+                imageFile: null,
+              }))
+            )
+            
+            // Set other arrays with proper structure
+            setTourHighlights(ensureArrayStructure(data.tourHighlights || []))
+            setIncludes(ensureArrayStructure(data.includes || []))
+            setExcludes(ensureArrayStructure(data.excludes || []))
+            setItineraries(ensureArrayStructure(data.itineraries || []))
+            setImportantNotes(ensureArrayStructure(data.importantNotes || []))
+            
+            // Set FAQs with proper structure
+            setFaqs(
+              ensureArrayStructure(data.faqs || [], {
+                id: generateUniqueId(),
+                question: "",
+                answer: ""
+              })
+            )
+            
+            // Set car prices with proper structure
+            setCarPrices(
+              ensureArrayStructure(data.carPrices || [], {
+                id: generateUniqueId(),
+                carType: "",
+                price: ""
+              })
+            )
+            
+            // Set sections with proper structure
+            setSections(
+              ensureArrayStructure(data.sections || [], {
+                id: generateUniqueId(),
+                title: "",
+                content: ""
+              })
+            )
+            
+            // Set sightseeing places with proper structure
+            setSightseeingPlaces(
+              ensureArrayStructure(data.sightseeingPlaces || [], {
+                id: generateUniqueId(),
+                name: "",
+                description: ""
+              })
+            )
+            
           } else {
             toast({
               title: "Error",
@@ -290,10 +398,21 @@ export default function TemplePackageForm({ packageId }) {
     e.preventDefault()
     setLoading(true)
 
-    if (!packageUrl) {
+    // Validate required fields
+    if (!packageUrl || packageUrl.trim() === '') {
       toast({
         title: "Validation Error",
         description: "Package URL is required.",
+        variant: "destructive",
+      })
+      setLoading(false)
+      return
+    }
+
+    if (!title || title.trim() === '') {
+      toast({
+        title: "Validation Error",
+        description: "Package title is required.",
         variant: "destructive",
       })
       setLoading(false)
@@ -317,49 +436,118 @@ export default function TemplePackageForm({ packageId }) {
         uploadedImageUrls.push(url)
       }
 
-      // Combine existing main images with newly uploaded ones
-      const allImageUrls = [...images, ...uploadedImageUrls]
+      // Combine existing main images with newly uploaded ones, filter empty strings
+      const allImageUrls = [...images, ...uploadedImageUrls].filter(url => url && url.trim() !== '')
 
       // Process temple list, including image uploads for each temple
       const processedTempleList = await Promise.all(
         templeList.map(async (temple) => {
-          let templeImageUrl = temple.imageUrl
+          // Skip temples with empty names
+          if (!temple.name || temple.name.trim() === '') {
+            return null
+          }
+
+          let templeImageUrl = temple.imageUrl || ""
           if (temple.imageFile) {
             const templeImageRef = ref(storage, `${storagePathPrefix}/temples/${temple.imageFile.name}`)
             await uploadBytes(templeImageRef, temple.imageFile)
             templeImageUrl = await getDownloadURL(templeImageRef)
           }
-          return {
+
+          const processedTemple = {
             id: temple.id,
-            name: temple.name,
-            description: temple.description,
-            imageUrl: templeImageUrl,
+            name: temple.name.trim(),
           }
+
+          // Only add description if it's not empty
+          if (temple.description && temple.description.trim() !== '') {
+            processedTemple.description = temple.description.trim()
+          }
+
+          // Only add imageUrl if it's not empty
+          if (templeImageUrl && templeImageUrl.trim() !== '') {
+            processedTemple.imageUrl = templeImageUrl.trim()
+          }
+
+          return processedTemple
         }),
       )
 
-      // Prepare temple package data
+      // Filter out null temples (those with empty names)
+      const validTempleList = processedTempleList.filter(temple => temple !== null)
+
+      // Prepare temple package data - only include non-empty fields
       const packageData = {
-        url: packageUrl,
-        title,
+        url: packageUrl.trim(),
+        title: title.trim(),
         order: packageOrder,
         days: tripDays,
-        images: allImageUrls,
-        templeList: processedTempleList,
-        tourHighlights,
-        includes,
-        excludes,
-        itineraries,
-        importantNotes,
-        faqs,
-        subtitle,
-        content,
         isActive,
-        carPrices,
-        sections,
-        sightseeingPlaces,
         createdAt: isEditMode ? (await getDoc(doc(db, "templePackages", packageId))).data().createdAt : Timestamp.now(),
         updatedAt: Timestamp.now(),
+      }
+
+      // Only add optional fields if they have content
+      if (subtitle && subtitle.trim() !== '') {
+        packageData.subtitle = subtitle.trim()
+      }
+
+      if (content && content.trim() !== '') {
+        packageData.content = content.trim()
+      }
+
+      if (allImageUrls.length > 0) {
+        packageData.images = allImageUrls
+      }
+
+      if (validTempleList.length > 0) {
+        packageData.templeList = validTempleList
+      }
+
+      // Clean and add array fields only if they have valid content
+      const cleanedTourHighlights = cleanEmptyFields(tourHighlights)
+      if (cleanedTourHighlights.length > 0) {
+        packageData.tourHighlights = cleanedTourHighlights
+      }
+
+      const cleanedIncludes = cleanEmptyFields(includes)
+      if (cleanedIncludes.length > 0) {
+        packageData.includes = cleanedIncludes
+      }
+
+      const cleanedExcludes = cleanEmptyFields(excludes)
+      if (cleanedExcludes.length > 0) {
+        packageData.excludes = cleanedExcludes
+      }
+
+      const cleanedItineraries = cleanEmptyFields(itineraries)
+      if (cleanedItineraries.length > 0) {
+        packageData.itineraries = cleanedItineraries
+      }
+
+      const cleanedImportantNotes = cleanEmptyFields(importantNotes)
+      if (cleanedImportantNotes.length > 0) {
+        packageData.importantNotes = cleanedImportantNotes
+      }
+
+      const cleanedFaqs = cleanEmptyFields(faqs)
+      if (cleanedFaqs.length > 0) {
+        packageData.faqs = cleanedFaqs
+      }
+
+      const cleanedCarPrices = cleanEmptyFields(carPrices)
+      if (cleanedCarPrices.length > 0) {
+        packageData.carPrices = cleanedCarPrices
+      }
+
+      const cleanedSections = cleanEmptyFields(sections)
+      if (cleanedSections.length > 0) {
+        packageData.sections = cleanedSections
+      }
+
+      const cleanedSightseeingPlaces = cleanEmptyFields(sightseeingPlaces)
+      if (cleanedSightseeingPlaces.length > 0) {
+        packageData.sightseeingPlaces = cleanedSightseeingPlaces
       }
 
       // Save/Update document in Firestore using packageUrl as document ID
@@ -534,9 +722,7 @@ export default function TemplePackageForm({ packageId }) {
 
             {/* Package Images */}
             <div>
-              <Label htmlFor="images">
-                Package Images<span className="text-red-500">*</span>
-              </Label>
+              <Label htmlFor="images">Package Images</Label>
               <Input id="images" type="file" multiple onChange={handleFileChange} className="cursor-pointer" />
               <p className="text-sm text-gray-500 mt-1">Upload multiple images for this temple package.</p>
 

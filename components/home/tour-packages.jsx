@@ -12,7 +12,7 @@ const packagesData = {
       price: "$150",
       include: "Home Pickup & Drop, Breakfast & Lunch, Special Entry Darshan Ticket, SriVari Laddu per person.",
       exclude: "Accommodation not provided, Multiple pickups, Guide fees excluded, Extra Laddus.",
-      image: "/images/city/c-t.png",
+      image: "/images/c-t.png",
     },
     {
       id: 2,
@@ -20,7 +20,7 @@ const packagesData = {
       price: "$250",
       include: "Home Pickup & Drop, Breakfast & Lunch, Special Entry Darshan Ticket, SriVari Laddu per person",
       exclude: "Accommodation not provided, Multiple pickups, Guide fees excluded, Extra Laddu",
-      image: "/images/city/v-t.png",
+      image: "/images/v-t.png",
     },
     {
       id: 3,
@@ -28,7 +28,7 @@ const packagesData = {
       price: "$400",
       include: "Home Pickup & Drop, Breakfast & Lunch, Special Entry Darshan Ticket, SriVari Laddu per person.",
       exclude: "Accommodation not provided, Multiple pickups, Guide fees excluded, Extra Laddu",
-      image: "/images/city/b-t.png",
+      image: "/images/b-t.png",
     },
   ],
   // "Temple Tour Package": [

@@ -449,7 +449,7 @@ export default async function TirupatiPackageDetailPage({ params }) {
                   <CardHeader className="p-0">
                     <div className="relative w-full h-48">
                       <Image
-                        src={pkg.images?.[0] || "/placeholder.svg?height=200&width=300&query=other package image"}
+                        src={pkg.images?.[0] || "/images/city/free.png?height=200&width=300&query=other package image"}
                         alt={pkg.title}
                         fill
                         style={{ objectFit: "cover" }}

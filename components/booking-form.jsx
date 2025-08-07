@@ -96,11 +96,10 @@ export default function BookingForm() {
         {/* Status Messages */}
         {submitStatus && (
           <div
-            className={`max-w-4xl w-full mb-6 p-4 rounded-md ${
-              submitStatus.type === "success"
+            className={`max-w-4xl w-full mb-6 p-4 rounded-md ${submitStatus.type === "success"
                 ? "bg-green-100 border border-green-400 text-green-700"
                 : "bg-red-100 border border-red-400 text-red-700"
-            }`}
+              }`}
           >
             {submitStatus.message}
           </div>
@@ -112,11 +111,10 @@ export default function BookingForm() {
             <div className="flex gap-4">
               {/* Tirupati Package */}
               <label
-                className={`flex-1   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
-                  selectedPackage === "Tirupati Package"
+                className={`flex-1   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${selectedPackage === "Tirupati Package"
                     ? "bg-blue-600 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <input
                   type="radio"
@@ -131,11 +129,10 @@ export default function BookingForm() {
 
               {/* Car Rental Package */}
               <label
-                className={`flex-1     bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
-                  selectedPackage === "Car Rental Package"
+                className={`flex-1     bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${selectedPackage === "Car Rental Package"
                     ? "bg-blue-600 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <input
                   type="radio"
@@ -150,11 +147,10 @@ export default function BookingForm() {
 
               {/* Temple Tour Package */}
               <label
-                className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${
-                  selectedPackage === "Temple Tour Package"
+                className={`flex-1   border-b-0   bg-white font-light px-4 py-3 text-center cursor-pointer transition-colors duration-200 ease-in-out ${selectedPackage === "Temple Tour Package"
                     ? "bg-blue-600 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <input
                   type="radio"
@@ -228,7 +224,7 @@ export default function BookingForm() {
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
                 />
-               
+
               </div>
               <div className="relative">
                 <input
@@ -284,13 +280,49 @@ export default function BookingForm() {
 
                       </>
                     )}
-                    {selectedPackage === "Temple Tour Package" && (
+                    {/* {selectedPackage === "Temple Tour Package" && (
                       <>
                         <option value="South India Temple Tour">South India Temple Tour</option>
                         <option value="North India Temple Tour">North India Temple Tour</option>
                         <option value="Custom Temple Tour">Custom Temple Tour</option>
                       </>
+                    )} */}
+
+                    {selectedPackage === "Temple Tour Package" && (
+                      <>
+                        <option value="Chennai-Kanchipuram Elruvanamalai Temple Package">
+                          Chennai-Kanchipuram Elruvanamalai Temple Package
+                        </option>
+                        <option value="Chennai-Navagraha Temple Package">
+                          Chennai-Navagraha Temple Package
+                        </option>
+                        <option value="Chennai-Trichy, Rameswaram, Madurai Temple Package">
+                          Chennai-Trichy, Rameswaram, Madurai Temple Package
+                        </option>
+                        <option value="Chennai-Trichy, Madurai, Tiruchendur, Kanyakumari Temple Package">
+                          Chennai-Trichy, Madurai, Tiruchendur, Kanyakumari Temple Package
+                        </option>
+                        <option value="Chennai-Srisolltom Mollis Arjuna Temple Package">
+                          Chennai-Srisolltom Mollis Arjuna Temple Package
+                        </option>
+                        <option value="Chennai To Kodaikanal-Palani Temple Package">
+                          Chennai To Kodaikanal-Palani Temple Package
+                        </option>
+                        <option value="Chennai-Kanchipuram, Mahabalipuram & Pondicherry Temple Package">
+                          Chennai-Kanchipuram, Mahabalipuram & Pondicherry Temple Package
+                        </option>
+                        <option value="Chennai To Kalahasti Tour Package">
+                          Chennai To Kalahasti Tour Package
+                        </option>
+                        <option value="Chennai-Vellore Temple Package">
+                          Chennai-Vellore Temple Package
+                        </option>
+                        <option value="Chennai - Tiruvannamalai Temple Package">
+                          Chennai - Tiruvannamalai Temple Package
+                        </option>
+                      </>
                     )}
+
                   </select>
                 </div>
               )}

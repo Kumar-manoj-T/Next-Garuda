@@ -231,7 +231,7 @@ export default function Header() {
             <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Gallery
             </a>
-            <a href="/under-construction" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            <a href="/contact" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
               Contact
             </a>
           </nav>
@@ -459,7 +459,7 @@ export default function Header() {
               Gallery
             </a>
             <a
-              href="/under-construction"
+              href="/contact"
               className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
             >
               Contact Us

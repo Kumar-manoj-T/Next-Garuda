@@ -2,23 +2,7 @@ import { doc, getDoc, getDocs, collection, query, where } from "firebase/firesto
 import { db } from "@/lib/firebase"
 import Image from "next/image"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import {
-  Check,
-  Shirt,
-  Star,
-  ShieldCheck,
-  Users,
-  Clock,
-  MapPin,
-  Wallet,
-  BriefcaseMedical,
-  UserCheck,
-  Award,
-  Phone,
-  Mail,
-  MessageCircle,
-  XCircle,
-} from "lucide-react" // Added new icons for Why Choose Us
+import { Check, Shirt, Star, ShieldCheck, Users, Clock, MapPin, Wallet, BriefcaseMedical, UserCheck, Award, Phone, Mail, MessageCircle, XCircle } from 'lucide-react' // Added new icons for Why Choose Us
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import BookingForm from "@/components/booking-form"
@@ -271,6 +255,180 @@ export default async function TirupatiPackageDetailPage({ params }) {
           </section>
         )}
 
+     {packageData.packagesAndCars && packageData.packagesAndCars.length > 0 && (
+  <section className="mb-12">
+    <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">Packages & Cars</h2>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {packageData.packagesAndCars.map((packageItem) => (
+        <div
+          key={packageItem.id}
+          className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden flex flex-col"
+        >
+          {/* Package Name Header */}
+          <div className="bg-blue-600 text-white text-center py-4 px-6">
+            <h3 className="text-xl font-bold">{packageItem.packageName}</h3>
+          </div>
+
+          {/* Cars Table-like Structure */}
+          {packageItem.cars && packageItem.cars.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left text-gray-700">
+                <thead className="bg-gray-100 text-gray-900">
+                  <tr>
+                    <th className="px-4 py-2 font-semibold">Car Name</th>
+                    <th className="px-4 py-2 font-semibold text-center">Seat</th>
+                    <th className="px-4 py-2 font-semibold text-center">Price</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {packageItem.cars.map((car) => (
+                    <tr key={car.id}>
+                      <td className="px-4 py-2">{car.carName}</td>
+                      <td className="px-4 py-2 text-center">{car.seatCapacity}</td>
+                      <td className="px-4 py-2 text-center text-blue-600 font-bold">
+                        ₹ {car.price ?? 'N/A'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="p-4 text-center text-gray-500">No cars available</p>
+          )}
+
+          {/* Book Now Button */}
+          <div className="p-4 mt-auto">
+            <a
+              href="#booking"
+              className="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition"
+            >
+              Book Now
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
+
+          {/* Additional Packages and Cars Section */}
+          {(packageData.packages || packageData.cars || packageData.additionalPackages || packageData.carTypes) && (
+            <section className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Available Packages & Cars</h2>
+              
+              {/* Display Packages if available */}
+              {packageData.packages && packageData.packages.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-4">Package Options</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {packageData.packages.map((pkg) => (
+                      <div key={pkg.id} className="bg-white rounded-lg shadow-md p-6 border">
+                        <h4 className="text-xl font-semibold text-gray-800 mb-2">{pkg.name || pkg.title}</h4>
+                        {pkg.description && <p className="text-gray-600 mb-3">{pkg.description}</p>}
+                        {pkg.price && (
+                          <p className="text-lg font-bold text-blue-600 mb-2">₹ {pkg.price.toLocaleString()}</p>
+                        )}
+                        {pkg.duration && <p className="text-sm text-gray-500">Duration: {pkg.duration}</p>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Display Cars if available */}
+              {packageData.cars && packageData.cars.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-4">Available Cars</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {packageData.cars.map((car) => (
+                      <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden border">
+                        {car.image && (
+                          <div className="w-full h-48 relative">
+                            <Image
+                              src={car.image || "/placeholder.svg?height=200&width=300&query=Car"}
+                              alt={car.name || "Car"}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="p-4">
+                          <h4 className="text-xl font-semibold text-gray-800 mb-2">{car.name || car.type}</h4>
+                          {car.description && <p className="text-gray-600 mb-3 text-sm">{car.description}</p>}
+                          {car.capacity && <p className="text-sm text-gray-500 mb-1">Capacity: {car.capacity} persons</p>}
+                          {car.price && (
+                            <p className="text-lg font-bold text-blue-600">₹ {car.price.toLocaleString()}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Display Additional Packages if available */}
+              {packageData.additionalPackages && packageData.additionalPackages.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-4">Additional Packages</h3>
+                  <div className="space-y-4">
+                    {packageData.additionalPackages.map((pkg) => (
+                      <div key={pkg.id} className="bg-gray-50 rounded-lg p-6 border">
+                        <h4 className="text-lg font-semibold text-gray-800 mb-2">{pkg.name || pkg.title}</h4>
+                        {pkg.description && (
+                          <div 
+                            className="text-gray-600 mb-3"
+                            dangerouslySetInnerHTML={{ __html: pkg.description }}
+                          />
+                        )}
+                        {pkg.features && pkg.features.length > 0 && (
+                          <ul className="list-none space-y-1">
+                            {pkg.features.map((feature, index) => (
+                              <li key={index} className="flex items-center text-gray-700">
+                                <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                                <span>{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Display Car Types if available */}
+              {packageData.carTypes && packageData.carTypes.length > 0 && (
+                <div>
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-4">Car Categories</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {packageData.carTypes.map((carType) => (
+                      <div key={carType.id} className="bg-white rounded-lg shadow-md p-6 border">
+                        <h4 className="text-xl font-semibold text-gray-800 mb-3">{carType.name || carType.category}</h4>
+                        {carType.description && <p className="text-gray-600 mb-4">{carType.description}</p>}
+                        {carType.cars && carType.cars.length > 0 && (
+                          <div>
+                            <p className="font-medium text-gray-700 mb-2">Available Cars:</p>
+                            <ul className="space-y-1">
+                              {carType.cars.map((car, index) => (
+                                <li key={index} className="text-gray-600 text-sm">• {car}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {carType.priceRange && (
+                          <p className="text-lg font-bold text-blue-600 mt-3">
+                            Price Range: ₹ {carType.priceRange}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </section>
+          )}
 
 
 
@@ -363,7 +521,7 @@ export default async function TirupatiPackageDetailPage({ params }) {
                           src={
                             packageData.femaleDressCodeImages[0] ||
                             "/placeholder.svg?height=300&width=200&query=female traditional dress"
-                          }
+                           || "/placeholder.svg"}
                           alt="Female dress code example"
                           fill
                           style={{ objectFit: "cover" }}
@@ -384,7 +542,7 @@ export default async function TirupatiPackageDetailPage({ params }) {
                           src={
                             packageData.maleDressCodeImages[0] ||
                             "/placeholder.svg?height=300&width=200&query=male traditional dress"
-                          }
+                           || "/placeholder.svg"}
                           alt="Male dress code example"
                           fill
                           style={{ objectFit: "cover" }}

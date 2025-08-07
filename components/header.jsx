@@ -210,7 +210,7 @@ export function Header() {
                     carRentalPackages.map((pkg) => (
                       <a
                         key={pkg.id}
-                        href={`/car-rental/${pkg.slug}`}
+                        href={`/car-rental/${pkg.id}`}
                         className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                       >
                         <div className="font-medium">{pkg.title}</div>
@@ -458,7 +458,7 @@ export function Header() {
                     templePackages.map((pkg) => (
                       <a
                         key={pkg.id}
-                        href={`/temple-tour-package/${pkg.slug}`}
+                        href={`/temple-tour-package/${pkg.id}`}
                         className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                       >
                         {pkg.title}

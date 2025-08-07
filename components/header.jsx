@@ -240,7 +240,7 @@ export function Header() {
                     templePackages.map((pkg) => (
                       <a
                         key={pkg.id}
-                        href={`/temple-tour-package/${pkg.slug}`}
+                        href={`/temple-tour-package/${pkg.id}`}
                         className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
                       >
                         <div className="font-medium">{pkg.title}</div>

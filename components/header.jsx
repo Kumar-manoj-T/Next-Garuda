@@ -89,7 +89,7 @@ export function Header() {
                       <h3 className="text-blue-600 font-semibold text-lg mb-3">Chennai to Tirupati</h3>
                       <div className="space-y-2">
                         <a
-                          href="/tirupati-package/chennai-to-tirupati"
+                          href="/tirupati-package/chennai-tirupati-one-day-tour-package"
                           className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-1"
                         >
                           <Repeat1 className="h-4 w-4 mr-2" />
@@ -335,12 +335,12 @@ export function Header() {
                   />
                 </button>
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${mobileDropdowns.tirupati ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
+                  className={`transition-all duration-300 ${mobileDropdowns.tirupati ? "max-h-[80vh] opacity-100 overflow-y-auto pr-1" : "max-h-0 opacity-0 overflow-hidden"}`}
                 >
                   <div className="pl-6 space-y-2 pb-2">
                     <div className="text-sm font-medium text-blue-600 px-4 py-1">Chennai to Tirupati</div>
                     <a
-                      href="/tirupati-package/chennai-to-tirupati"
+                      href="/tirupati-package/chennai-tirupati-one-day-tour-package"
                       className="flex items-center px-6 py-1 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 text-sm"
                     >
                       <User className="h-3 w-3 mr-2" />
@@ -489,12 +489,12 @@ export function Header() {
                 </div>
               </div>
 
-              {/* <a
+              <a
                 href="/under-construction"
                 className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"
               >
                 Gallery
-              </a> */}
+              </a>
               <a
                 href="/contact"
                 className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200"

@@ -229,7 +229,7 @@ function TemplePackagePage() {
                 <div className="bg-white rounded-lg shadow-sm p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                     <Award className="w-6 h-6 text-orange-500" />
-                    Temples to Visit
+                    Places to Visit
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {packageData.templeList.map((temple, index) => (
@@ -378,7 +378,7 @@ function TemplePackagePage() {
                     {packageData.faqs.map((faq, index) => (
                       <AccordionItem key={faq.id || index} value={`item-${index}`} className="border-b border-gray-200">
                         <AccordionTrigger className="text-left hover:no-underline py-4">
-                          <span className="font-medium text-gray-800">{faq.question}</span>
+                          <span className="text-base font-bold text-gray-800">{faq.question}</span>
                         </AccordionTrigger>
                         <AccordionContent className="pb-4">
                           <div 
@@ -396,35 +396,7 @@ function TemplePackagePage() {
             {/* Right Sidebar - 1/3 width */}
             <div className="space-y-6">
               
-              {/* Car Prices */}
-              {packageData.carPrices && packageData.carPrices.length > 0 && (
-                <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <Car className="w-5 h-5 text-blue-600" />
-                    Car Rental Prices
-                  </h3>
-                  <div className="space-y-3">
-                    {packageData.carPrices.map((carPrice, index) => (
-                      <div key={carPrice.id || index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <span className="font-medium text-gray-800 text-sm">{carPrice.carType}</span>
-                        <span className="flex items-center gap-1 font-bold text-blue-600">
-                          <IndianRupee className="w-4 h-4" />
-                          {parseInt(carPrice.price).toLocaleString()}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <p className="text-xs text-gray-500 mb-3 text-center">
-                      * Prices may vary based on season and availability
-                    </p>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
-                      <Phone className="w-4 h-4 mr-2" />
-                      Book Now
-                    </Button>
-                  </div>
-                </div>
-              )}
+             
 
               {/* Quick Info */}
               <div className="bg-white rounded-lg shadow-sm p-6">
@@ -463,7 +435,7 @@ function TemplePackagePage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-800">Availability</p>
-                      <p className="text-sm text-gray-600">Year Round</p>
+                      <p className="text-sm text-gray-600">24/7 </p>
                     </div>
                   </div>
                 </div>
@@ -490,6 +462,36 @@ function TemplePackagePage() {
                   </Button>
                 </div>
               </div>
+
+               {/* Car Prices */}
+              {packageData.carPrices && packageData.carPrices.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <Car className="w-5 h-5 text-blue-600" />
+                    Car Rental Prices
+                  </h3>
+                  <div className="space-y-3">
+                    {packageData.carPrices.map((carPrice, index) => (
+                      <div key={carPrice.id || index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="font-medium text-gray-800 text-sm">{carPrice.carType}</span>
+                        <span className="flex items-center gap-1 font-bold text-blue-600">
+                          <IndianRupee className="w-4 h-4" />
+                          {parseInt(carPrice.price).toLocaleString()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <p className="text-xs text-gray-500 mb-3 text-center">
+                      * Prices may vary based on season and availability
+                    </p>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
+                      <Phone className="w-4 h-4 mr-2" />
+                      Book Now
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

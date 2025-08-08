@@ -42,27 +42,27 @@ export default function Footer() {
           <h3 className="text-xl font-semibold text-white mb-6">Our Services</h3>
           <ul className="space-y-3">
             <li>
-              <a href="#" className="flex items-center hover:text-blue-400 transition-colors">
+              <a href="/tirupati-package/srivani-vip-break-darshan" className="flex items-center hover:text-blue-400 transition-colors">
                 <ChevronRight className="h-4 w-4 mr-2 text-blue-400" /> VIP Break Darshan
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center hover:text-blue-400 transition-colors">
+              <a href="/tirupati-package/chennai-tirupati-one-day-tour-package" className="flex items-center hover:text-blue-400 transition-colors">
                 <ChevronRight className="h-4 w-4 mr-2 text-blue-400" /> One Day Tirupati Tour
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center hover:text-blue-400 transition-colors">
+              <a href="/tirupati-package/tirupati-two-days-package-from-chennai" className="flex items-center hover:text-blue-400 transition-colors">
                 <ChevronRight className="h-4 w-4 mr-2 text-blue-400" /> Chennai to Tirupati Tour
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center hover:text-blue-400 transition-colors">
+              <a href="/tirupati-package/vellore-tirupati-one-day-tour-package" className="flex items-center hover:text-blue-400 transition-colors">
                 <ChevronRight className="h-4 w-4 mr-2 text-blue-400" /> Vellore to Tirupati Tour
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center hover:text-blue-400 transition-colors">
+              <a href="/tirupati-package/bangalore-tirupati-darshan-tour-package" className="flex items-center hover:text-blue-400 transition-colors">
                 <ChevronRight className="h-4 w-4 mr-2 text-blue-400" /> Bangalore to Tirupati Tour
               </a>
             </li>
@@ -84,12 +84,12 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center hover:text-blue-400 transition-colors">
+              <a href="/privacy-&-policy" className="flex items-center hover:text-blue-400 transition-colors">
                 <ChevronRight className="h-4 w-4 mr-2 text-blue-400" /> Privacy Policy
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center hover:text-blue-400 transition-colors">
+              <a href="/contact" className="flex items-center hover:text-blue-400 transition-colors">
                 <ChevronRight className="h-4 w-4 mr-2 text-blue-400" /> Contact Us
               </a>
             </li>

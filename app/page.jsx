@@ -19,13 +19,19 @@ export default function HomePage() {
       <Header />
 
       <HeroSlider />
-      <BookingForm />
+      <div className="mt-5">
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">Book Your Chennai to Tirupati Package with Garuda</h2>
+        <p className="text-lg text-center text-gray-600 mb-12">Experience peace & devotion with our Chennai to Tirupati travel package, VIP darshan and flexible one‑day &
+            two‑day packages.</p>
+         <BookingForm />
+      </div>
+     
       <TourPackages />
       <Vehicl />
       <section className="py-12 px-4 bg-white">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center ">
           {/* Left - Content*/}
-          <div className="space-y-4">
+          <div className="space-y-4 order-2 md:order-none">
             <h2 className="text-3xl font-bold text-gray-800"> About Us</h2>
             <p className="text-gray-600">
               Welcome to Garuda Tours and Travels, your trusted partner for hassle-free Chennai to Tirupati tour packages. We are specialists in providing well-organized Chennai to Tirupati one-day packages, two-day Tirupati tour packages, and VIP darshan packages from Chennai with on-time service, expert guidance, and comfortable travel. Our Tirupati darshan packages from Chennai are designed for individuals, families, and senior citizens seeking peace, devotion, and convenience. In addition to Tirupati, we offer divine temple tour packages to Rameswaram, Kanchipuram, Thiruvannamalai, and other holy destinations across South India. Every Chennai to Tirupati travel package is backed by our commitment to punctuality and customer satisfaction. Trusted by thousands of devotees, we aim to make your Tirupati package from Chennai truly spiritual, memorable, and easy to book.
@@ -37,7 +43,7 @@ export default function HomePage() {
             </a>
           </div>
           {/* Right - Image */}
-          <div className="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
+          <div className="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto order-1 md:order-none">
             <img
               src="/images/about.png"
               alt="Car Booking"
@@ -81,7 +87,7 @@ export default function HomePage() {
       <section className="py-12 px-4 bg-white">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center ">
           {/* Left - Content*/}
-          <div className="space-y-4">
+          <div className="space-y-4 order-2 md:order-none">
             <h2 className="text-3xl font-bold text-gray-800">Chennai to Tirupati Two-Day Package – Peaceful Pilgrimage</h2>
             <p className="text-gray-600">
              Our Chennai to Tirupati two day package is ideal for those who prefer an unhurried, relaxed darshan experience. This two day package from Chennai to Tirupati includes comfortable accommodation, VIP darshan, and guided visits to nearby temples like Padmavathi Thayar Temple, all arranged with precision by Garuda Tours and Travels.
@@ -96,7 +102,7 @@ export default function HomePage() {
             </a>
           </div>
           {/* Right - Image */}
-          <div className="w-full">
+          <div className="w-full order-1 md:order-none">
             <img
               src="/images/4.png"
               alt="Car Booking"
@@ -139,7 +145,7 @@ export default function HomePage() {
       <section className="py-12 px-4 bg-white">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center ">
           {/* Left - Content*/}
-          <div className="space-y-4">
+          <div className="space-y-4 order-2 md:order-none">
             <h2 className="text-3xl font-bold text-gray-800">Temple Tour Packages from Chennai – South India’s Spiritual Trail</h2>
             <p className="text-gray-600">
              Garuda Tours and Travels curates the best temple tour packages from Chennai, covering spiritual destinations like Tirupati, Rameswaram, Kanchipuram, Madurai, and more. Whether it's a short Chennai to Tirupati travel package or a multi-day journey, we plan it all with devotion and care.
@@ -154,7 +160,7 @@ export default function HomePage() {
             </a>
           </div>
           {/* Right - Image */}
-          <div className="w-full">
+          <div className="w-full order-1 md:order-none">
             <img
               src="/images/1.png"
               alt="Car Booking"

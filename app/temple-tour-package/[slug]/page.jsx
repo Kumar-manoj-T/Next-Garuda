@@ -448,18 +448,28 @@ function TemplePackagePage() {
                   Have questions about this temple tour package? Our travel experts are here to help!
                 </p>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
+                  <a href="tel:9840789844"> 
+
+                    <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
                     <Phone className="w-4 h-4 mr-2" />
                     Call Us
                   </Button>
-                  <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
+                  </a>
+                  <a href="mail:garudattd1@gmail.com">
+                    <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
                     <Mail className="w-4 h-4 mr-2" />
                     Email Us
                   </Button>
-                  <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
+
+                  </a>
+                  
+                  <a href="tel:9840789857">
+                    <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp
                   </Button>
+                  </a>
+                  
                 </div>
               </div>
 

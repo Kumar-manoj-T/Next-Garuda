@@ -221,8 +221,8 @@ export default function PrivacyPolicyPage() {
                 <address className="not-italic text-gray-800">
                   <div className="font-medium">Tours & Travels</div>
                   <div>Customer Support</div>
-                  <div>Email: <a className="underline hover:no-underline" href="mailto:support@example.com">support@example.com</a></div>
-                  <div>Phone: <a className="underline hover:no-underline" href="tel:+10000000000">+1 (000) 000-0000</a></div>
+                  <div>Email: <a className="underline hover:no-underline" href="mailto:garudattd1@gmail.com">garudattd1@gmail.com</a></div>
+                  <div>Phone: <a className="underline hover:no-underline" href="tel:+919840789844">9840789844, 9840789857</a></div>
                 </address>
               </CardContent>
             </Card>

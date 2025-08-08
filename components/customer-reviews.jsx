@@ -15,8 +15,8 @@ const customerReviews = [
   {
     id: 2,
     avatar: "/images/client/3.png?height=64&width=64", // Placeholder for customer avatar
-    name: "David Lee",
-    location: "Singapore",
+    name: "P.Ramanujam",
+    location: "Kumbakonam",
     content:
        "We chose Garuda's Chennai to Tirupati two-day package for our family trip. The stay was neat, travel was comfortable, and the darshan was peaceful. A well-planned Tirupati tour package from Chennai that I’d recommend to others.",
   },
@@ -31,7 +31,7 @@ const customerReviews = [
   {
     id: 4,
     avatar: "/images/client/4.png?height=64&width=64", // Placeholder for customer avatar
-    name: "Ahmed Khan",
+    name: "S.Mounaguru",
     location: "Dubai, UAE",
     content:
       "Booked the Tirupati travel package from Chennai with Garuda Tours. It was a simple and spiritual trip. The team stayed in touch from start to end. I felt safe and satisfied. Would book again for temple tour packages.",

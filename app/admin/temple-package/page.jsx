@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore"
+import { collection, getDocs, updateDoc, doc, serverTimestamp } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { useToast } from "@/hooks/use-toast"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -40,13 +40,14 @@ export default function ManageTemplePackagesPage() {
     setLoading(true)
     try {
       const querySnapshot = await getDocs(collection(db, "templePackages"))
-      const fetchedPackages = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
+      const fetchedPackages = querySnapshot.docs.map((docu) => ({
+        id: docu.id,
+        ...docu.data(),
       }))
-      // Sort by order
-      fetchedPackages.sort((a, b) => (a.order || 0) - (b.order || 0))
-      setPackages(fetchedPackages)
+      const filteredPackages = fetchedPackages
+        .filter((p) => !(p?.isDeleted || p?.deletedAt))
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+      setPackages(filteredPackages)
     } catch (error) {
       console.error("Error fetching packages:", error)
       toast({
@@ -66,19 +67,22 @@ export default function ManageTemplePackagesPage() {
   }, [clientAuthenticated])
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this package?")) {
+    if (!confirm("Are you sure you want to delete this package? This will move it to the recycle bin.")) {
       return
     }
     try {
-      await deleteDoc(doc(db, "templePackages", id))
+      await updateDoc(doc(db, "templePackages", id), {
+        isDeleted: true,
+        deletedAt: serverTimestamp(),
+      })
       toast({
-        title: "Success!",
-        description: "Package deleted successfully.",
+        title: "Moved to Recycle Bin",
+        description: "Package was soft-deleted successfully.",
         variant: "default",
       })
-      setPackages(packages.filter((pkg) => pkg.id !== id))
+      setPackages((prev) => prev.filter((pkg) => pkg.id !== id))
     } catch (error) {
-      console.error("Error deleting package:", error)
+      console.error("Error soft-deleting package:", error)
       toast({
         title: "Error",
         description: `Failed to delete package: ${error.message}`,

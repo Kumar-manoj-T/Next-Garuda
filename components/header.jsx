@@ -227,30 +227,55 @@ export function Header() {
             </div>
 
             {/* Temple Tour Packages Dropdown - Dynamic */}
-            <div className="relative group">
+             <div className="relative group">
               <button className="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 Temple Tour Packages
                 <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-80 bg-[#f5ece1] rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
-                <div className="py-2">
+              <div className="absolute top-full left-0 mt-2 w-[600px] bg-[#f5ece1] rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+                <div className="p-6">
                   {loading ? (
-                    <div className="px-4 py-3 text-gray-500">Loading...</div>
+                    <div className="text-center py-8 text-gray-500">Loading temple packages...</div>
                   ) : templePackages.length > 0 ? (
-                    templePackages.map((pkg) => (
-                      <a
-                        key={pkg.id}
-                        href={`/temple-tour-package/${pkg.id}`}
-                        className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
-                      >
-                        <div className="font-medium">{pkg.title}</div>
-                        {pkg.shortDescription && (
-                          <div className="text-sm text-gray-500 truncate">{pkg.shortDescription}</div>
-                        )}
-                      </a>
-                    ))
+                    <div className="grid grid-cols-2 gap-8">
+                      {/* Left Column */}
+                      <div className="space-y-6">
+                        {templePackages.slice(0, Math.ceil(templePackages.length / 2)).map((pkg) => (
+                          <div key={pkg.id}>
+                            <a
+                              href={`/temple-tour-package/${pkg.url || pkg.id}`}
+                              className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-2 group/item"
+                            >
+                              {/* <MapPin className="h-4 w-4 mr-2 text-blue-600" /> */}
+                              <div>
+                                <div className="font-medium group-hover/item:text-blue-600">{pkg.title}</div>
+                                {/* {pkg.subtitle && <div className="text-sm text-gray-500 truncate">{pkg.subtitle}</div>} */}
+                              </div>
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Right Column */}
+                      <div className="space-y-6">
+                        {templePackages.slice(Math.ceil(templePackages.length / 2)).map((pkg) => (
+                          <div key={pkg.id}>
+                            <a
+                              href={`/temple-tour-package/${pkg.url || pkg.id}`}
+                              className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-150 py-2 group/item"
+                            >
+                              {/* <MapPin className="h-4 w-4 mr-2 text-blue-600" /> */}
+                              <div>
+                                <div className="font-medium group-hover/item:text-blue-600">{pkg.title}</div>
+                                {/* {pkg.subtitle && <div className="text-sm text-gray-500 truncate">{pkg.subtitle}</div>} */}
+                              </div>
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   ) : (
-                    <div className="px-4 py-3 text-gray-500">No packages available</div>
+                    <div className="text-center py-8 text-gray-500">No temple packages available</div>
                   )}
                 </div>
               </div>

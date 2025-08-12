@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { X } from 'lucide-react'
+import { X } from "lucide-react"
 import { isAuthenticated } from "@/lib/custom-auth"
 import { Switch } from "@/components/ui/switch"
 
@@ -21,61 +21,63 @@ const generateUniqueId = () => Math.random().toString(36).substring(2, 15)
 const cleanEmptyFields = (data) => {
   if (Array.isArray(data)) {
     return data
-      .map(item => cleanEmptyFields(item))
-      .filter(item => {
-        if (typeof item === 'string') return item.trim() !== ''
-        if (typeof item === 'object' && item !== null) {
+      .map((item) => cleanEmptyFields(item))
+      .filter((item) => {
+        if (typeof item === "string") return item.trim() !== ""
+        if (typeof item === "object" && item !== null) {
           const cleanedItem = Object.fromEntries(
             Object.entries(item).filter(([key, value]) => {
-              if (typeof value === 'string') return value.trim() !== ''
+              if (typeof value === "string") return value.trim() !== ""
               if (Array.isArray(value)) return value.length > 0
               return value !== null && value !== undefined
-            })
+            }),
           )
           return Object.keys(cleanedItem).length > 0
         }
         return item !== null && item !== undefined
       })
   }
-  
-  if (typeof data === 'object' && data !== null) {
+
+  if (typeof data === "object" && data !== null) {
     const cleaned = {}
     for (const [key, value] of Object.entries(data)) {
-      if (typeof value === 'string') {
-        if (value.trim() !== '') cleaned[key] = value.trim()
+      if (typeof value === "string") {
+        if (value.trim() !== "") cleaned[key] = value.trim()
       } else if (Array.isArray(value)) {
         const cleanedArray = cleanEmptyFields(value)
         if (cleanedArray.length > 0) cleaned[key] = cleanedArray
-      } else if (typeof value === 'object' && value !== null) {
+      } else if (typeof value === "object" && value !== null) {
         const cleanedObject = cleanEmptyFields(value)
         if (Object.keys(cleanedObject).length > 0) cleaned[key] = cleanedObject
-      } else if (value !== null && value !== undefined && value !== '') {
+      } else if (value !== null && value !== undefined && value !== "") {
         cleaned[key] = value
       }
     }
     return cleaned
   }
-  
+
   return data
 }
 
 // Helper function to ensure arrays have proper structure when fetching
 const ensureArrayStructure = (data, defaultStructure = { id: generateUniqueId(), text: "" }) => {
   if (!Array.isArray(data)) return []
-  
-  return data.map(item => {
-    if (typeof item === 'string') {
-      return { id: generateUniqueId(), text: item }
-    }
-    if (typeof item === 'object' && item !== null) {
-      return { id: item.id || generateUniqueId(), ...item }
-    }
-    return defaultStructure
-  }).filter(item => {
-    // Filter out items where all values are empty
-    const values = Object.values(item).filter(val => val !== 'id')
-    return values.some(val => val && val.toString().trim() !== '')
-  })
+
+  return data
+    .map((item) => {
+      if (typeof item === "string") {
+        return { id: generateUniqueId(), text: item }
+      }
+      if (typeof item === "object" && item !== null) {
+        return { id: item.id || generateUniqueId(), ...item }
+      }
+      return defaultStructure
+    })
+    .filter((item) => {
+      // Filter out items where all values are empty
+      const values = Object.values(item).filter((val) => val !== "id")
+      return values.some((val) => val && val.toString().trim() !== "")
+    })
 }
 
 export default function TemplePackageForm({ packageId }) {
@@ -108,6 +110,7 @@ export default function TemplePackageForm({ packageId }) {
   const [carPrices, setCarPrices] = useState([])
   const [sections, setSections] = useState([])
   const [sightseeingPlaces, setSightseeingPlaces] = useState([])
+  const [whyChooseUsItems, setWhyChooseUsItems] = useState([])
 
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
@@ -150,20 +153,23 @@ export default function TemplePackageForm({ packageId }) {
   }, [isDirty, isNavigating])
 
   // Custom navigation handler
-  const handleNavigation = useCallback((callback) => {
-    if (isDirty) {
-      const confirmed = window.confirm(
-        "You have unsaved changes. Are you sure you want to leave? All changes will be lost."
-      )
-      if (confirmed) {
-        setIsNavigating(true)
-        setIsDirty(false)
+  const handleNavigation = useCallback(
+    (callback) => {
+      if (isDirty) {
+        const confirmed = window.confirm(
+          "You have unsaved changes. Are you sure you want to leave? All changes will be lost.",
+        )
+        if (confirmed) {
+          setIsNavigating(true)
+          setIsDirty(false)
+          callback()
+        }
+      } else {
         callback()
       }
-    } else {
-      callback()
-    }
-  }, [isDirty])
+    },
+    [isDirty],
+  )
 
   useEffect(() => {
     if (isEditMode && clientAuthenticated) {
@@ -174,7 +180,7 @@ export default function TemplePackageForm({ packageId }) {
 
           if (docSnap.exists()) {
             const data = docSnap.data()
-            
+
             // Set basic fields with empty string fallback
             setPackageUrl(packageId)
             setTitle(data.title || "")
@@ -183,10 +189,10 @@ export default function TemplePackageForm({ packageId }) {
             setSubtitle(data.subtitle || "")
             setContent(data.content || "")
             setIsActive(data.isActive !== undefined ? data.isActive : true)
-            
+
             // Set images array, filter out empty strings
-            setImages((data.images || []).filter(img => img && img.trim() !== ''))
-            
+            setImages((data.images || []).filter((img) => img && img.trim() !== ""))
+
             // Set temple list with proper structure
             setTempleList(
               ensureArrayStructure(data.templeList || [], {
@@ -194,56 +200,64 @@ export default function TemplePackageForm({ packageId }) {
                 name: "",
                 description: "",
                 imageUrl: "",
-                imageFile: null
-              }).map(temple => ({
+                imageFile: null,
+              }).map((temple) => ({
                 ...temple,
                 imageFile: null,
-              }))
+              })),
             )
-            
+
             // Set other arrays with proper structure
             setTourHighlights(ensureArrayStructure(data.tourHighlights || []))
             setIncludes(ensureArrayStructure(data.includes || []))
             setExcludes(ensureArrayStructure(data.excludes || []))
             setItineraries(ensureArrayStructure(data.itineraries || []))
             setImportantNotes(ensureArrayStructure(data.importantNotes || []))
-            
+
             // Set FAQs with proper structure
             setFaqs(
               ensureArrayStructure(data.faqs || [], {
                 id: generateUniqueId(),
                 question: "",
-                answer: ""
-              })
+                answer: "",
+              }),
             )
-            
+
             // Set car prices with proper structure
             setCarPrices(
               ensureArrayStructure(data.carPrices || [], {
                 id: generateUniqueId(),
                 carType: "",
-                price: ""
-              })
+                price: "",
+              }),
             )
-            
+
             // Set sections with proper structure
             setSections(
               ensureArrayStructure(data.sections || [], {
                 id: generateUniqueId(),
                 title: "",
-                content: ""
-              })
+                content: "",
+              }),
             )
-            
+
             // Set sightseeing places with proper structure
             setSightseeingPlaces(
               ensureArrayStructure(data.sightseeingPlaces || [], {
                 id: generateUniqueId(),
                 name: "",
-                description: ""
-              })
+                description: "",
+              }),
             )
-            
+
+            setSightseeingPlaces(data.sightseeingPlaces || [])
+            setWhyChooseUsItems(
+              data.whyChooseUsItems?.map((item) => ({
+                id: item.id,
+                iconName: item.iconName,
+                title: item.title,
+              })) || [],
+            )
           } else {
             toast({
               title: "Error",
@@ -302,7 +316,10 @@ export default function TemplePackageForm({ packageId }) {
 
   // Temple List handlers
   const addTemple = () => {
-    setTempleList((prev) => [...prev, { id: generateUniqueId(), name: "", description: "", imageUrl: "", imageFile: null }])
+    setTempleList((prev) => [
+      ...prev,
+      { id: generateUniqueId(), name: "", description: "", imageUrl: "", imageFile: null },
+    ])
     setIsDirty(true)
   }
 
@@ -317,7 +334,9 @@ export default function TemplePackageForm({ packageId }) {
   }
 
   const removeTempleImage = (templeId) => {
-    setTempleList((prev) => prev.map((temple) => (temple.id === templeId ? { ...temple, imageUrl: "", imageFile: null } : temple)))
+    setTempleList((prev) =>
+      prev.map((temple) => (temple.id === templeId ? { ...temple, imageUrl: "", imageFile: null } : temple)),
+    )
     setIsDirty(true)
   }
 
@@ -342,64 +361,74 @@ export default function TemplePackageForm({ packageId }) {
 
   // Car Prices handlers
   const addCarPrice = () => {
-    setCarPrices((prev) => [...prev, { id: generateUniqueId(), carType: "", price: "" }]);
-    setIsDirty(true);
-  };
+    setCarPrices((prev) => [...prev, { id: generateUniqueId(), carType: "", price: "" }])
+    setIsDirty(true)
+  }
 
   const updateCarPrice = (id, field, value) => {
-    setCarPrices((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
-    setIsDirty(true);
-  };
+    setCarPrices((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+    setIsDirty(true)
+  }
 
   const removeCarPrice = (id) => {
-    setCarPrices((prev) => prev.filter((item) => item.id !== id));
-    setIsDirty(true);
-  };
+    setCarPrices((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
+  }
 
   // Sections handlers
   const addSection = () => {
-    setSections((prev) => [...prev, { id: generateUniqueId(), title: "", content: "" }]);
-    setIsDirty(true);
-  };
+    setSections((prev) => [...prev, { id: generateUniqueId(), title: "", content: "" }])
+    setIsDirty(true)
+  }
 
   const updateSection = (id, field, value) => {
-    setSections((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
-    setIsDirty(true);
-  };
+    setSections((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+    setIsDirty(true)
+  }
 
   const removeSection = (id) => {
-    setSections((prev) => prev.filter((item) => item.id !== id));
-    setIsDirty(true);
-  };
+    setSections((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
+  }
 
   // Sightseeing Places handlers
   const addSightseeingPlace = () => {
-    setSightseeingPlaces((prev) => [...prev, { id: generateUniqueId(), name: "", description: "" }]);
-    setIsDirty(true);
-  };
+    setSightseeingPlaces((prev) => [...prev, { id: generateUniqueId(), name: "", description: "" }])
+    setIsDirty(true)
+  }
 
   const updateSightseeingPlace = (id, field, value) => {
-    setSightseeingPlaces((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
-    setIsDirty(true);
-  };
+    setSightseeingPlaces((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+    setIsDirty(true)
+  }
 
   const removeSightseeingPlace = (id) => {
-    setSightseeingPlaces((prev) => prev.filter((item) => item.id !== id));
-    setIsDirty(true);
-  };
+    setSightseeingPlaces((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
+  }
+
+  // Why Choose Us handlers
+  const addWhyChooseUsItem = () => {
+    setWhyChooseUsItems((prev) => [...prev, { id: generateUniqueId(), iconName: "", title: "" }])
+    setIsDirty(true)
+  }
+
+  const updateWhyChooseUsItem = (id, field, value) => {
+    setWhyChooseUsItems((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+    setIsDirty(true)
+  }
+
+  const removeWhyChooseUsItem = (id) => {
+    setWhyChooseUsItems((prev) => prev.filter((item) => item.id !== id))
+    setIsDirty(true)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
 
     // Validate required fields
-    if (!packageUrl || packageUrl.trim() === '') {
+    if (!packageUrl || packageUrl.trim() === "") {
       toast({
         title: "Validation Error",
         description: "Package URL is required.",
@@ -409,7 +438,7 @@ export default function TemplePackageForm({ packageId }) {
       return
     }
 
-    if (!title || title.trim() === '') {
+    if (!title || title.trim() === "") {
       toast({
         title: "Validation Error",
         description: "Package title is required.",
@@ -437,13 +466,13 @@ export default function TemplePackageForm({ packageId }) {
       }
 
       // Combine existing main images with newly uploaded ones, filter empty strings
-      const allImageUrls = [...images, ...uploadedImageUrls].filter(url => url && url.trim() !== '')
+      const allImageUrls = [...images, ...uploadedImageUrls].filter((url) => url && url.trim() !== "")
 
       // Process temple list, including image uploads for each temple
       const processedTempleList = await Promise.all(
         templeList.map(async (temple) => {
           // Skip temples with empty names
-          if (!temple.name || temple.name.trim() === '') {
+          if (!temple.name || temple.name.trim() === "") {
             return null
           }
 
@@ -460,12 +489,12 @@ export default function TemplePackageForm({ packageId }) {
           }
 
           // Only add description if it's not empty
-          if (temple.description && temple.description.trim() !== '') {
+          if (temple.description && temple.description.trim() !== "") {
             processedTemple.description = temple.description.trim()
           }
 
           // Only add imageUrl if it's not empty
-          if (templeImageUrl && templeImageUrl.trim() !== '') {
+          if (templeImageUrl && templeImageUrl.trim() !== "") {
             processedTemple.imageUrl = templeImageUrl.trim()
           }
 
@@ -474,7 +503,7 @@ export default function TemplePackageForm({ packageId }) {
       )
 
       // Filter out null temples (those with empty names)
-      const validTempleList = processedTempleList.filter(temple => temple !== null)
+      const validTempleList = processedTempleList.filter((temple) => temple !== null)
 
       // Prepare temple package data - only include non-empty fields
       const packageData = {
@@ -488,11 +517,11 @@ export default function TemplePackageForm({ packageId }) {
       }
 
       // Only add optional fields if they have content
-      if (subtitle && subtitle.trim() !== '') {
+      if (subtitle && subtitle.trim() !== "") {
         packageData.subtitle = subtitle.trim()
       }
 
-      if (content && content.trim() !== '') {
+      if (content && content.trim() !== "") {
         packageData.content = content.trim()
       }
 
@@ -550,6 +579,15 @@ export default function TemplePackageForm({ packageId }) {
         packageData.sightseeingPlaces = cleanedSightseeingPlaces
       }
 
+      const validWhyChooseUsItems = whyChooseUsItems.filter(
+        (item) => item.iconName && item.iconName.trim() !== "" && item.title && item.title.trim() !== "",
+      )
+      if (validWhyChooseUsItems.length > 0) {
+        packageData.whyChooseUsItems = validWhyChooseUsItems
+      }
+
+      packageData.isActive = isActive
+
       // Save/Update document in Firestore using packageUrl as document ID
       const docRef = doc(db, "templePackages", packageUrl)
       await setDoc(docRef, packageData)
@@ -595,9 +633,7 @@ export default function TemplePackageForm({ packageId }) {
     <div className="min-h-screen bg-gray-100 p-8">
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-center">
-            {isEditMode ? "Edit Temple Package" : "Add New Temple Package"}
-          </CardTitle>
+          <CardTitle className="text-center">{isEditMode ? "Edit Temple Package" : "Add New Temple Package"}</CardTitle>
           {isDirty && (
             <div className="text-center">
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -830,7 +866,11 @@ export default function TemplePackageForm({ packageId }) {
                     {(temple.imageUrl || temple.imageFile) && (
                       <div className="mb-4">
                         <img
-                          src={temple.imageFile ? URL.createObjectURL(temple.imageFile) : temple.imageUrl || "/placeholder.svg"}
+                          src={
+                            temple.imageFile
+                              ? URL.createObjectURL(temple.imageFile)
+                              : temple.imageUrl || "/placeholder.svg"
+                          }
                           alt={`${temple.name} image`}
                           width={200}
                           height={150}
@@ -1200,6 +1240,71 @@ export default function TemplePackageForm({ packageId }) {
               </div>
             </div>
 
+            {/* Why Choose Us */}
+            <div>
+              <h4 className="text-lg font-semibold mb-2">Why Choose Us Items</h4>
+              <div className="space-y-4 p-4 bg-gray-50 rounded-md border border-gray-200">
+                {whyChooseUsItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col gap-2 border border-gray-300 p-4 rounded-md bg-white relative"
+                  >
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                      onClick={() => removeWhyChooseUsItem(item.id)}
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove item</span>
+                    </Button>
+                    <div>
+                      <Label htmlFor={`why-us-icon-${item.id}`}>Icon Name (Lucide React)</Label>
+                      <Input
+                        id={`why-us-icon-${item.id}`}
+                        type="text"
+                        value={item.iconName}
+                        onChange={(e) => {
+                          updateWhyChooseUsItem(item.id, "iconName", e.target.value)
+                          setIsDirty(true)
+                        }}
+                        placeholder="Eg: Star, ShieldCheck, Users"
+                      />
+                      <p className="text-sm text-gray-500 mt-1">
+                        Use names from{" "}
+                        <a
+                          href="https://lucide.dev/icons/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          Lucide React
+                        </a>{" "}
+                        (e.g., Star, ShieldCheck, Users, Clock, MapPin, Wallet).
+                      </p>
+                    </div>
+                    <div>
+                      <Label htmlFor={`why-us-title-${item.id}`}>Title</Label>
+                      <Input
+                        id={`why-us-title-${item.id}`}
+                        type="text"
+                        value={item.title}
+                        onChange={(e) => {
+                          updateWhyChooseUsItem(item.id, "title", e.target.value)
+                          setIsDirty(true)
+                        }}
+                        placeholder="Eg: 5-Star Rated Service"
+                      />
+                    </div>
+                  </div>
+                ))}
+                <Button type="button" onClick={addWhyChooseUsItem} className="mt-3">
+                  Add Why Choose Us Item
+                </Button>
+              </div>
+            </div>
+
             {/* Is Active */}
             <div className="flex items-center space-x-2 mt-6">
               <Switch
@@ -1221,7 +1326,7 @@ export default function TemplePackageForm({ packageId }) {
               <Button
                 type="button"
                 variant="outline"
-                className="flex-1"
+                className="flex-1 bg-transparent"
                 onClick={() => handleNavigation(() => router.back())}
               >
                 Cancel

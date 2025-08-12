@@ -66,6 +66,31 @@ function TemplePackagePage() {
     }
   }, [params.slug])
 
+
+    const renderIcon = (iconName) => {
+    const iconMap = {
+      Shield,
+      Award,
+      Clock,
+      Phone,
+      Star,
+      Users,
+      CheckCircle,
+      Car,
+      MapPin,
+      Calendar,
+      Mail,
+      MessageCircle,
+      Camera,
+      Route,
+      Info,
+      IndianRupee,
+      Eye,
+    }
+    const IconComponent = iconMap[iconName] || Shield
+    return <IconComponent className="w-8 h-8" />
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -598,7 +623,7 @@ function TemplePackagePage() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="bg-orange-50 py-12">
+      {/* <section className="bg-orange-50 py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Why Choose Our Temple Tours</h2>
@@ -642,9 +667,32 @@ function TemplePackagePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      
+       {/* Why Choose Us Section */}
+      {packageData.whyChooseUsItems && packageData.whyChooseUsItems.length > 0 && (
+        <section className="bg-orange-50 py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Why Choose Our Temple Tours</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {packageData.whyChooseUsItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="text-orange-600">{renderIcon(item.iconName)}</div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.title}</h3>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       
 
      

@@ -26,6 +26,7 @@ import {
   Car,
   IndianRupee,
   Eye,
+  Headset,
 } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
@@ -86,6 +87,7 @@ function TemplePackagePage() {
       Info,
       IndianRupee,
       Eye,
+      Headset,
     }
     const IconComponent = iconMap[iconName] || Shield
     return <IconComponent className="w-8 h-8" />
@@ -685,6 +687,7 @@ function TemplePackagePage() {
                       <div className="text-orange-600">{renderIcon(item.iconName)}</div>
                     </div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.title}</h3>
+                     {item.description && <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>}
                   </div>
                 ))}
               </div>

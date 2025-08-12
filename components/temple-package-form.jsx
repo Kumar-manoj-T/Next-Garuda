@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast"
 import { X } from "lucide-react"
 import { isAuthenticated } from "@/lib/custom-auth"
 import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
 
 // Helper to generate unique IDs for dynamic fields
 const generateUniqueId = () => Math.random().toString(36).substring(2, 15)
@@ -256,6 +257,7 @@ export default function TemplePackageForm({ packageId }) {
                 id: item.id,
                 iconName: item.iconName,
                 title: item.title,
+                description: item.description || "",
               })) || [],
             )
           } else {
@@ -409,7 +411,7 @@ export default function TemplePackageForm({ packageId }) {
 
   // Why Choose Us handlers
   const addWhyChooseUsItem = () => {
-    setWhyChooseUsItems((prev) => [...prev, { id: generateUniqueId(), iconName: "", title: "" }])
+    setWhyChooseUsItems((prev) => [...prev, { id: generateUniqueId(), iconName: "", title: "", description: "" }])
     setIsDirty(true)
   }
 
@@ -1295,6 +1297,19 @@ export default function TemplePackageForm({ packageId }) {
                           setIsDirty(true)
                         }}
                         placeholder="Eg: 5-Star Rated Service"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`why-us-description-${item.id}`}>Description</Label>
+                      <Textarea
+                        id={`why-us-description-${item.id}`}
+                        value={item.description}
+                        onChange={(e) => {
+                          updateWhyChooseUsItem(item.id, "description", e.target.value)
+                          setIsDirty(true)
+                        }}
+                        placeholder="Eg: Our experienced team ensures top-quality service with 24/7 customer support"
+                        rows={3}
                       />
                     </div>
                   </div>

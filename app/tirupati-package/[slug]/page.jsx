@@ -118,16 +118,20 @@ export default async function TirupatiPackageDetailPage({ params }) {
         </section>
 
         {/* Booking Form and Why Choose Us Section - Adjusted Layout */}
-        <section className="py-12 px-4 bg-gray-100 mb-10">
+        <section className=" px-4 bg-gray-100 mb-10">
           <div className="container mx-auto flex flex-col gap-12 items-center">
             {/* Booking Form */}
-            <div >
+            <div>
               <BookingForm />
             </div>
 
-            {/* Custom "Why Choose Us" Section */}
+          
+          </div>
+        </section>
+
+          {/* Custom "Why Choose Us" Section */}
             {packageData.whyChooseUsItems && packageData.whyChooseUsItems.length > 0 && (
-              <div className="flex flex-col items-center w-full">
+              <div className="flex flex-col items-center w-full mb-10">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Why Choose Us</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                   {packageData.whyChooseUsItems?.map((item) => {
@@ -149,8 +153,6 @@ export default async function TirupatiPackageDetailPage({ params }) {
                 </div>
               </div>
             )}
-          </div>
-        </section>
 
         {/* Overview Section */}
         {packageData.content && (

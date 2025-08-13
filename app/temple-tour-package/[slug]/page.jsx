@@ -68,7 +68,7 @@ function TemplePackagePage() {
   }, [params.slug])
 
 
-    const renderIcon = (iconName) => {
+  const renderIcon = (iconName) => {
     const iconMap = {
       Shield,
       Award,
@@ -134,7 +134,7 @@ function TemplePackagePage() {
       <Header />
 
       {/* Breadcrumb Section */}
-      <section className="bg-white py-4 border-b">
+      {/* <section className="bg-white py-4 border-b">
         <div className="container mx-auto px-4">
           <nav className="text-sm text-gray-600 flex items-center gap-2" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-blue-600 transition-colors">
@@ -148,10 +148,10 @@ function TemplePackagePage() {
             <span className="text-gray-800 font-medium">{packageData.title}</span>
           </nav>
         </div>
-      </section>
+      </section> */}
 
       {/* Hero Section */}
-      <section className="bg-orange-50 py-8">
+      {/* <section className="bg-orange-50 py-8">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">{packageData.title}</h1>
@@ -172,7 +172,51 @@ function TemplePackagePage() {
             </div>
           </div>
         </div>
+      </section> */}
+
+      <section className="bg-orange-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+
+            {/* Left Side - Text */}
+            <div className="text-left max-w-2xl">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
+                {packageData.title}
+              </h1>
+              {packageData.subtitle && (
+                <p className="text-lg md:text-xl text-gray-600 mb-6">
+                  {packageData.subtitle}
+                </p>
+              )}
+              <div className="flex flex-wrap items-center gap-4">
+                <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1">
+                  <Clock className="w-4 h-4" />
+                  {packageData.days} Days
+                </Badge>
+                <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+                  <MapPin className="w-4 h-4" />
+                  Temple Tour
+                </Badge>
+                <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+                  <Users className="w-4 h-4" />
+                  All Group Sizes
+                </Badge>
+              </div>
+            </div>
+
+            {/* Right Side - Static Image */}
+            <div className="flex justify-center">
+              <img
+                src="/images/2.png" // static image path
+                alt="Tour Package"
+                className="rounded-lg shadow-lg w-full max-w-md object-cover"
+              />
+            </div>
+
+          </div>
+        </div>
       </section>
+
 
       {/* Image Gallery Section */}
       {packageData.images && packageData.images.length > 0 && (
@@ -196,9 +240,8 @@ function TemplePackagePage() {
                   {packageData.images.slice(0, 6).map((image, index) => (
                     <div
                       key={index}
-                      className={`flex-shrink-0 cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
-                        activeImageIndex === index ? "border-blue-500" : "border-transparent"
-                      }`}
+                      className={`flex-shrink-0 cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${activeImageIndex === index ? "border-blue-500" : "border-transparent"
+                        }`}
                       onClick={() => setActiveImageIndex(index)}
                     >
                       <img
@@ -511,7 +554,7 @@ function TemplePackagePage() {
 
             {/* Right Sidebar - 1/3 width */}
             <div className="space-y-6">
-              
+
               {/* Quick Info */}
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Quick Information</h3>
@@ -562,28 +605,28 @@ function TemplePackagePage() {
                   Have questions about this temple tour package? Our travel experts are here to help!
                 </p>
                 <div className="space-y-3">
-                  <a href="tel:9840789844"> 
+                  <a href="tel:9840789844">
 
                     <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
-                    <Phone className="w-4 h-4 mr-2" />
-                    Call Us
-                  </Button>
+                      <Phone className="w-4 h-4 mr-2" />
+                      Call Us
+                    </Button>
                   </a>
                   <a href="mail:garudattd1@gmail.com">
                     <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
-                    <Mail className="w-4 h-4 mr-2" />
-                    Email Us
-                  </Button>
+                      <Mail className="w-4 h-4 mr-2" />
+                      Email Us
+                    </Button>
 
                   </a>
-                  
+
                   <a href="tel:9840789857">
                     <Button variant="outline" className="w-full justify-start hover:bg-blue-50">
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    WhatsApp
-                  </Button>
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      WhatsApp
+                    </Button>
                   </a>
-                  
+
                 </div>
               </div>
               {/* Car Prices */}
@@ -671,7 +714,7 @@ function TemplePackagePage() {
         </div>
       </section> */}
 
-       {/* Why Choose Us Section */}
+      {/* Why Choose Us Section */}
       {packageData.whyChooseUsItems && packageData.whyChooseUsItems.length > 0 && (
         <section className="bg-orange-50 py-12">
           <div className="container mx-auto px-4">
@@ -687,7 +730,7 @@ function TemplePackagePage() {
                       <div className="text-orange-600">{renderIcon(item.iconName)}</div>
                     </div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.title}</h3>
-                     {item.description && <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>}
+                    {item.description && <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>}
                   </div>
                 ))}
               </div>
@@ -696,9 +739,9 @@ function TemplePackagePage() {
         </section>
       )}
 
-      
 
-     
+
+
 
       <Footer />
     </div>
